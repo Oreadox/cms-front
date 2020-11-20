@@ -4,7 +4,7 @@
 
 <script>
 export default {
-name: "conference"
+  name: "profile"
 }
 </script>
 

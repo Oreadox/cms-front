@@ -5,7 +5,7 @@
 
 
 ### 目录结构 
-    ```text
+```text
     ├─.gitignore
     ├─babel.config.js
     ├─LICENSE
@@ -17,10 +17,9 @@
     ├─src
     |  ├─App.vue
     |  ├─main.js
-    |  ├─router.js
     |  ├─server
     |  ├─plugins
-    |  ├─pages
+    |  ├─views
     |  |   ├─HelloWorld.vue
     |  |   ├─user
     |  |   |  ├─home.vue
@@ -28,10 +27,10 @@
     |  |   |  ├─message.vue
     |  |   |  ├─profile.vue
     |  |   |  └register.vue
-    |  |   ├─hotal
+    |  |   ├─hotel
     |  |   |   ├─home.vue
     |  |   |   ├─login.vue
-    |  |   |   ├─profile.html
+    |  |   |   ├─profile.vue
     |  |   |   └reservation.vue
     |  |   ├─drive
     |  |   |   ├─home.vue
@@ -45,19 +44,13 @@
     |  |   |     ├─list.vue
     |  |   |     └participate.vue
     |  |   ├─admin
-    |  |   |   ├─conference.vue
     |  |   |   ├─home.vue
-    |  |   |   ├─hotel.vue
     |  |   |   ├─login.vue
     |  |   |   ├─supervise.vue
     |  |   |   └system.vue
+    |  |─routers
+    |  |   └router.js
     |  ├─components
-    |  |     ├─user
-    |  |     ├─hotal
-    |  |     ├─drive
-    |  |     ├─conference
-    |  |     ├─common
-    |  |     ├─admin
     |  ├─assets
     |  |   ├─logo.png
     |  |   ├─svg
@@ -67,4 +60,4 @@
     |   ├─favicon.ico
     |   └index.html
 
-    ```
+```
