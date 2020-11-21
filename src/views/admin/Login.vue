@@ -1,5 +1,7 @@
 <template>
-
+<!--  <div>login</div>-->
+<!--  <Navbar></Navbar>-->
+  <div id="app">登录</div>
 </template>
 
 <script>
