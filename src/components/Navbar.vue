@@ -5,10 +5,10 @@
         <Menu mode="horizontal" theme="light">
           <div class="layout-nav">
             <MenuItem name="login">
-              <Button type="primary">登录</Button>
+              <Button type="primary" v-on:click="login">登录</Button>
             </MenuItem>
             <MenuItem name="register">
-              <Button>注册</Button>
+              <Button v-on:click="register">注册</Button>
             </MenuItem>
           </div>
         </Menu>
@@ -22,6 +22,14 @@ export default {
   name: "Navbar",
   data() {
     return {}
+  },
+  methods:{
+    login(){
+      this.$router.push('/user/login')
+    },
+    register(){
+      this.$router.push('/user/register')
+    }
   }
 }
 </script>

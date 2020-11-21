@@ -49,7 +49,7 @@
     |  |   |   ├─supervise.vue
     |  |   |   └system.vue
     |  |─routers
-    |  |   └router.js
+    |  |   └routes.js
     |  ├─components
     |  ├─assets
     |  |   ├─logo.png
