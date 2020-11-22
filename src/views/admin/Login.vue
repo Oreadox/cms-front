@@ -1,12 +1,15 @@
 <template>
 <!--  <div>login</div>-->
 <!--  <Navbar></Navbar>-->
-  <div id="app">登录</div>
+  <InputBox></InputBox>
 </template>
 
 <script>
+import InputBox from "@/components/InputBox";
 export default {
-name: "login"
+name: "login",
+  components:{InputBox}
+
 }
 </script>
 

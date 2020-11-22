@@ -5,7 +5,7 @@
         <Menu mode="horizontal" theme="light">
           <div class="layout-nav">
             <MenuItem name="login">
-              <Button type="primary" v-on:click="login">登录</Button>
+              <Button type="primary" v-on:click="toLogin">登录</Button>
             </MenuItem>
             <MenuItem name="register">
               <Button v-on:click="register">注册</Button>
@@ -18,20 +18,19 @@
 </template>
 
 <script>
+
+
 export default {
   name: "Navbar",
-  data() {
-    return {}
-  },
   methods:{
-    login(){
-      this.$router.push('/user/login')
-    },
-    register(){
-      this.$router.push('/user/register')
+    toLogin:function (){
+      this.$router.push('/user/login');
     }
   }
+
 }
+
+
 </script>
 
 <style scoped>
