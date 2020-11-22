@@ -1,10 +1,13 @@
 <template>
-  <div></div>
+  <Login></Login>
 </template>
 
 <script>
+import Login from "@/components/hotal/Login";
+
 export default {
-name: "login"
+  name: "test-login",
+  components: {Login}
 }
 </script>
 

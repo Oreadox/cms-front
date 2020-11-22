@@ -16,7 +16,6 @@
     </Layout>
   </div>
 </template>
-
 <script>
 
 
@@ -24,7 +23,7 @@ export default {
   name: "Navbar",
   methods:{
     toLogin:function (){
-      this.$router.push('/user/login');
+      this.$router.push('/hotel/login');
     }
   }
 

@@ -1,10 +1,10 @@
 <template>
   <div class="form-wrapper">
     <form class="bg-white">
-      <h1 id ="login-name" class="text-title">{{login-name}}登录</h1>
+      <h1 id="login-name" class="text-title">{{ login - name }}登录</h1>
       <div class="field-group">
         <label class="label" for="user-id">账号</label>
-        <input class="input" type="text" id="user-id" name="user-id" placeholder="" />
+        <input class="input" type="text" id="user-id" name="user-id" placeholder=""/>
         <div id="seclected">
           <Select v-model="model2" size="small" style="width:100px">
             <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -13,27 +13,29 @@
       </div>
       <div class="field-group">
         <label class="label" for="user-password">密码</label>
-        <input class="input" type="password" id="user-password" name="password" placeholder="" />
+        <input class="input" type="password" id="user-password" name="password" placeholder=""/>
         <a href="#forgot" class="link-forgot"></a>
       </div>
 
       <div class="field-group">
-        <input class="btn-submit" type="submit" value="登录" />
+        <input class="btn-submit" type="submit" @click="login" value="登录"/>
       </div>
     </form>
     <div class="bg-grey">
-    <div v-if="value === '用户'">
+      <div v-if="value === '用户'">
         <a href="#register" class="link-register">注册</a>
-    </div>
-    <div v-else> <a href="#back" class="link-register">返回</a></div>
+      </div>
+      <div v-else><a href="#back" class="link-register">返回</a></div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: "InputBox",
-  data () {
+  data() {
     return {
       cityList: [
         {
@@ -58,12 +60,23 @@ export default {
             model4: ''*/
     }
   },
-  // template:
-/*  methods:{
-    gotoLogin(){
-      this.$router.push("")
+  methods: {
+    login() {
+      axios({
+        methods: 'get',
+        url: '/api/user/login',
+        data: [],
+      }).then(function (resp) {
+        console.log(resp)
+      })
     }
-  }*/
+  }
+  // template:
+  /*  methods:{
+      gotoLogin(){
+        this.$router.push("")
+      }
+    }*/
 }
 </script>
 
@@ -211,7 +224,7 @@ html {
   margin-bottom: 1em;
 }
 
-.link-about>a {
+.link-about > a {
   color: #4D5068;
   text-decoration: underline;
 }

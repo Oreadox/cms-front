@@ -15,16 +15,16 @@ Vue.use(ViewUI)
 Vue.config.productionTip = false
 
 const router = new VueRouter({
-      routes: routes,
-      // mode: 'abstract'
+        routes: routes,
+        // mode: 'abstract'
         base: '/'
-      // routes,
-}
+        // routes,
+    }
 )
 
 new Vue({
     el: '#app',
-  router,
-  render: h => h(App),
+    router,
+    render: h => h(App),
 }).$mount('#app')
 // })
