@@ -1,46 +1,44 @@
 <template>
   <div>
-    <Navbar v-on: @getModal1="getMod"  @getModal2=getMod1></Navbar>
+    <Navbar @setLoginModal="setLoginModal" @setRegisterModal=setRegisterModal></Navbar>
     <Modal
         footer-hide
         :mask-closable="false"
-        v-model="modal1">
-      <Login></Login>
+        v-model="loginModal">
+      <Login @setLoginModal="setLoginModal" @setRegisterModal=setRegisterModal></Login>
     </Modal>
-    <Modal
-        footer-hide
-        :mask-closable="false"
-        v-model="modal2">
-      <Register></Register>
+    <Modal style="padding: 20px"
+           footer-hide
+           :mask-closable="false"
+           v-model="registerModal">
+      <Register @setLoginModal="setLoginModal" @setRegisterModal=setRegisterModal></Register>
     </Modal>
   </div>
 </template>
 
 <script>
-
-
 import Navbar from "@/components/Navbar";
 import Login from "@/views/Login";
 import Register from "@/views/user/Register";
+
 export default {
   name: "index",
-  components: { Navbar,Login,Register},
-  data(){
-    return{
-      modal1:false,
-      modal2:false,
+  components: {Navbar, Login, Register},
+  data() {
+    return {
+      loginModal: false,
+      registerModal: false,
     }
   },
-  methods:{
-    getMod(fromChild){
-      this.modal1 = fromChild;
+  methods: {
+    setLoginModal(fromChild) {
+      this.loginModal = fromChild;
     },
-    getMod1(fromChild){
-      this.modal2 = fromChild;
-    }
+    setRegisterModal(fromChild) {
+      this.registerModal = fromChild;
+    },
   }
 }
-
 </script>
 
 <style scoped>
