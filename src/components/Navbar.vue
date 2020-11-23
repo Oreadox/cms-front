@@ -1,35 +1,43 @@
-<template>
+<template><div>
   <div class="layout">
     <Layout>
       <Header class="header">
         <Menu mode="horizontal" theme="light">
           <div class="layout-nav">
             <MenuItem name="login">
-              <Button type="primary" v-on:click="toLogin">登录</Button>
+              <Button type="primary" v-on:click=childClick1>登录</Button>
             </MenuItem>
             <MenuItem name="register">
-              <Button v-on:click="toRegister">注册</Button>
+              <Button v-on:click=childClick2>注册</Button>
             </MenuItem>
           </div>
         </Menu>
       </Header>
     </Layout>
-  </div>
-</template>
-<script>
 
+  </div>
+</div></template>
+<script>
 
 export default {
   name: "Navbar",
+  data(){
+    return{
+      modal1: false,
+      modal2:false,
+
+    }
+  },
   methods:{
-    toLogin:function (){
-      this.$router.push('/login');
+    childClick1(){
+      this.modal1 = true;
+      this.$emit('getModal1',this.modal1);
     },
-    toRegister:function (){
-      this.$router.push('/user/register')
+    childClick2(){
+      this.modal2 = true;
+      this.$emit('getModal2',this.modal2);
     }
   }
-
 }
 
 

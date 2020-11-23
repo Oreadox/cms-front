@@ -1,6 +1,6 @@
 <template>
   <div style="margin: 10%"  >
-      <card title="欢迎使用CMS" class="form-wrapper" >
+      <card  title="欢迎使用CMS" class="form-wrapper" >
         <h1 style="text-align: center">{{ selected }}登录</h1>
         <Select  v-model="selected"  size="small" style="width:80px; margin: 5px auto; display: block; ">
           <Option v-for="item in userList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -77,7 +77,7 @@ export default {
       this.$router.push('/user/register')
     },
     goto_submit(data){
-      this.$set(this.formItem,'usertype',this.selected)
+      this.$set(this.formInline,'usertype',this.selected)
       this.$refs[data].validate((valid) => {
         if (valid) {
           this.$axios(
