@@ -1,18 +1,17 @@
 <template>
   <div class="form">
     <Layout>
-      <Content>
-        <card>
+        <card class="form-wrapper">
           <h2 class="center">注册</h2>
-          <Form ref="formItem" :model="formItem" :rules="fromValidate" :label-width="80">
+          <Form hide-required-mark ref="formItem" :model="formItem" :rules="fromValidate" :label-width="80">
             <FormItem label="用户名" prop="username">
               <Input v-model="formItem.username" placeholder="长度为2-16的字符"></Input>
             </FormItem>
             <FormItem label="密码" prop="password">
-              <Input type="password" v-model="formItem.password" placeholder="长度为8-32, 需包含字母和数字"></Input>
+              <Input type="password" password  v-model="formItem.password" placeholder="长度为8-32, 需包含字母和数字"></Input>
             </FormItem>
             <FormItem label="确认密码" prop="passwordCheck">
-              <Input type="password" v-model="formItem.passwordCheck" placeholder="重复上述的密码"></Input>
+              <Input type="password" password v-model="formItem.passwordCheck" placeholder="重复上述的密码"></Input>
             </FormItem>
             <FormItem label="姓名" prop="name">
               <Input v-model="formItem.name" placeholder=""></Input>
@@ -23,8 +22,8 @@
                 <Radio label="female">女</Radio>
               </RadioGroup>
             </FormItem>
-            <FormItem label="年龄" prop="age">
-              <Input v-model="formItem.age" placeholder=""></Input>
+            <FormItem  label="年龄" prop="age">
+              <Input  v-model.number="formItem.age" placeholder=""></Input>
             </FormItem>
             <FormItem label="身份证号" prop="idCard">
               <Input v-model="formItem.idCard" placeholder=""></Input>
@@ -41,7 +40,6 @@
             </FormItem>
           </Form>
         </card>
-      </Content>
     </Layout>
   </div>
 
@@ -49,7 +47,7 @@
 
 <script>
 export default {
-  name: "register",
+  name: "Register",
   data() {
     const validatePassCheck = (rule, value, callback) => {
       if (value !== this.formItem.password) {
@@ -89,7 +87,14 @@ export default {
           {required: true, message: '性别不能为空', trigger: 'blur'},
         ],
         age: [
-          {type: 'number', min: 0, message: '年龄不合法', trigger: 'blur'},
+          {type: 'number', required: true, min:1, max:200, message: '年龄不合法', trigger: 'blur'},
+/*
+          {
+            pattern: /^([0-9]$|([1-9][0-9]{0,2}))$/
+            , message: '年龄不合法', trigger: 'blur'
+          }
+*/
+
         ],
         idCard: [
           {required: true, message: '身份证号不能为空', trigger: 'blur'},
@@ -132,7 +137,17 @@ export default {
 <style scoped>
 .form {
   width: 30%;
-  margin: 0 auto;
+  margin: 10% auto;
+}
+@media screen and (max-width: 640px) {
+  .form-wrapper {
+    width: 90%;
+    margin: auto;
+  }
+}
+.form-wrapper{
+  width: 450px;
+  margin: auto;
 }
 
 .center {

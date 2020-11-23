@@ -8,7 +8,7 @@
               <Button type="primary" v-on:click="toLogin">登录</Button>
             </MenuItem>
             <MenuItem name="register">
-              <Button v-on:click="register">注册</Button>
+              <Button v-on:click="toRegister">注册</Button>
             </MenuItem>
           </div>
         </Menu>
@@ -23,7 +23,10 @@ export default {
   name: "Navbar",
   methods:{
     toLogin:function (){
-      this.$router.push('/hotel/login');
+      this.$router.push('/login');
+    },
+    toRegister:function (){
+      this.$router.push('/user/register')
     }
   }
 
