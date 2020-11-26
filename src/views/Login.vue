@@ -1,11 +1,11 @@
 <template>
   <div style="margin: 10%">
-    <card title="欢迎使用CMS" class="form-wrapper">
+<!--    <card title="欢迎使用CMS" class="form-wrapper">-->
       <h1 style="text-align: center">{{ selected }}登录</h1>
       <Select v-model="selected" size="small" style="width:80px; margin: 5px auto; display: block; ">
         <Option v-for="item in userList" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
-      <Form hide-required-mark ref="formInline" :model="formInline" :rules="ruleInline">
+      <Form hide-required-mark ref="formItem" :model="formInline" :rules="ruleInline">
         <FormItem label="账号" prop="user">
           <Input type="text" v-model="formInline.user" placeholder="手机号/账号">
           </Input>
@@ -17,14 +17,14 @@
         <FormItem>
           <Button type="primary" class="button" long @click="submitForm('formItem')">登录</Button>
           <div v-if="selected==='用户'">
-            <Button class="button" long @click="gotoRegister">注册</Button>
+            <Button class="button" long @click="function(){ resetForm('formItem');gotoRegister()}">注册</Button>
           </div>
           <div v-else>
             <Button class="button" long block @click="gotoIndex">返回</Button>
           </div>
         </FormItem>
       </Form>
-    </card>
+<!--    </card>-->
   </div>
 </template>
 <script>
@@ -78,14 +78,13 @@ export default {
       this.$emit('setLoginModal', false);
       this.$emit('setRegisterModal', true);
     },
-    submitForm(data) {
-      this.$set(this.formInline, 'usertype', this.selected)
-      this.$refs[data].validate((valid) => {
+    submitForm(name) {
+      this.$refs[name].validate((valid) => {
         if (valid) {
           this.$axios(
               {
                 method: 'post',
-                url: './api/submit',
+                url: 'https://mock.yonyoucloud.com/mock/16280/info',
                 data: {}
               }
           ).then(function (response) {
@@ -93,8 +92,10 @@ export default {
           })
         }
       })
-    }
-  }
+    },
+    resetForm(name) {
+      this.$refs[name].resetFields();
+    },  }
 }
 
 </script>

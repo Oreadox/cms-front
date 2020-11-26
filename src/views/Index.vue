@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="body">
+      <img :src="imgSrc" width="100%" height="100%" style="pointer-events: none">
+    </div>
     <Navbar @setLoginModal="setLoginModal" @setRegisterModal=setRegisterModal></Navbar>
     <Modal
         footer-hide
@@ -26,8 +29,13 @@ export default {
   components: {Navbar, Login, Register},
   data() {
     return {
+
       loginModal: false,
       registerModal: false,
+      imgSrc:'http://tva4.sinaimg.cn/large/007YSV3xgy1gl1j8l1esbj30kz0dle0g.jpg' 
+      // img/background仅供参考，图片采用图床引用
+      
+      
     }
   },
   methods: {
@@ -42,5 +50,9 @@ export default {
 </script>
 
 <style scoped>
-
+.body{
+  width:100%;
+  height:100%;  /**宽高100%是为了图片铺满屏幕 */
+  position: absolute;
+}
 </style>

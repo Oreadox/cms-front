@@ -35,7 +35,7 @@
       <FormItem>
         <Button style="float: right; margin-left: 8px " @click="resetForm('formItem')">重置</Button>
         <Button style="float: right" type="primary" @click="submitForm('formItem')">提交</Button>
-        <Button style="float: left" type="text" @click="gotoLogin">登录现有账号</Button>
+        <Button style="float: left" type="text" @click="function(){resetForm('formItem'); gotoLogin()}">登录现有账号</Button>
       </FormItem>
     </Form>
   </div>
