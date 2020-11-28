@@ -16,7 +16,7 @@
       </FormItem>
       <FormItem>
         <Button type="primary" class="button" long @click="submitForm('formItem')">登录</Button>
-        <div v-if="selected==='用户'">
+        <div v-if="selected==='user'">
           <Button class="button" long @click="function(){ resetForm('formItem');gotoRegister()}">注册</Button>
         </div>
         <div v-else>
@@ -32,13 +32,11 @@
 export default {
   name: "Login",
   data() {
-
     return {
       formItem: [{
         usertype: '',
         username: '',
         password: '',
-
       }],
       ruleInline: {
         username: [
@@ -63,7 +61,6 @@ export default {
       this.$emit('setLoginModal', false);
     },
     gotoRegister() {
-      // this.$router.push('/user/register')
       this.$emit('setLoginModal', false);
       this.$emit('setRegisterModal', true);
     },
