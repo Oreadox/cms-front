@@ -1,8 +1,5 @@
 const index = () => import('@/views/Index')
-const login = () => import('@/views/Login')
 const userHome = () => import('@/views/user/Home')
-// const userLogin = () => import('@/views/user/Login')
-const userRegister = () => import('@/views/user/Register')
 const userProfile = () => import('@/views/user/Profile')
 const userMessage = () => import('@/views/user/Message')
 
@@ -12,17 +9,14 @@ const conferenceDetail = () => import('@/views/conference/Detail')
 const conferenceParticipate = () => import('@/views/conference/Participate')
 
 const hotelHome = () => import('@/views/hotel/Home')
-// const hotelLogin = () => import('@/views/Login')
 const hotelProfile = () => import('@/views/hotel/Profile')
 const hotelReservation = () => import('@/views/hotel/Reservation')
 
 const driverHome = () => import('@/views/driver/Home')
-// const driverLogin = () => import('@/views/driver/Login')
 const driverProfile = () => import('@/views/driver/Profile')
 const driverReservation = () => import('@/views/driver/Reservation')
 
 const adminHome = () => import('@/views/admin/Home')
-// const adminLogin = () => import('@/views/admin/Login')
 const adminSupervise = () => import('@/views/admin/Supervise')
 const adminConference = () => import('@/views/admin/Conference')
 const adminHotel = () => import('@/views/admin/Hotel')
@@ -40,18 +34,8 @@ export default [
         component: index
     },
     {
-      path: '/login',
-      name: '登录',
-      component: login,
-    },
-    // 用户
-    {
         path: '/user/home',
         component: userHome
-    },
-    {
-        path: '/user/register',
-        component: userRegister
     },
     {
         path: '/user/profile',

@@ -3,6 +3,8 @@
 ### 安装及使用
 参照 [usage.md](usage.md)
 
+### 页面示例  
+[demo](https://oreadox.github.io/cms-front)
 
 ### 目录结构 
 ```text
