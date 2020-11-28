@@ -5,7 +5,7 @@
     <Content :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
         <div style="text-align: center">
           <div style="margin-top: 12vh">
-            <h1>你好, 陈总</h1>
+            <h1>你好, NAME</h1>
             <h2>welcome to NCU-CMS</h2>
           </div>
           <div>
