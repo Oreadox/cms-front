@@ -4,7 +4,8 @@
 参照 [usage.md](usage.md)
 
 ### 页面示例  
-[demo](https://github.com/Oreadox/cms-front/deployments/activity_log?environment=github-pages)
+[demo](https://oreadox.github.io/cms-front)
+
 ### 目录结构 
 ```text
     ├─.gitignore
