@@ -54,13 +54,10 @@ export default {
   components: {Navbar, Login, Register},
   data() {
     return {
-
       loginModal: false,
       registerModal: false,
       imgSrc:'http://tva4.sinaimg.cn/large/007YSV3xgy1gl1j8l1esbj30kz0dle0g.jpg' 
       // img/background仅供参考，图片采用图床引用
-      
-      
     }
   },
   methods: {
