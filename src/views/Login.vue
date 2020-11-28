@@ -5,13 +5,13 @@
       <Select v-model="selected" size="small" style="width:80px; margin: 5px auto; display: block; ">
         <Option v-for="item in userList" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
-      <Form hide-required-mark ref="formItem" :model="formInline" :rules="ruleInline">
+      <Form hide-required-mark ref="formItem" :model="formItem" :rules="ruleInline">
         <FormItem label="账号" prop="user">
-          <Input type="text" v-model="formInline.user" placeholder="手机号/账号">
+          <Input type="text" v-model="formItem.user" placeholder="手机号/账号">
           </Input>
         </FormItem>
         <FormItem label="密码" prop="password">
-          <Input type="password" password v-model="formInline.password" placeholder="密码">
+          <Input type="password" password v-model="formItem.password" placeholder="密码">
           </Input>
         </FormItem>
         <FormItem>
@@ -33,7 +33,7 @@ export default {
   data() {
 
     return {
-      formInline: [{
+      formItem: [{
         usertype: '',
         username: '',
         password: '',
@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     gotoIndex() {
-      this.$router.push('/index')
+      this.$emit('setLoginModal', false);
     },
     gotoRegister() {
       // this.$router.push('/user/register')

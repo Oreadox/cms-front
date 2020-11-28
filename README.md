@@ -3,7 +3,8 @@
 ### 安装及使用
 参照 [usage.md](usage.md)
 
-
+### 页面示例  
+[demo](https://github.com/Oreadox/cms-front/deployments/activity_log?environment=github-pages)
 ### 目录结构 
 ```text
     ├─.gitignore
