@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import Register from "@/views/user/Register";
-import Login from "@/views/Login";
+import Register from "@/components/Register";
+import Login from "@/components/Login";
 export default {
   name: "PanelShow",
   components: {Register, Login},

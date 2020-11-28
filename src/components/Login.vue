@@ -85,6 +85,7 @@ export default {
               {
                 method: 'post',
                 url: 'https://mock.yonyoucloud.com/mock/16280/info',
+                // url: require('@/../public/'),
                 data: {}
               }
           ).then(function (response) {
