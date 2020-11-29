@@ -21,12 +21,14 @@
     <div class="font-stype form-wrapper">
       <Row type="flex" justify="center" gutter=40 style="padding:5%;margin-top: 5%">
         <Col span="10">
-          <p class="title-font-stype">
+          <p class="title-font-stlye">
             会议管理更加便携
           </p>
-          <p class="text-font-stype">
+          <p class="text-font-style">
             Detailed introduction
           </p>
+          <Divider />
+          <p class="text-font-style"> 还没有账号？<a @click="setTuretoRegisterModal">不妨注册一个</a> </p>
         </Col>
         <Col span="10">
           <img src="https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE4qpUo?ver=fc80&q=90&h=675&w=830&b=%23FFFFFFFF&aim=true"
@@ -34,16 +36,16 @@
         </Col>
       </Row>
 
-      <Row type="flex" justify="center" gutter=40 style="padding:5%;background-color: lightgray">
+      <Row type="flex" justify="center" gutter=40 style="padding:5%;background-color: #F5F5F5">
         <Col span="10">
           <img src="https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE3oNUA?ver=2548&q=90&h=675&w=830&b=%23FFFFFFFF&aim=true"
                class="control-layout">
         </Col>
         <Col span="10">
-          <p class="title-font-stype">
+          <p class="title-font-stlye">
             随时随地组织会议
           </p>
-          <p class="text-font-stype">
+          <p class="text-font-style">
             Detailed introduction
           </p>
         </Col>
@@ -51,10 +53,10 @@
 
       <Row type="flex" justify="center" gutter=40 style="padding:5%;">
         <Col span="10">
-          <p class="title-font-stype">
+          <p class="title-font-stlye">
             丰富的组织方式
           </p>
-          <p class="text-font-stype">
+          <p class="text-font-style">
             既可以设置为公开页面供大家加入，也能够设置为私人会议，通过id来查询加入。
           </p>
         </Col>
@@ -95,6 +97,9 @@ export default {
     setRegisterModal(fromChild) {
       this.registerModal = fromChild;
     },
+    setTuretoRegisterModal(){
+      this.registerModal = true
+    }
   }
 }
 </script>
@@ -105,16 +110,22 @@ export default {
   height:100%;
   position: absolute;
 }
-.title-font-stype{
+.title-font-stlye{
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
-  font-size: 3em;
+  font-size: 2em;
   font-weight: bold;
   flex: auto
 }
-.text-font-stype{
+.text-font-style{
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
-  font-size: 2em;
+  font-size: 1.5em;
   flex: auto;
+}
+a:link{
+  color: #2d8cf0;
+}
+a:hover{
+  color: #5cadff;
 }
 @media screen and (max-width: 640px) {
   .form-wrapper {

@@ -1,4 +1,6 @@
 const index = () => import('@/views/Index')
+
+const userIndex = () => import("@/views/user/index")
 const userHome = () => import('@/views/user/Home')
 const userProfile = () => import('@/views/user/Profile')
 const userMessage = () => import('@/views/user/Message')
@@ -23,6 +25,7 @@ const adminHotel = () => import('@/views/admin/Hotel')
 const adminDriver = () => import('@/views/admin/Driver')
 const adminSystem = () => import('@/views/admin/System')
 
+
 export default [
     {
         path: '/',
@@ -34,17 +37,25 @@ export default [
         component: index
     },
     {
-        path: '/user/home',
-        component: userHome
+        path: '/user/',
+        redirect: '/user/home',
+        component: userIndex,
+        children: [
+            {
+                path: 'home',
+                component: userHome
+            },
+            {
+                path: 'profile',
+                component: userProfile
+            },
+            {
+                path: 'message',
+                component: userMessage
+            },
+        ]
     },
-    {
-        path: '/user/profile',
-        component: userProfile
-    },
-    {
-        path: '/user/message',
-        component: userMessage
-    },
+
     // 会议
     {
         path: '/conference/create',
@@ -94,7 +105,7 @@ export default [
         component: adminHome
     },
     {
-        path: '/admin/supervise',
+        path: '/admin/supervise/',
         component: adminSupervise,
         children: [
             {
