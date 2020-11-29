@@ -16,8 +16,8 @@
       </FormItem>
       <FormItem label="性别" prop="gender">
         <RadioGroup v-model="formItem.gender">
-          <Radio label="male">男</Radio>
-          <Radio label="female">女</Radio>
+          <Radio label="MALE">男</Radio>
+          <Radio label="FEMALE">女</Radio>
         </RadioGroup>
       </FormItem>
       <FormItem label="年龄" prop="age">
@@ -48,16 +48,36 @@ export default {
   data() {
     const validatePassCheck = (rule, value, callback) => {
       if (value !== this.formItem.password) {
-        callback(new Error('密码验证不一致'))
+        return callback(new Error('密码验证不一致'))
+      } else {
+        return callback()
       }
     };
+    const validateUsername = (rule, value, callback) => {
+      // var err
+      this.$axios(
+          {
+            method: 'post',
+            url: this.$baseURI + '/api/register/checkUsername',
+            data: {
+              "username": value
+            }
+          }
+      ).then(function (response) {
+        if(response['data']['data']===false){
+          callback(new Error('用户名重复'))
+        } else {
+          callback();
+        }
+      })
+    }
     return {
       formItem: {
         username: '',
         password: '',
         passwordCheck: '',
         name: '',
-        gender: 'male',
+        gender: 'MALE',
         age: '',
         idCard: '',
         workUnit: '',
@@ -65,7 +85,8 @@ export default {
       },
       fromValidate: {
         username: [
-          {required: true, message: '用户名不能为空', trigger: 'blur'}
+          {required: true, message: '用户名不能为空', trigger: 'blur'},
+          {validator: validateUsername, trigger: 'blur'}
         ],
         password: [
           {required: true, message: '密码不能为空', trigger: 'blur'},
@@ -103,16 +124,34 @@ export default {
   },
   methods: {
     submitForm(name) {
+      var that = this
       this.$refs[name].validate((valid) => {
         if (valid) {
+          var data = {
+            username: this.formItem.username,
+            password: this.formItem.password,
+            name: this.formItem.name,
+            gender: this.formItem.gender,
+            birthday: this.formItem.birthday,  //上面记得加
+            residentIdNumber: this.formItem.idCard,
+            email: this.formItem.email, //上面记得加
+            telephone: this.formItem.phone,
+            workplace: this.formItem.workUnit
+          }
           this.$axios(
               {
                 method: 'post',
-                url: 'https://mock.yonyoucloud.com/mock/16280/info',
-                data: {}
+                url: this.$baseURI + '/api/register/submit',
+                data: data
               }
           ).then(function (response) {
-            console.log(response.data['message'])
+            if(response["data"]["data"]===true){
+              that.$Message.success("注册成功，即将跳转到登录界面");
+              setTimeout(function(){
+                that.$emit('setRegisterModal', false);
+                that.$emit('setLoginModal', true);
+              }, 1500);
+            }
           })
         }
       })

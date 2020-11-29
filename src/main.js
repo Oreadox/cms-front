@@ -9,6 +9,7 @@ import App from "@/App";
 
 
 Vue.prototype.$axios = axios
+Vue.prototype.$baseURI = "https://mock.yonyoucloud.com/mock/16360"
 Vue.use(VueRouter)
 Vue.use(ViewUI)
 Vue.use(Vuex)
