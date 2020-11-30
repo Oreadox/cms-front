@@ -5,6 +5,7 @@ import Vuex from 'vuex'
 import 'view-design/dist/styles/iview.css';
 import axios from 'axios'
 import routes from "@/router/routes";
+import store from "@/store";
 import App from "@/App";
 
 
@@ -28,6 +29,7 @@ const router = new VueRouter({
 new Vue({
     el: '#app',
     router,
+    store,
     render: h => h(App),
 }).$mount('#app')
 // })
