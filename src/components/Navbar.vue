@@ -1,6 +1,6 @@
 <template>
   <div>
-  <Menu mode="horizontal" :theme="light" active-name="1">
+  <Menu mode="horizontal" active-name="1">
     <img src="http://tvax4.sinaimg.cn/large/007YSV3xgy1gl45wx0lx7j30a00a0mxd.jpg"
          style="pointer-events: none;float: left;" class="control-layout">
 <!--    src 请放本地，本次仅供测试使用，最终图标待定-->

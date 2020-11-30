@@ -15,7 +15,7 @@
         </Input>
       </FormItem>
       <FormItem>
-        <Button type="primary" class="button" long @click="submitForm('formItem')">登录</Button>
+        <Button type="primary" class="button" long @click="submitForm()">登录</Button>
         <div v-if="selected==='user'">
           <Button class="button" long @click="function(){ resetForm('formItem');gotoRegister()}">注册</Button>
         </div>
@@ -64,21 +64,29 @@ export default {
       this.$emit('setLoginModal', false);
       this.$emit('setRegisterModal', true);
     },
-    submitForm(name) {
-      var $this = this;
-      this.$refs[name].validate((valid) => {
+    submitForm: function () {
+      var that = this;
+      this.$refs['formItem'].validate((valid) => {
         if (valid) {
+          var data = {
+            role: this.selected.toUpperCase(),
+            username: this.formItem.username,
+            password: this.formItem.password
+          }
           this.$axios({
             method: 'post',
-            url: 'https://mock.yonyoucloud.com/mock/16280/info',
-            data: {}
+            url: `${this.$baseURI}/api/login/submit`,
+            data: data
           }).then(function (response) {
-            if (response['status']===1){
-              $this.$router.push(`/${$this.selected}/home`)
+            var respData = response['data']
+            if (Boolean(respData['data']['loginSuccess']) === true) {
+              that.$Message.success("登录成功");
+              that.$store.commit("setToken", respData['data']['token'])
+              that.$store.commit("setUsername", respData['data']['username'])
+              that.$store.commit("setRole", respData['data']['role'].toLowerCase())
+              that.$router.push(`/${that.selected}/home`)
             } else {
-              // todo: 给了接口文档记得改下
-              $this.$router.push(`/${$this.selected}/home`)
-              console.log(response)
+              that.$Message.error(response['data']['message'])
             }
           })
         }

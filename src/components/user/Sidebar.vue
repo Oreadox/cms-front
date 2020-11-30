@@ -1,7 +1,7 @@
 <template>
     <div>
       <Sider :style="{background: '#fff', position: 'fixed', height: '100vh', left: 0, overflow: 'auto'}" width="15vw">
-        <Menu active-name="home" width="15vw" :open-names='home'>
+        <Menu active-name="home" width="15vw">
           <MenuItem name="home" to="/user/home">
             <Icon type="ios-navigate"></Icon>
             <span>首页</span>

@@ -78,7 +78,7 @@ export default {
         passwordCheck: '',
         name: '',
         gender: 'MALE',
-        age: '',
+        age: Number(),
         idCard: '',
         workUnit: '',
         phone: ''
@@ -141,7 +141,7 @@ export default {
           this.$axios(
               {
                 method: 'post',
-                url: this.$baseURI + '/api/register/submit',
+                url: `${this.$baseURI}/api/register/submit`,
                 data: data
               }
           ).then(function (response) {
