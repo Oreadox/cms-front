@@ -31,104 +31,106 @@ const adminDriver = () => import('@/views/admin/Driver')
 const adminSystem = () => import('@/views/admin/System')
 
 
-export default new VueRouter([
-    {
-        path: '/',
-        redirect: '/index'
-    },
-    {
-        path: '/index',
-        name: '主页',
-        component: index
-    },
-    {
-        path: '/user/',
-        redirect: '/user/home',
-        component: userIndex,
-        children: [
-            {
-                path: 'home',
-                component: userHome
-            },
-            {
-                path: 'profile',
-                component: userProfile
-            },
-            {
-                path: 'message',
-                component: userMessage
-            },
-        ]
-    },
+export default new VueRouter({
+    routes: [
+        {
+            path: '/',
+            redirect: '/index'
+        },
+        {
+            path: '/index',
+            name: '主页',
+            component: index
+        },
+        {
+            path: '/user/',
+            redirect: '/user/home',
+            component: userIndex,
+            children: [
+                {
+                    path: 'home',
+                    component: userHome
+                },
+                {
+                    path: 'profile',
+                    component: userProfile
+                },
+                {
+                    path: 'message',
+                    component: userMessage
+                },
+            ]
+        },
 
-    // 会议
-    {
-        path: '/conference/create',
-        component: conferenceCreate
-    },
-    {
-        path: '/conference/list',
-        component: conferenceList
-    },
-    {
-        path: '/conference/detail',
-        component: conferenceDetail
-    },
-    {
-        path: '/conference/participate',
-        component: conferenceParticipate
-    },
-    // 酒店
-    {
-        path: '/hotel/home',
-        component: hotelHome
-    },
-    {
-        path: '/hotel/profile',
-        component: hotelProfile
-    },
-    {
-        path: '/hotel/reservation',
-        component: hotelReservation
-    },
-    // 司机
-    {
-        path: '/driver/home',
-        component: driverHome
-    },
-    {
-        path: '/driver/profile',
-        component: driverProfile
-    },
-    {
-        path: '/driver/reservation',
-        component: driverReservation
-    },
-    // 管理员
-    {
-        path: '/admin/home',
-        component: adminHome
-    },
-    {
-        path: '/admin/supervise/',
-        component: adminSupervise,
-        children: [
-            {
-                path: 'conference',
-                component: adminConference
-            },
-            {
-                path: 'hotel',
-                component: adminHotel
-            },
-            {
-                path: 'driver',
-                component: adminDriver
-            },
-        ]
-    },
-    {
-        path: '/admin/system',
-        component: adminSystem
-    }
-])
+        // 会议
+        {
+            path: '/conference/create',
+            component: conferenceCreate
+        },
+        {
+            path: '/conference/list',
+            component: conferenceList
+        },
+        {
+            path: '/conference/detail',
+            component: conferenceDetail
+        },
+        {
+            path: '/conference/participate',
+            component: conferenceParticipate
+        },
+        // 酒店
+        {
+            path: '/hotel/home',
+            component: hotelHome
+        },
+        {
+            path: '/hotel/profile',
+            component: hotelProfile
+        },
+        {
+            path: '/hotel/reservation',
+            component: hotelReservation
+        },
+        // 司机
+        {
+            path: '/driver/home',
+            component: driverHome
+        },
+        {
+            path: '/driver/profile',
+            component: driverProfile
+        },
+        {
+            path: '/driver/reservation',
+            component: driverReservation
+        },
+        // 管理员
+        {
+            path: '/admin/home',
+            component: adminHome
+        },
+        {
+            path: '/admin/supervise/',
+            component: adminSupervise,
+            children: [
+                {
+                    path: 'conference',
+                    component: adminConference
+                },
+                {
+                    path: 'hotel',
+                    component: adminHotel
+                },
+                {
+                    path: 'driver',
+                    component: adminDriver
+                },
+            ]
+        },
+        {
+            path: '/admin/system',
+            component: adminSystem
+        }
+    ]
+})
