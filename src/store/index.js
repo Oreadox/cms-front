@@ -1,9 +1,13 @@
+import Vue from 'vue'
 import Vuex from 'vuex'
 
-var store = new Vuex.Store({
+Vue.use(Vuex)
+
+const store = new Vuex.Store({
     state: {
         username: "",
         token: "",
+        role: "",
     },
     mutations: {
         setUsername(state, username) {
@@ -11,6 +15,9 @@ var store = new Vuex.Store({
         },
         setToken(state, token) {
             state.token = token
+        },
+        setRole(state, role) {
+            state.role = role
         }
     }
 })

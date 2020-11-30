@@ -51,7 +51,7 @@
     |  |   |   ├─supervise.vue
     |  |   |   └system.vue
     |  |─routers
-    |  |   └routes.js
+    |  |   └router.js
     |  ├─components
     |  ├─assets
     |  |   ├─logo.png

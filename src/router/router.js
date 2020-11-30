@@ -1,3 +1,8 @@
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+
+Vue.use(VueRouter)
+
 const index = () => import('@/views/Index')
 
 const userIndex = () => import("@/views/user/index")
@@ -26,7 +31,7 @@ const adminDriver = () => import('@/views/admin/Driver')
 const adminSystem = () => import('@/views/admin/System')
 
 
-export default [
+export default new VueRouter([
     {
         path: '/',
         redirect: '/index'
@@ -126,4 +131,4 @@ export default [
         path: '/admin/system',
         component: adminSystem
     }
-]
+])
