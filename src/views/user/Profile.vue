@@ -1,66 +1,29 @@
 <template>
   <div id="Profile">
     <Content :style="{padding: '24px', margin: 'auto auto auto 25vw'}">
-      <div >
-        <List  class="List" style="margin-top: 5%; text-align: center" header="个人资料" border>
+      <div>
+        <List class="List" style="margin-top: 5%; text-align: center" header="个人资料" border >
           <ListItem class="ListItem">
-            <a @click="gotoChange">
+            <a>
               头像
-<!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
+              <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
             </a>
           </ListItem>
-          <ListItem class="ListItem" v-model="userData.userName">
-            <a @click="gotoChange">
-              <div class="set_margin">名称 </div>
-              <div >{{ userData.userName }}</div>
-<!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
-            </a>
-          </ListItem>
-          <ListItem class="ListItem">
-            <a @click="gotoChange">
-              <div class="set_margin">生日</div>
-                <div>{{userData.userBirthday}}</div>
-<!--                <Icon style="float: right" type="ios-arrow-forward"/>-->
-
-
-            </a>
-          </ListItem>
-          <ListItem class="ListItem">
-            <a @click="gotoChange">
-              <div class="set_margin">性别 </div>
-              <div>{{userData.userSex}}</div>
-<!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
-            </a>
-          </ListItem>
-          <ListItem class="ListItem">
-            <a @click="gotoChange">
-              <div class="set_margin">密码 </div>
-              <div>{{userData.userPassword}}</div>
-<!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
+          <ListItem class="ListItem" v-for="(value, key) in listItem.personalData" :key="key" :value="value" v-model=userData[value] >
+            <a @click="gotoChange(value, key)">
+              <div class="set_margin">{{value}}</div>
+              <div>{{ userData[key] }}</div>
+              <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
             </a>
           </ListItem>
         </List>
         <br><br>
-        <List class="List" style="text-align: center" header="联系信息" border >
-          <ListItem class="ListItem">
-            <a @click="gotoChange">
-              <div class="set_margin">账号 </div>
-              <div>{{userData.userAccount}}</div>
-<!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
-            </a>
-          </ListItem>
-          <ListItem class="ListItem">
-            <a @click="gotoChange">
-              <div class="set_margin">邮箱 </div>
-              <div>{{userData.userEmail}}</div>
-<!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
-            </a>
-          </ListItem>
-          <ListItem class="ListItem">
-            <a @click="gotoChange">
-              <div class="set_margin">电话 </div>
-              <div>{{userData.userPhone}}</div>
-<!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
+        <List class="List" style="text-align: center" header="联系信息" border>
+          <ListItem class="ListItem" v-for="(value, key) in listItem.contactInformation" :key="key" :value="value">
+            <a @click="gotoChange(value, key)">
+              <div class="set_margin">{{value}}</div>
+              <div>{{ userData[key] }}</div>
+              <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
             </a>
           </ListItem>
         </List>
@@ -69,39 +32,60 @@
     <Modal
         footer-hide
         :mask-closable="false"
-        v-model="changeProfile">
-      <ChangeInfo  :dataToChild="userData" :dataType="changeType" :dataTitle="changeTitle"  @gotoProfile="gotoProfile"></ChangeInfo>
+        v-model="modelInfo.changeModal">
+      <ChangeInfo :userData="userData" :modelInfo="modelInfo"
+                  @gotoProfile="gotoProfile"></ChangeInfo>
     </Modal>
   </div>
 </template>
 
 <script>
 import ChangeInfo from "@/components/user/ChangeInfo";
+
 export default {
   name: "Profile",
-  components:{ChangeInfo},
+  components: {ChangeInfo},
   data() {
     return {
       userData: {
-        userName: 'xxx',
-        userBirthday: 'xxx',
-        userSex: 'xxx',
-        userPassword: '●●●●●●●●●●●●',
-        userAccount: 'xxx',
-        userEmail:'xxx',
-        userPhone: 'xxx',
+        name: 'xxx',
+        birthday: 'xxx',
+        gender: 'xxx',
+        password: '●●●●●●●●●●●●',
+        account: 'xxx',
+        email: 'xxx',
+        phone: 'xxx',
       },
-      changeTitle:'名字',
-      changeType : 'text',
-      changeProfile : false,
-    }
+      listItem: {
+        personalData: {
+          name: '名称',
+          birthday: '生日',
+          gender: '性别',
+          password: '密码',
+        },
+        contactInformation: {
+          account: '账号',
+          email: '邮箱',
+          phone: '电话',
+        }
+      },
+      modelInfo: {
+        changedTitle: '名字',
+        changedType: 'name',
+        changeModal: false,
+      }
+
+  }
   },
   methods: {
-    gotoProfile(child){
-      this.changeProfile=child
+    gotoProfile(child) {
+      this.modelInfo.changeModal = child
     },
-    gotoChange(){
-      this.changeProfile = true
+    gotoChange(title, type) {
+      console.log(`${title} ${type}`)
+      this.modelInfo.changedTitle = title
+      this.modelInfo.changedType = type
+      this.modelInfo.changeModal = true
     }
   },
 
@@ -128,18 +112,22 @@ a {
   color: #515a6e;
   text-align: left;
 }
-.set_margin{
-  float:left;
+
+.set_margin {
+  float: left;
   width: 8em;
 }
+
 .ListItem:hover {
   background-color: #F6F6F6
 }
-.List{
+
+.List {
   width: 800px;
 }
+
 @media screen and (max-width: 960px) {
-  .List{
+  .List {
     width: 90%;
   }
 }
