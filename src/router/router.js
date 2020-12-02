@@ -14,6 +14,7 @@ const conferenceCreate = () => import('@/views/conference/Create')
 const conferenceList = () => import('@/views/conference/List')
 const conferenceDetail = () => import('@/views/conference/Detail')
 const conferenceParticipate = () => import('@/views/conference/Participate')
+const conferenceIndex = () => import('@/views/conference/index')
 
 const hotelHome = () => import('@/views/hotel/Home')
 const hotelProfile = () => import('@/views/hotel/Profile')
@@ -63,6 +64,10 @@ export default new VueRouter({
         },
 
         // 会议
+        {
+          path: '/conference/',
+          component: conferenceIndex,
+        },
         {
             path: '/conference/create',
             component: conferenceCreate

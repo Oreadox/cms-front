@@ -1,42 +1,45 @@
 <template>
-  <div id="Profile">
-    <Content :style="{padding: '24px', margin: 'auto auto auto 25vw'}">
-      <div>
-        <List class="List" style="margin-top: 5%; text-align: center" header="个人资料" border >
-          <ListItem class="ListItem">
-            <a>
-              头像
-              <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
-            </a>
-          </ListItem>
-          <ListItem class="ListItem" v-for="(value, key) in listItem.personalData" :key="key" :value="value" v-model=userData[value] >
-            <a @click="gotoChange(value, key)">
-              <div class="set_margin">{{value}}</div>
-              <div>{{ userData[key] }}</div>
-              <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
-            </a>
-          </ListItem>
-        </List>
-        <br><br>
-        <List class="List" style="text-align: center" header="联系信息" border>
-          <ListItem class="ListItem" v-for="(value, key) in listItem.contactInformation" :key="key" :value="value">
-            <a @click="gotoChange(value, key)">
-              <div class="set_margin">{{value}}</div>
-              <div>{{ userData[key] }}</div>
-              <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
-            </a>
-          </ListItem>
-        </List>
-      </div>
-    </Content>
-    <Modal
-        footer-hide
-        :mask-closable="false"
-        v-model="modelInfo.changeModal">
-      <ChangeInfo :userData="userData" :modelInfo="modelInfo"
-                  @gotoProfile="gotoProfile"></ChangeInfo>
-    </Modal>
-  </div>
+  <Card dis-hover :bordered=false :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
+    <div id="Profile">
+      <Content>
+        <div>
+          <List class="List" style="margin-top: 5%; text-align: center" header="个人资料" border>
+            <ListItem class="ListItem">
+              <a>
+                头像
+                <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
+              </a>
+            </ListItem>
+            <ListItem class="ListItem" v-for="(value, key) in listItem.personalData" :key="key" :value="value"
+                      v-model=userData[value]>
+              <a @click="gotoChange(value, key)">
+                <div class="set_margin">{{ value }}</div>
+                <div>{{ userData[key] }}</div>
+                <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
+              </a>
+            </ListItem>
+          </List>
+          <br><br>
+          <List class="List" style="text-align: center" header="联系信息" border>
+            <ListItem class="ListItem" v-for="(value, key) in listItem.contactInformation" :key="key" :value="value">
+              <a @click="gotoChange(value, key)">
+                <div class="set_margin">{{ value }}</div>
+                <div>{{ userData[key] }}</div>
+                <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
+              </a>
+            </ListItem>
+          </List>
+        </div>
+      </Content>
+      <Modal
+          footer-hide
+          :mask-closable="false"
+          v-model="modelInfo.changeModal">
+        <ChangeInfo :userData="userData" :modelInfo="modelInfo"
+                    @gotoProfile="gotoProfile"></ChangeInfo>
+      </Modal>
+    </div>
+  </Card>
 </template>
 
 <script>

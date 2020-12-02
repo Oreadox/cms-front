@@ -10,13 +10,13 @@
             <Icon type="ios-keypad"></Icon>
             <span>账户信息</span>
           </MenuItem>
-          <MenuItem name="conference" to="/conference/create">
+          <MenuItem name="conference" to="/conference/">
             <Icon type="ios-paper"></Icon>
             <span>会议</span>
           </MenuItem>
           <MenuItem name="message" to="/user/message">
             <Icon type="ios-mail"></Icon>
-            <span>站内邮箱</span>
+            <span>站内信息</span>
           </MenuItem>
         </Menu>
       </Sider>

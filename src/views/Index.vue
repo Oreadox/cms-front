@@ -22,10 +22,10 @@
       <Row type="flex" justify="center" gutter=40 style="padding:5%;margin-top: 5%">
         <Col span="10">
           <p class="title-font-stlye">
-            会议管理更加便携
+            随时随地组织会议
           </p>
           <p class="text-font-style">
-            Detailed introduction
+            您只需设置好会议，然后将链接分享给与会者即可。CMS采用操作快捷的轻量级界面，并提供智能的参与者管理功能，可让您轻松组织，参与会议。
           </p>
           <Divider />
           <p class="text-font-style"> 还没有账号？<a @click="setTuretoRegisterModal">不妨注册一个</a> </p>
@@ -43,10 +43,10 @@
         </Col>
         <Col span="10">
           <p class="title-font-stlye">
-            随时随地组织会议
+            会议管理更加便捷
           </p>
           <p class="text-font-style">
-            Detailed introduction
+            您只需要参与会议，后台即刻智能提供专车。无需额外的操作，高效开启您的会议。
           </p>
         </Col>
       </Row>

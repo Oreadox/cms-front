@@ -1,9 +1,7 @@
 <template>
 <div class="layout">
   <Navbar ></Navbar>
-  <sidebar>
     <Sidebar></Sidebar>
-  </sidebar>
   <Content >
     <RouterView></RouterView>
   </Content>
@@ -11,8 +9,8 @@
 </template>
 
 <script>
-import Navbar from "@/components/user/Navbar";
-import Sidebar from "@/components/user/Sidebar";
+import Navbar from "@/components/common/Navbar";
+import Sidebar from "@/components/common/Sidebar";
 // import Home from "@/views/user/Home";
 export default {
 name: "index",
