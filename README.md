@@ -3,6 +3,8 @@
 ### 安装及使用
 参照 [usage.md](usage.md)
 
+### 页面示例  
+[demo](https://oreadox.github.io/cms-front)
 
 ### 目录结构 
 ```text
@@ -49,7 +51,7 @@
     |  |   |   ├─supervise.vue
     |  |   |   └system.vue
     |  |─routers
-    |  |   └routes.js
+    |  |   └router.js
     |  ├─components
     |  ├─assets
     |  |   ├─logo.png
