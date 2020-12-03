@@ -3,25 +3,24 @@
   <Navbar></Navbar>
     <Sidebar></Sidebar>
   <Card dis-hover  :bordered=false :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
+    <div style="margin-bottom: 2vw">
+      <Button size="large" type="primary">创建会议</Button>
+      <Button size="large" style="margin-left: 5vw ">加入会议</Button>
+    </div>
     <div>
-      <strong>Default Size:</strong>
-      <br><br>
+
       <List header="Header" footer="Footer" border>
         <ListItem>This is a piece of text.</ListItem>
         <ListItem>This is a piece of text.</ListItem>
         <ListItem>This is a piece of text.</ListItem>
       </List>
-      <br>
-      <strong>Small Size:</strong>
-      <br><br>
+      <br><br><br>
       <List header="Header" footer="Footer" border size="small">
         <ListItem>This is a piece of text.</ListItem>
         <ListItem>This is a piece of text.</ListItem>
         <ListItem>This is a piece of text.</ListItem>
       </List>
-      <br>
-      <strong>Large Size:</strong>
-      <br><br>
+      <br><br><br>
       <List header="Header" footer="Footer" border size="large">
         <ListItem>This is a piece of text.</ListItem>
         <ListItem>This is a piece of text.</ListItem>

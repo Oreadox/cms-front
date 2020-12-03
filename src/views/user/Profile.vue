@@ -126,7 +126,7 @@ a {
 }
 
 .List {
-  width: 800px;
+  width: 700px;
 }
 
 @media screen and (max-width: 960px) {
