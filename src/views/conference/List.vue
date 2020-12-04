@@ -18,7 +18,8 @@
           <Panel name="ended">
             已结束
             <div slot="content">
-              <Table :columns="this.columns" :data="this.conference" :stripe="true" max-height="500px">
+              <Table :columns="this.columns" :data="this.conference" :stripe="true"
+                     max-height="500px" style="overflow-y: auto">
               </Table>
             </div>
           </Panel>
@@ -129,5 +130,9 @@ export default {
 
 >>> .ivu-table::before {
   height: 0;
+}
+
+>>> .ivu-table-overflowX {
+  overflow-x: hidden;
 }
 </style>
