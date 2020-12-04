@@ -1,55 +1,66 @@
 <template>
   <div>
-    <Card dis-hover  :bordered=false :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
+    <Card dis-hover :bordered=false :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
       <div style="margin-bottom: 2vw">
         <Button size="large" type="primary">创建会议</Button>
         <Button size="large" style="margin-left: 5vw ">加入会议</Button>
       </div>
       <div>
-
-        <Button @click="showProcessing = !showProcessing"  >进行中</Button>
-
-        <collapse-transition>
-          <Table :columns="this.columns" :data="this.conference" v-if="showProcessing"  :stripe="true">
-          </Table>
-        </collapse-transition><br>
-
-        <Button @click="showFinish = !showFinish">已结束</Button>
-        <collapse-transition>
-          <Table :columns="this.columns" :data="this.conference" v-if="showFinish" :stripe="true">
-          </Table>
-        </collapse-transition>
+        <!--        <Button @click="showFinish = !showFinish">已结束</Button>-->
+        <Collapse v-model="showingPanel" simple>
+          <Panel name="processing">
+            进行中
+            <div slot="content">
+              <Table :columns="this.columns" :data="this.conference" :stripe="true">
+              </Table>
+            </div>
+          </Panel>
+          <Panel name="ended">
+            已结束
+            <div slot="content">
+              <Table :columns="this.columns" :data="this.conference" :stripe="true" class="table" height="500px">
+              </Table>
+            </div>
+          </Panel>
+        </Collapse>
       </div>
     </Card>
   </div>
 </template>
 
 <script>
-import CollapseTransition from "@/plugins/CollapseTransition"
+// import CollapseTransition from "@/plugins/CollapseTransition"
 
 export default {
-
-
   name: "List",
-  components:{
-    'CollapseTransition':CollapseTransition,
+  components: {
+    // 'CollapseTransition': CollapseTransition,
   },
-  data(){
-    return{
-      columns:[
-        {key: 'id',
-          title:'id'},
+  data() {
+    return {
+      columns: [
+        {
+          key: 'id',
+          title: 'id'
+        },
 
-        {key: 'name',
-          title:'name'},
+        {
+          key: 'name',
+          title: 'name'
+        },
 
-        {key: 'address',
-          title:'address'},
+        {
+          key: 'address',
+          title: 'address'
+        },
 
-        {key: 'startTime',
-          title:'startTime'},
+        {
+          key: 'startTime',
+          title: 'startTime'
+        },
 
-        {key:'state',
+        {
+          key: 'state',
           title: 'state',
         },
 
@@ -78,23 +89,29 @@ export default {
           }
         }
       ],
-      conference:[{
+      conference: [{
         id: 1000,
-        name:'one',
-        address:'xxx',
+        name: 'one',
+        address: 'xxx',
         startTime: '2020/12/12-2020/12/13',
         state: 'finish',
-      }],
-      showProcessing:true,
-      showFinish:true,
+      },
+        {
+          id: 1000,
+          name: 'one',
+          address: 'xxx',
+          startTime: '2020/12/12-2020/12/13',
+          state: 'finish',
+        }],
+      showingPanel: "processing",
     }
   },
   methods: {
-    show () {
-/*            this.$Modal.info({
-              title: 'User Info',
-              content: `Name：${this.conference[index].name}<br>Age：${this.conference[index].address}<br>Address：${this.conference[index].startTime}`
-            })*/
+    show() {
+      /*            this.$Modal.info({
+                    title: 'User Info',
+                    content: `Name：${this.conference[index].name}<br>Age：${this.conference[index].address}<br>Address：${this.conference[index].startTime}`
+                  })*/
       this.$router.push('/conference/detail')
     },
   }
@@ -102,5 +119,15 @@ export default {
 </script>
 
 <style scoped>
+>>> .ivu-collapse-content, >>> .ivu-collapse-content-box {
+  padding: 0;
+}
 
+>>> .ivu-table tr:last-child td, th {
+  border-bottom: none;
+}
+
+>>> .ivu-table::before {
+  height: 0;
+}
 </style>
