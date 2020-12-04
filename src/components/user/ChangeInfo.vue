@@ -2,8 +2,8 @@
 <div>
   <Form hide-required-mark style="margin-top: 5%" :rules="fromValidate" ref="formItem" :model="formItem">
     <h2 style="text-align: center">修改{{modelInfo.changedTitle}}</h2>
-    <FormItem :label="modelInfo.changedTitle">
-      <Input disabled :placeholder=userData[modelInfo.changedType]></Input>
+    <FormItem show-message :label="modelInfo.changedTitle">
+      <Input  disabled :placeholder=userData[modelInfo.changedType]></Input>
     </FormItem>
     <FormItem label="新密码" prop="password" v-if="modelInfo.changedType==='password'">
       <Input type="password" password v-model="formItem.newInfo" placeholder="长度为8-32, 需包含字母和数字"></Input>

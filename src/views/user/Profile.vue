@@ -10,7 +10,7 @@
                 <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
               </a>
             </ListItem>
-            <ListItem class="ListItem" v-for="(value, key) in listItem.personalData" :key="key" :value="value"
+            <ListItem  class="ListItem" v-for="(value, key) in listItem.personalData" :key="key" :value="value"
                       v-model=userData[value]>
               <a @click="gotoChange(value, key)">
                 <div class="set_margin">{{ value }}</div>

@@ -5,7 +5,7 @@ Vue.use(VueRouter)
 
 const index = () => import('@/views/Index')
 
-const userIndex = () => import("@/views/user/index")
+const userIndex = () => import("@/views/user/Index")
 const userHome = () => import('@/views/user/Home')
 const userProfile = () => import('@/views/user/Profile')
 const userMessage = () => import('@/views/user/Message')
@@ -14,7 +14,7 @@ const conferenceCreate = () => import('@/views/conference/Create')
 const conferenceList = () => import('@/views/conference/List')
 const conferenceDetail = () => import('@/views/conference/Detail')
 const conferenceParticipate = () => import('@/views/conference/Participate')
-const conferenceIndex = () => import('@/views/conference/index')
+const conferenceIndex = () => import('@/views/conference/Index')
 
 const hotelHome = () => import('@/views/hotel/Home')
 const hotelProfile = () => import('@/views/hotel/Profile')
@@ -66,24 +66,28 @@ export default new VueRouter({
         // 会议
         {
           path: '/conference/',
+            redirect: '/conference/list',
           component: conferenceIndex,
-        },
+            children: [
         {
-            path: '/conference/create',
+            path: 'create',
             component: conferenceCreate
         },
         {
-            path: '/conference/list',
+            path: 'list',
             component: conferenceList
         },
         {
-            path: '/conference/detail',
+            path: 'detail',
             component: conferenceDetail
         },
         {
-            path: '/conference/participate',
+            path: 'participate',
             component: conferenceParticipate
         },
+            ]
+        },
+
         // 酒店
         {
             path: '/hotel/home',
