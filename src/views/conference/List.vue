@@ -18,7 +18,7 @@
           <Panel name="ended">
             已结束
             <div slot="content">
-              <Table :columns="this.columns" :data="this.conference" :stripe="true" class="table" height="500px">
+              <Table :columns="this.columns" :data="this.conference" :stripe="true" max-height="500px">
               </Table>
             </div>
           </Panel>
