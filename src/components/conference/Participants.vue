@@ -14,6 +14,8 @@ export default {
   name: "Participants",
   data() {
     return {
+      driveFinish:false,
+      hotelFinish:false,
       columns: [
         {
           title: '姓名',
@@ -35,18 +37,34 @@ export default {
           key: 'hotel',
           align: 'center',
           render: (hotalFinish) => {
-            return hotalFinish('div', [
-              hotalFinish('Tag', {
-                props: {
-                  size: 'small',
-                  color: 'success'
-                },
-                style: {
-                  marginRight: '5px'
-                },
+            if (this.hotelFinish) {
+              return hotalFinish('div', [
+                hotalFinish('Tag', {
+                  props: {
+                    size: 'small',
+                    color: 'success'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
 
-              }, '完成'),
-            ]);
+                }, '完成'),
+              ]);
+            }else {
+              return hotalFinish('div', [
+                hotalFinish('Tag', {
+                  props: {
+                    size: 'small',
+                    color: '#c5c8ce'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+
+                }, '待完成'),
+              ]);
+
+            }
           }
         },
         {
@@ -54,17 +72,32 @@ export default {
           key: 'drive',
           align: 'center',
           render: (driveFinish) => {
-            return driveFinish('div', [
-              driveFinish('Tag', {
-                props: {
-                  size: 'small',
-                  color:'primary',
-                },
-                style: {
-                  marginRight: '5px'
-                },
-              }, '等待中'),
-            ]);
+            if(this.driveFinish){
+              return driveFinish('div', [
+                driveFinish('Tag', {
+                  props: {
+                    size: 'small',
+                    color: 'success',
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                }, '完成'),
+              ]);
+            }else {
+              return driveFinish('div', [
+                driveFinish('Tag', {
+                  props: {
+                    size: 'small',
+                    color: '#c5c8ce',
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                }, '待完成'),
+              ]);
+
+            }
           }
         },
         {
