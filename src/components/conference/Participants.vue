@@ -161,7 +161,8 @@ export default {
         hotel: 'xxx',
         drive: 'xxx',
         account: "xxx",
-      }],
+      },
+      ],
     }
   },
   methods: {
