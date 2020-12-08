@@ -10,7 +10,7 @@
                 <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
               </a>
             </ListItem>
-            <ListItem  class="ListItem" v-for="(value, key) in listItem.personalData" :key="key" :value="value"
+            <ListItem class="ListItem" v-for="(value, key) in listItem.personalData" :key="key" :value="value"
                       v-model=userData[value]>
               <a @click="gotoChange(value, key)">
                 <div class="set_margin">{{ value }}</div>
@@ -78,7 +78,10 @@ export default {
         changeModal: false,
       }
 
-  }
+    }
+  },
+  mounted() {
+    this.getProfile()
   },
   methods: {
     gotoProfile(child) {
@@ -86,9 +89,31 @@ export default {
     },
     gotoChange(title, type) {
       console.log(`${title} ${type}`)
+      if (type === 'account') {
+        return
+      }
       this.modelInfo.changedTitle = title
       this.modelInfo.changedType = type
       this.modelInfo.changeModal = true
+    },
+    getProfile() {
+      var that = this
+      this.$axios(
+          {
+            method: 'post',
+            url: `${this.$baseURI}/api/user/profile`,
+          }
+      ).then(function (response) {
+        var respData = response["data"]
+        if (respData["Result"] !== null) {
+          that.userData.name = respData["Result"]["name"]
+          that.userData.birthday = new Date(respData["Result"]["birthday"])
+          that.userData.gender = respData["Result"]["gender"]
+          that.userData.account = respData["Result"]["accountId"]
+          that.userData.email = respData["Result"]["email"]
+          that.userData.phone = respData["Result"]["telephone"]
+        }
+      })
     }
   },
 

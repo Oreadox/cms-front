@@ -2,8 +2,9 @@
   <div>
     <Navbar></Navbar>
     <Sidebar></Sidebar>
+    <Content>
       <RouterView></RouterView>
-
+    </Content>
   </div>
 </template>
 
