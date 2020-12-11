@@ -67,7 +67,7 @@ export default {
             }
           }
       ).then(function (response) {
-        if(response['data']===false){
+        if(response['data']['result']===false){
           callback(new Error('用户名重复'))
         } else {
           callback();
@@ -153,12 +153,14 @@ export default {
                 data: data
               }
           ).then(function (response) {
-            if(response["data"]["data"]===true){
+            if(response['data']['success']===true){
               that.$Message.success("注册成功，即将跳转到登录界面");
               setTimeout(function(){
                 that.$emit('setRegisterModal', false);
                 that.$emit('setLoginModal', true);
               }, 1500);
+            } else {
+              that.$Message.error(response['data']['message'])
             }
           })
         }

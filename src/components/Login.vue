@@ -79,15 +79,15 @@ export default {
             data: data
           }).then(function (response) {
             var respData = response['data']
-            if (Boolean(respData['result']['success']) === true) {
+            if (Boolean(respData['success']) === true) {
               that.$Message.success("登录成功");
-              that.$store.commit("setToken", respData['result']['token'])
-              that.$store.commit("setUsername", respData['result']['username'])
-              that.$store.commit("setAccountId", respData['result']['account_id'])
-              that.$store.commit("setRole", respData['result']['role'].toLowerCase())
+              that.$store.commit("setToken", respData['token'])
+              that.$store.commit("setUsername", respData['username'])
+              that.$store.commit("setAccountId", respData['account_id'])
+              that.$store.commit("setRole", respData['role'].toLowerCase())
               that.$router.push(`/${that.selected}/home`)
             } else {
-              that.$Message.error(response['message'])
+              that.$Message.error(respData['message'])
             }
           })
         }

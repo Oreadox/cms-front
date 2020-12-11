@@ -58,6 +58,8 @@ export default {
         account: 'xxx',
         email: 'xxx',
         phone: 'xxx',
+        idCard: '',
+        workUnit: '',
       },
       listItem: {
         personalData: {
@@ -105,14 +107,14 @@ export default {
           }
       ).then(function (response) {
         var respData = response["data"]
-        if (respData["Result"] !== null) {
-          that.userData.name = respData["Result"]["name"]
-          that.userData.birthday = new Date(respData["Result"]["birthday"])
-          that.userData.gender = respData["Result"]["gender"]
-          that.userData.account = respData["Result"]["accountId"]
-          that.userData.email = respData["Result"]["email"]
-          that.userData.phone = respData["Result"]["telephone"]
-        }
+        that.userData.name = respData['name']
+        that.userData.birthday = new Date(respData['birthday'])
+        that.userData.gender = respData['gender']
+        that.userData.account = respData['accountId']
+        that.userData.email = respData['email']
+        that.userData.phone = respData['telephone']
+        that.userData.idCard = respData['residentIdNumber']
+        that.userData.workUnit = respData['workplace']
       })
     }
   },
