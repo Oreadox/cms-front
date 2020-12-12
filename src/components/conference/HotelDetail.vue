@@ -36,7 +36,7 @@
 
 <script>
 export default {
-  name: "otalDetail",
+  name: "HotelDetail",
   data(){
     return{
       formItem:{
@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     arrowBack() {
-      this.$emit('setCheckHotal', false);
+      this.$emit('setCheckHotel', false);
     }
   }
 

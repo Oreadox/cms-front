@@ -41,7 +41,6 @@ export default {
               return hotalFinish('div', [
                 hotalFinish('Tag', {
                   props: {
-                    size: 'small',
                     color: 'success'
                   },
                   style: {
@@ -54,7 +53,6 @@ export default {
               return hotalFinish('div', [
                 hotalFinish('Tag', {
                   props: {
-                    size: 'small',
                     color: '#c5c8ce'
                   },
                   style: {
@@ -76,7 +74,6 @@ export default {
               return driveFinish('div', [
                 driveFinish('Tag', {
                   props: {
-                    size: 'small',
                     color: 'success',
                   },
                   style: {
@@ -88,7 +85,6 @@ export default {
               return driveFinish('div', [
                 driveFinish('Tag', {
                   props: {
-                    size: 'small',
                     color: '#c5c8ce',
                   },
                   style: {

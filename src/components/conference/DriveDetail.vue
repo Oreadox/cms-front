@@ -9,7 +9,7 @@
 
 <script>
 export default {
-name: "DriveDtail",
+name: "DriveDetail",
   methods: {
     arrowBack() {
       this.$emit('setCheckDrive', false);

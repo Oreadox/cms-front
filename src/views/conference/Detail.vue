@@ -1,19 +1,19 @@
 <template>
   <div :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
-    <ParticipantDtail v-if="whichChoose"></ParticipantDtail>
-    <CreaterDtail v-else></CreaterDtail>
+    <ParticipantDetail v-if="whichChoose"></ParticipantDetail>
+    <CreatorDetail v-else-if ="!whichChoose"></CreatorDetail>
   </div>
 </template>
 
 <script>
- import CreaterDtail from "@/components/conference/CreaterDtail";
- import ParticipantDtail from "@/components/conference/ParticipantDtail";
+ import CreatorDetail from "@/components/conference/CreatorDetail";
+ import ParticipantDetail from "@/components/conference/ParticipantDetail";
 export default {
   name: "Detail",
-  components:{CreaterDtail,ParticipantDtail},
+  components:{CreatorDetail,ParticipantDetail},
   data(){
     return{
-      whichChoose: true,
+      whichChoose: false,
     }
   }
 }
