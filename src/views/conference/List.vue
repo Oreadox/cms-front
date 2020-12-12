@@ -10,9 +10,27 @@
         <Collapse v-model="showingPanel" simple>
           <Panel name="processing">
             进行中
-            <div slot="content">
-              <Table :columns="this.columns" :data="this.conference" :stripe="true">
-              </Table>
+            <div slot="content" style="margin-left: 2em">
+              <Collapse v-model="showingPanelMe" simple >
+                <Panel name = "Initiated">
+                  我发起的
+                  <div slot="content">
+                    <Table :columns="this.columns" :data="this.conference" :stripe="true">
+                    </Table>
+                  </div>
+                </Panel>
+              </Collapse>
+              <Collapse v-model="showingPanelJoin" simple>
+                <Panel name = "participated">
+                  我参加的
+                  <div slot="content">
+                    <Table :columns="this.columns" :data="this.conference" :stripe="true">
+                    </Table>
+                  </div>
+                </Panel>
+              </Collapse>
+<!--              <Table :columns="this.columns" :data="this.conference" :stripe="true">-->
+<!--              </Table>-->
             </div>
           </Panel>
           <Panel name="ended">
@@ -105,6 +123,8 @@ export default {
           state: 'finish',
         }],
       showingPanel: "processing",
+      showingPanelMe: "Initiated",
+      showingPanelJoin: "participated",
     }
   },
   methods: {
