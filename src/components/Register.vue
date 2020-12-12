@@ -20,8 +20,11 @@
           <Radio label="FEMALE">女</Radio>
         </RadioGroup>
       </FormItem>
-      <FormItem label="年龄" prop="age">
-        <InputNumber :max="200" :min="0" v-model="formItem.age"></InputNumber>
+      <FormItem label="生日" prop="birthday">
+        <DatePicker type="date" v-model="formItem.birthday"></DatePicker>
+      </FormItem>
+      <FormItem label="邮箱" prop="email">
+        <Input v-model="formItem.email"></Input>
       </FormItem>
       <FormItem label="身份证号" prop="idCard">
         <Input v-model="formItem.idCard" placeholder=""></Input>
@@ -64,7 +67,7 @@ export default {
             }
           }
       ).then(function (response) {
-        if(response['data']['data']===false){
+        if(response['data']['result']===false){
           callback(new Error('用户名重复'))
         } else {
           callback();
@@ -78,7 +81,8 @@ export default {
         passwordCheck: '',
         name: '',
         gender: 'MALE',
-        age: Number(),
+        birthday: '',
+        email: '',
         idCard: '',
         workUnit: '',
         phone: ''
@@ -104,8 +108,12 @@ export default {
         gender: [
           {required: true, message: '性别不能为空', trigger: 'blur'},
         ],
-        age: [
-          {type: 'number', required: true, message: '年龄不能为空', trigger: 'blur'},
+        birthday: [
+          {required: true, message: '生日不能为空', trigger: 'blur'},
+        ],
+        email: [
+          {required: true, message: '邮箱不能为空', trigger: 'blur'},
+          {type: 'email', message: '邮箱不合法', trigger: 'blur'}
         ],
         idCard: [
           {required: true, message: '身份证号不能为空', trigger: 'blur'},
@@ -132,9 +140,9 @@ export default {
             password: this.formItem.password,
             name: this.formItem.name,
             gender: this.formItem.gender,
-            birthday: this.formItem.birthday,  //上面记得加
+            birthday: this.formItem.birthday.toDateString(),
             residentIdNumber: this.formItem.idCard,
-            email: this.formItem.email, //上面记得加
+            email: this.formItem.email,
             telephone: this.formItem.phone,
             workplace: this.formItem.workUnit
           }
@@ -145,12 +153,14 @@ export default {
                 data: data
               }
           ).then(function (response) {
-            if(response["data"]["data"]===true){
+            if(response['data']['success']===true){
               that.$Message.success("注册成功，即将跳转到登录界面");
               setTimeout(function(){
                 that.$emit('setRegisterModal', false);
                 that.$emit('setLoginModal', true);
               }, 1500);
+            } else {
+              that.$Message.error(response['data']['message'])
             }
           })
         }

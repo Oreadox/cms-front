@@ -58,6 +58,8 @@ export default {
         account: 'xxx',
         email: 'xxx',
         phone: 'xxx',
+        idCard: '',
+        workUnit: '',
       },
       listItem: {
         personalData: {
@@ -78,7 +80,10 @@ export default {
         changeModal: false,
       }
 
-  }
+    }
+  },
+  mounted() {
+    this.getProfile()
   },
   methods: {
     gotoProfile(child) {
@@ -86,9 +91,31 @@ export default {
     },
     gotoChange(title, type) {
       console.log(`${title} ${type}`)
+      if (type === 'account') {
+        return
+      }
       this.modelInfo.changedTitle = title
       this.modelInfo.changedType = type
       this.modelInfo.changeModal = true
+    },
+    getProfile() {
+      var that = this
+      this.$axios(
+          {
+            method: 'post',
+            url: `${this.$baseURI}/api/user/profile`,
+          }
+      ).then(function (response) {
+        var respData = response["data"]
+        that.userData.name = respData['name']
+        that.userData.birthday = new Date(respData['birthday'])
+        that.userData.gender = respData['gender']
+        that.userData.account = respData['accountId']
+        that.userData.email = respData['email']
+        that.userData.phone = respData['telephone']
+        that.userData.idCard = respData['residentIdNumber']
+        that.userData.workUnit = respData['workplace']
+      })
     }
   },
 
@@ -126,7 +153,7 @@ a {
 }
 
 .List {
-  width: 800px;
+  width: 700px;
 }
 
 @media screen and (max-width: 960px) {

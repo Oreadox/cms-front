@@ -4,7 +4,7 @@
       <Content>
         <div style="text-align: center">
           <div style="margin-top: 12vh">
-            <h1>你好, {{ userInfo['username'] }}</h1>
+            <h1>您好, {{ userInfo['username'] }}</h1>
             <h2>welcome to NCU-CMS</h2>
           </div>
           <div style="position: relative; left: 4%; ">
