@@ -8,6 +8,7 @@ const store = new Vuex.Store({
         username: "",
         token: "",
         role: "",
+        accountId: ""
     },
     mutations: {
         setUsername(state, username) {
@@ -18,7 +19,10 @@ const store = new Vuex.Store({
         },
         setRole(state, role) {
             state.role = role
-        }
+        },
+        setAccountId(state, accountId) {
+            state.accountId = accountId
+        },
     }
 })
 

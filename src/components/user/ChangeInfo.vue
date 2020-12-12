@@ -1,42 +1,41 @@
 <template>
-<div>
-  <Form hide-required-mark style="margin-top: 5%" :rules="fromValidate" ref="formItem" :model="formItem">
-    <h2 style="text-align: center">修改{{modelInfo.changedTitle}}</h2>
-    <FormItem :label="modelInfo.changedTitle">
-      <Input disabled :placeholder=userData[modelInfo.changedType]></Input>
-    </FormItem>
-    <FormItem label="新密码" prop="password" v-if="modelInfo.changedType==='password'">
-      <Input type="password" password v-model="formItem.newInfo" placeholder="长度为8-32, 需包含字母和数字"></Input>
-    </FormItem>
-    <FormItem label="确认密码" prop="passwordCheck" v-if="modelInfo.changedType==='password'">
-      <Input type="password" password v-model="formItem.passwordCheck" placeholder="重复上述的密码"></Input>
-    </FormItem>
-    <FormItem label="性别" prop="gender" v-else-if="modelInfo.changedType==='gender'">
-      <RadioGroup v-model="formItem.newInfo">
-        <Radio label="MALE">男</Radio>
-        <Radio label="FEMALE">女</Radio>
-      </RadioGroup>
-    </FormItem>
-    <!-- TODO:注册改了生日记得复制过来 -->
-    <FormItem label="年龄" prop="age" v-else-if="modelInfo.changedType==='age'">
-      <InputNumber :max="200" :min="0" v-model="formItem.newAge"></InputNumber>
-    </FormItem>
-    <FormItem :label="'新的'+modelInfo.changedTitle" :prop="modelInfo.changedType" v-else>
-      <Input v-model="formItem.newInfo" ></Input>
-    </FormItem>
-    <FormItem>
-      <Button style="float: right; margin-left: 16px" type="primary" @click="submitForm()">修改</Button>
-      <Button type="text" style="float: right; " @click="cancelButton()" >取消</Button>
-    </FormItem>
-  </Form>
-</div>
+  <div>
+    <Form hide-required-mark style="margin-top: 5%" :rules="fromValidate" ref="formItem" :model="formItem">
+      <h2 style="text-align: center">修改{{ modelInfo.changedTitle }}</h2>
+      <FormItem show-message :label="modelInfo.changedTitle">
+        <Input disabled :placeholder=userData[modelInfo.changedType]></Input>
+      </FormItem>
+      <FormItem label="新密码" prop="password" v-if="modelInfo.changedType==='password'">
+        <Input type="password" password v-model="formItem.newInfo" placeholder="长度为8-32, 需包含字母和数字"></Input>
+      </FormItem>
+      <FormItem label="确认密码" prop="passwordCheck" v-if="modelInfo.changedType==='password'">
+        <Input type="password" password v-model="formItem.passwordCheck" placeholder="重复上述的密码"></Input>
+      </FormItem>
+      <FormItem label="性别" prop="gender" v-else-if="modelInfo.changedType==='gender'">
+        <RadioGroup v-model="formItem.newInfo">
+          <Radio label="MALE">男</Radio>
+          <Radio label="FEMALE">女</Radio>
+        </RadioGroup>
+      </FormItem>
+      <FormItem label="生日" prop="birthday" v-else-if="modelInfo.changedType==='birthday'">
+        <DatePicker type="date" v-model="formItem.newInfo"></DatePicker>
+      </FormItem>
+      <FormItem :label="'新的'+modelInfo.changedTitle" :prop="modelInfo.changedType" v-else>
+        <Input v-model="formItem.newInfo"></Input>
+      </FormItem>
+      <FormItem>
+        <Button style="float: right; margin-left: 16px" type="primary" @click="submitForm(modelInfo.changedType)">修改
+        </Button>
+        <Button type="text" style="float: right; " @click="cancelButton()">取消</Button>
+      </FormItem>
+    </Form>
+  </div>
 </template>
 
 <script>
 export default {
   name: "ChangeInfo",
   data() {
-
     const validatePassCheck = (rule, value, callback) => {
       if (value !== this.formItem.password) {
         return callback(new Error('密码验证不一致'))
@@ -45,7 +44,6 @@ export default {
       }
     };
     const validateUsername = (rule, value, callback) => {
-      // var err
       this.$axios(
           {
             method: 'post',
@@ -55,21 +53,17 @@ export default {
             }
           }
       ).then(function (response) {
-        if(response['data']['data']===false){
+        if (response['data']['data'] === false) {
           callback(new Error('用户名重复'))
         } else {
           callback();
         }
       })
     }
-    //把Profile的页面逻辑修改成动态接受值。
+
     return {
-      // changeType: this.dataType,
-      // changeValue: this.dataTitle,
-      // // oldUserInfo: this.dataToChild.userName,
       formItem: {
         newInfo: '',
-        newAge: Number,
         passwordCheck: '',
       },
 
@@ -94,8 +88,8 @@ export default {
         gender: [
           {required: true, message: '性别不能为空', trigger: 'blur'},
         ],
-        age: [
-          {type: 'number', required: true, message: '年龄不能为空', trigger: 'blur'},
+        birthday: [
+          {required: true, message: '生日不能为空', trigger: 'blur'},
         ],
         idCard: [
           {required: true, message: '身份证号不能为空', trigger: 'blur'},
@@ -113,23 +107,41 @@ export default {
 
     }
   },
-  props:['userData','modelInfo'],
+  props: ['userData', 'modelInfo'],
   methods: {
-    resetForm(){
-      this.formItem.newInfo= ''
-      this.formItem.newAge= Number
-      this.formItem.passwordCheck= ''
+    resetForm() {
+      this.formItem.newInfo = ''
+      this.formItem.newAge = Number
+      this.formItem.passwordCheck = ''
     },
-
-    cancelButton(){
+    cancelButton() {
       this.$emit('gotoProfile', false);
       this.resetForm();
     },
-    submitForm() {
-      this.$Message.success("修改成功");
-      // this.$refs['formItem'].validate(() => {
-      //
-      // })
+    submitForm(changedType) {
+      var that = this
+      var data = {
+        name: changedType === 'name' ? this.formItem.newInfo : this.userData.name,
+        gender: changedType === 'gender' ? this.formItem.newInfo : this.userData.gender,
+        birthday: changedType === 'birthday' ? this.formItem.newInfo.toDateString() : this.userData.birthday.toDateString(),
+        residentIdNumber: changedType === 'idCard' ? this.formItem.newInfo : this.userData.idCard,
+        email: changedType === 'email' ? this.formItem.newInfo : this.userData.email,
+        telephone: changedType === 'phone' ? this.formItem.newInfo : this.userData.phone,
+        workplace: changedType === 'workUnit' ? this.formItem.newInfo : this.userData.workUnit,
+      }
+      this.$axios(
+          {
+            method: 'post',
+            url: `${this.$baseURI}/api/user/profile/modify`,
+            data: data
+          }
+      ).then(function (response) {
+        if (response['data']['success'] === true) {
+          that.$Message.success("修改成功");
+        } else {
+          that.$Message.error(response['data']['message']);
+        }
+      })
     }
   }
 }
