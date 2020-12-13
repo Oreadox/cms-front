@@ -5,32 +5,32 @@
         <Input type="text" style="width: 150px"></Input>
       </FormItem>
       <FormItem label="会议简介">
-        <Input type="textarea" v-model="formItem.introduction"  class="input_size"></Input>
+        <Input type="textarea" v-model="formItem.introduction" class="input_size"></Input>
       </FormItem>
       <FormItem label="会议地点">
-        <Input type="textarea" v-model="formItem.address"  class="input_size"></Input>
+        <Input type="textarea" v-model="formItem.address" class="input_size"></Input>
       </FormItem>
       <FormItem label="会议时间">
-        <DatePicker v-model="formItem.startTime" ></DatePicker>
+        <DatePicker v-model="formItem.startTime"></DatePicker>
         至
-        <DatePicker v-model="formItem.endTime" ></DatePicker>
+        <DatePicker v-model="formItem.endTime"></DatePicker>
       </FormItem>
       <FormItem label="报名截止时间">
-        <DatePicker v-model="formItem.startTime" ></DatePicker>
+        <DatePicker v-model="formItem.enrollTime"></DatePicker>
       </FormItem>
       <FormItem label="使用邀请码">
-        <i-switch v-model="invitationSwitch" />
+        <i-switch v-model="useInviteCode"/>
       </FormItem>
-      <div  style="height: 60px">
+      <div style="height: 60px">
         <transition name="fade">
-          <FormItem v-if="invitationSwitch">
-            <Input type="text" v-model="formItem.invitationCode" style="width: 150px"></Input>
+          <FormItem v-if="useInviteCode">
+            <Input type="text" v-model="formItem.inviteCode" style="width: 150px"></Input>
           </FormItem>
         </transition>
       </div>
       <FormItem>
         <Button style=" margin-left:15% ">取消</Button>
-        <Button style=" margin-left:15% "  type="primary">创建</Button>
+        <Button style=" margin-left:15% " type="primary"  @click="submitForm">创建</Button>
       </FormItem>
     </Form>
   </div>
@@ -39,24 +39,54 @@
 <script>
 export default {
   name: "create",
-  data () {
+  data() {
     return {
-      invitationSwitch:false,
+      useInviteCode: false,
       formItem: {
         name: 'xxx',
         introduction: '...',
         address: 'xxx',
         startTime: '2020-10-11',
         endTime: '2020-12-11',
-        deadline:'2020-11-11',
-        invitationCode: '111123',
+        enrollTime: '2020-11-11',
+        inviteCode: '111123',
       },
     }
   },
   methods: {
-    changeSwitch(){
-      this.invitationSwitch = !this.invitationSwitch;
+    changeSwitch() {
+      this.useInviteCode = !this.useInviteCode;
     },
+
+    submitForm(){
+      var that = this
+      var data = {
+        name: this.formItem.name,
+        detail: this.formItem.introduction,
+        address: this.formItem.address,
+        startTime: this.formItem.startTime.toDateString(),
+        endTime: this.formItem.endTime.toDateString(),
+        enrollTime: this.formItem.enrollTime.toDateString(),
+        inviteCode: this.useInviteCode?this.formItem.inviteCode:null
+      }
+      this.$axios(
+          {
+            method: 'post',
+            url: `${this.$baseURI}/api/user/conference/create`,
+            data: data
+          }
+      ).then(function (response) {
+        if (response['data']['success'] === true) {
+          that.$Message.success("创建成功");
+          setTimeout(function(){
+            that.$router.push("/conference/list")
+          }, 1500);
+        } else {
+          that.$Message.error(response['data']['message']);
+        }
+      })
+
+    }
   }
 }
 </script>

@@ -65,26 +65,26 @@ export default new VueRouter({
 
         // 会议
         {
-          path: '/conference/',
+            path: '/conference/',
             redirect: '/conference/list',
-          component: conferenceIndex,
+            component: conferenceIndex,
             children: [
-        {
-            path: 'create',
-            component: conferenceCreate
-        },
-        {
-            path: 'list',
-            component: conferenceList
-        },
-        {
-            path: 'detail',
-            component: conferenceDetail
-        },
-        {
-            path: 'participate',
-            component: conferenceParticipate
-        },
+                {
+                    path: 'create',
+                    component: conferenceCreate
+                },
+                {
+                    path: 'list',
+                    component: conferenceList
+                },
+                {
+                    path: 'detail/:id',
+                    component: conferenceDetail
+                },
+                {
+                    path: 'participate',
+                    component: conferenceParticipate
+                },
             ]
         },
 
