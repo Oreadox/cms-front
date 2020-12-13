@@ -53,7 +53,7 @@ export default {
             }
           }
       ).then(function (response) {
-        if (response['data']['data'] === false) {
+        if (response['data']['result'] === false) {
           callback(new Error('用户名重复'))
         } else {
           callback();

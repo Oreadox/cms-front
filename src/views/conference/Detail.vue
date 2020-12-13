@@ -24,7 +24,7 @@ export default {
   methods: {
     initData(){
       var that = this
-      this.id = this.$router.params.id
+      this.id = this.$route.params.id
       var data = {
         id: this.id
       }
