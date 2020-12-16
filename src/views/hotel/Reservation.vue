@@ -28,6 +28,12 @@
               </Table>
             </div>
           </Panel>
+          <Modal
+              footer-hide
+              :mask-closable="true"
+            v-model="modelInfo.changeModal">
+            <ConferenceDetail></ConferenceDetail>
+          </Modal>
         </Collapse>
       </div>
     </Card>
@@ -36,13 +42,20 @@
 
 <script>
 // import CollapseTransition from "@/plugins/CollapseTransition"
+import ConferenceDetail from "@/components/hotel/OrderDetail";
 export default {
   name: "reservation",
   components: {
+    ConferenceDetail
     // 'CollapseTransition': CollapseTransition,
   },
   data() {
     return {
+      modelInfo: {
+        changedTitle: '名字',
+        changedType: 'name',
+        changeModal: false,
+      },
       columns: [
         {
           key: 'sendReservationTime',
@@ -118,74 +131,48 @@ export default {
       var that = this
       this.$axios({
         method: 'post',
-        url: `${this.$baseURI}/api/user/conference/created/ongoing`,
+        url: `${this.$baseURI}/api/hotel/reservation/unchecked`,
       }).then(function (response) {
-        that.createdConference = []
+        that.waitingConfirmConference = []
         response['data'].forEach(v => {
           var newData = {
-            id: v['id'],
-            name: v['name'],
-            address: v['address'],
-            startTime: new Date(v['startTime']),
-            state: v['progress'].toLowerCase()
+            sendReservationTime:new Date(v['sendReservationTime']),
+            customerName:v['customerName'],
+            startTime:new Date(v['startTime']),
+            endTime:new Date(v['endTime']),
           }
-          that.createdConference.append(newData)
+          that.waitingConfirmConference.append(newData)
         });
       })
       this.$axios({
         method: 'post',
-        url: `${this.$baseURI}/api/user/conference/participated/ongoing`,
+        url: `${this.$baseURI}/api/hotel/reservation/checked`,
       }).then(function (response) {
-        that.participatedConference = []
+        that.processConference = []
         response['data'].forEach(v => {
           var newData = {
-            id: v['id'],
-            name: v['name'],
-            address: v['address'],
-            startTime: new Date(v['startTime']),
-            state: v['progress'].toLowerCase()
+            sendReservationTime:new Date(v['sendReservationTime']),
+            customerName:v['customerName'],
+            startTime:new Date(v['startTime']),
+            endTime:new Date(v['endTime']),
           }
-          that.participatedConference.append(newData)
+          that.processConference.append(newData)
         });
       })
       this.$axios({
         method:'post',
-        url:`${this.$baseURI}/api/`,
+        url:`${this.$baseURI}/api/hotel/reservation/ended`,
       }).then(function (response) {
         that.endedConference = []
         response['data'].forEach(v => {
           var newData = {
-            id: v['id'],
-            name: v['name'],
-            address: v['address'],
-            startTime: new Date(v['startTime']),
-            state: v['progress'].toLowerCase()
+            sendReservationTime:new Date(v['sendReservationTime']),
+            customerName:v['customerName'],
+            startTime:new Date(v['startTime']),
+            endTime:new Date(v['endTime']),
           }
-          that.participatedConference.append(newData)
+          that.endedConference.append(newData)
         });
-      })
-      this.$axios({
-        method: 'post',
-        url: `${this.$baseURI}/api/user/conference/created/ended`,
-      }).then(function (response) {
-        that.endedConference = []
-        var respData = response['data']
-        this.$axios({
-          method: 'post',
-          url: `${this.$baseURI}/api/user/conference/participated/ended`,
-        }).then(function (response) {
-          respData = respData.concat(response['data'])
-          respData.forEach(v => {
-            var newData = {
-              id: v['id'],
-              name: v['name'],
-              address: v['address'],
-              startTime: new Date(v['startTime']),
-              state: v['progress'].toLowerCase()
-            }
-            that.endedConference.append(newData)
-          });
-        })
       })
     },
     show(id) {
@@ -195,6 +182,7 @@ export default {
                   })*/
       this.$router.push(`/conference/detail/${id}`)
     },
+
   }
 }
 </script>
