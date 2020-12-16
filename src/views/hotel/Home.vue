@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <Navbar ></Navbar>
-    <Sidebar></Sidebar>
+    <HotelSidebar></HotelSidebar>
     <Content >
       <RouterView></RouterView>
     </Content>
@@ -10,11 +10,11 @@
 
 <script>
 import Navbar from "@/components/common/Navbar";
-import Sidebar from "@/components/common/Sidebar";
+import HotelSidebar from "@/components/hotel/HotelSidebar";
 
 export default {
   name: "home",
-  components: {Navbar, Sidebar},
+  components: { Navbar, HotelSidebar},
   data(){
     return{
       showHome: true

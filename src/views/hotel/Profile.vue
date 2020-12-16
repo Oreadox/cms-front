@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import ChangeInfo from "@/components/user/ChangeInfo";
+import ChangeInfo from "@/components/hotel/ChangeInfo";
 
 export default {
   name: "Profile",
@@ -57,7 +57,6 @@ export default {
         changedType: 'name',
         changeModal: false,
       }
-
     }
   },
   mounted() {
