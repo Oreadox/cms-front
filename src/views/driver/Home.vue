@@ -10,6 +10,7 @@
 
 <script>
 import Navbar from "@/components/common/Navbar";
+import DriverSidebar from "@/components/driver/DriverSidebar";
 
 export default {
 name: "home",
