@@ -1,20 +1,13 @@
 <template>
-  <div class="layout">
-    <Navbar ></Navbar>
-    <DriverSidebar></DriverSidebar>
-    <Content >
-      <RouterView></RouterView>
-    </Content>
+  <div>
   </div>
 </template>
 
 <script>
-import Navbar from "@/components/common/Navbar";
-import DriverSidebar from "@/components/driver/DriverSidebar";
 
 export default {
 name: "home",
-  components: { Navbar, DriverSidebar},
+  components: {},
   data(){
     return{
       showHome: true
@@ -24,8 +17,5 @@ name: "home",
 </script>
 
 <style scoped>
-.layout{
-  background-color: #ffffff;
-  position: relative;
-}
+
 </style>

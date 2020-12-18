@@ -1,21 +1,12 @@
 <template>
-  <div class="layout">
-    <Navbar ></Navbar>
-    <HotelSidebar></HotelSidebar>
-    <Content >
-      <RouterView></RouterView>
-    </Content>
-
+  <div>
   </div>
 </template>
 
 <script>
-import Navbar from "@/components/common/Navbar";
-import HotelSidebar from "@/components/hotel/HotelSidebar";
-
 export default {
   name: "home",
-  components: { Navbar, HotelSidebar},
+  components: {},
   data(){
     return{
       showHome: true
@@ -25,8 +16,5 @@ export default {
 </script>
 
 <style scoped>
-.layout{
-  background-color: #ffffff;
-  position: relative;
-}
+
 </style>
