@@ -5,6 +5,7 @@
     <Content >
       <RouterView></RouterView>
     </Content>
+
   </div>
 </template>
 

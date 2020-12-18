@@ -5,20 +5,11 @@
       <FormItem show-message :label="modelInfo.changedTitle">
         <Input disabled :placeholder=driverData[modelInfo.changedType]></Input>
       </FormItem>
-      <FormItem label="所属车队" prop="team" v-if="modelInfo.changedType==='team'">
-        <Input type="text"  v-model="formItem.newInfo"></Input>
-      </FormItem>
-      <FormItem label="身份证号" prop="idCard" v-if="modelInfo.changedType==='idCard'">
-        <Input type="text" v-model="formItem.newInfo" ></Input>
-      </FormItem>
-      <FormItem label="联系电话" prop="celephone" v-if="modelInfo.changedType==='celephone'">
-        <Input type="text" v-model="formItem.newInfo" ></Input>
-      </FormItem>
       <FormItem label="性别" prop="gender" v-if="modelInfo.changedType==='gender'">
-        <Input type="password"  v-model="formItem.newInfo" ></Input>
-      </FormItem>
-      <FormItem label="姓名" prop="name" v-if="modelInfo.changedType==='name'">
-        <Input type="text"  v-model="formItem.newInfo"></Input>
+        <RadioGroup v-model="formItem.newInfo">
+          <Radio label="MALE">男</Radio>
+          <Radio label="FEMALE">女</Radio>
+        </RadioGroup>
       </FormItem>
       <FormItem label="新密码" prop="password" v-if="modelInfo.changedType==='password'">
         <Input type="password" password v-model="formItem.newInfo" placeholder="长度为8-32, 需包含字母和数字"></Input>

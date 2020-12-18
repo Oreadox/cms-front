@@ -37,16 +37,16 @@
         </Collapse>
       </div>
     </Card>
+    <CustomerMessage></CustomerMessage>
   </div>
 </template>
 
 <script>
 // import CollapseTransition from "@/plugins/CollapseTransition"
-import ConferenceDetail from "@/components/hotel/OrderDetail";
+
 export default {
   name: "reservation",
   components: {
-    ConferenceDetail
     // 'CollapseTransition': CollapseTransition,
   },
   data() {

@@ -5,18 +5,6 @@
       <FormItem show-message :label="modelInfo.changedTitle">
         <Input disabled :placeholder=hotelData[modelInfo.changedType]></Input>
       </FormItem>
-      <FormItem label="酒店详情" prop="detail" v-if="modelInfo.changedType==='detail'">
-        <Input type="text" v-model="formItem.newInfo" ></Input>
-      </FormItem>
-      <FormItem label="酒店地址" prop="address" v-if="modelInfo.changedType==='address'">
-        <Input type="text" v-model="formItem.newInfo" ></Input>
-      </FormItem>
-      <FormItem label="联系电话" prop="celephone" v-if="modelInfo.changedType==='phone'">
-        <Input type="password"  v-model="formItem.newInfo" ></Input>
-      </FormItem>
-      <FormItem label="酒店名" prop="name" v-if="modelInfo.changedType==='name'">
-        <Input type="text"  v-model="formItem.newInfo"></Input>
-      </FormItem>
       <FormItem label="新密码" prop="password" v-if="modelInfo.changedType==='password'">
         <Input type="password" password v-model="formItem.newInfo" placeholder="长度为8-32, 需包含字母和数字"></Input>
       </FormItem>
