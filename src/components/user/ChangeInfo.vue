@@ -80,7 +80,7 @@ export default {
           {required: true, message: '性别不能为空', trigger: 'blur'},
         ],
         birthday: [
-          {required: true, message: '生日不能为空', trigger: 'blur'},
+          {type:'date',required: true, message: '生日不能为空', trigger: 'change' },
         ],
         phone: [
           {required: true, message: '手机号码不能为空', trigger: 'blur'},

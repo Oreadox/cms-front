@@ -14,7 +14,7 @@ export default {
   data(){
     return{
       id: 0,
-      isCreator: false,
+      isCreator: true,
     }
   },
   mounted() {
