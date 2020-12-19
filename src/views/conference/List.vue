@@ -163,7 +163,7 @@ export default {
             startTime: new Date(v['startTime']),
             state: v['progress'].toLowerCase()
           }
-          that.createdConference.append(newData)
+          that.createdConference.push(newData)
         });
       })
       this.$axios({
@@ -179,7 +179,7 @@ export default {
             startTime: new Date(v['startTime']),
             state: v['progress'].toLowerCase()
           }
-          that.participatedConference.append(newData)
+          that.participatedConference.push(newData)
         });
       })
       this.$axios({
@@ -188,7 +188,7 @@ export default {
       }).then(function (response) {
         that.endedConference = []
         var respData = response['data']
-        this.$axios({
+        that.$axios({
           method: 'post',
           url: `${this.$baseURI}/api/user/conference/participated/ended`,
         }).then(function (response) {
@@ -201,7 +201,7 @@ export default {
               startTime: new Date(v['startTime']),
               state: v['progress'].toLowerCase()
             }
-            that.endedConference.append(newData)
+            that.endedConference.push(newData)
           });
         })
       })

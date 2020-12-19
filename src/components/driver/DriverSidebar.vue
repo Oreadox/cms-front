@@ -26,7 +26,7 @@ export default {
       activeItem: "home"
     }
   },
-  mounted() {
+  created() {
     this.switchItem()
   },
   methods: {
