@@ -52,8 +52,8 @@
            scrollable
            :mask-closable="false"
            v-model="checkParticipants">
-      <Participants style="height:40vw;overflow-y:auto;overflow-x:hidden;"
-                    @setCheckParticipants=setCheckParticipants></Participants>
+      <Participants style="height:40vw;overflow-y:auto;overflow-x:hidden;" @setCheckParticipants=setCheckParticipants
+                    :participantsInfo="participantsInfo" :conferenceId="conferenceId"></Participants>
     </Modal>
     <Modal style="padding: 20px" width="45"
            footer-hide
@@ -112,6 +112,17 @@ export default {
           driverAmount: 0
         },
       },
+      participantsInfo: [
+        {
+          id: 0,
+          name: 'name',
+          phone: 'phone',
+          workUnit: 'workUnit',
+          hotelProgress: 2,
+          driverProgress: 1,
+          account: 'account'
+        }
+      ],
       checkParticipants: false,
       checkHotel: false,
       checkFleet: false,
@@ -122,16 +133,17 @@ export default {
     this.loadConferenceInfo();
     this.loadHotelInfo();
     this.loadDriverInfo();
+    this.loadParticipantsInfo();
   },
   methods: {
     loadConferenceInfo() {
-      var that = this
+      let that = this
       this.$axios({
         method: 'post',
         url: `${this.$baseURI}/api/conference/getById`,
         data: {id: that.conferenceId}
       }).then(function (response) {
-        var resData = response['data']
+        let resData = response['data']
         that.formItem = {
           name: resData['name'],
           detail: resData['resData'],
@@ -163,12 +175,12 @@ export default {
           url: `${this.$baseURI}/api/conference/participant/count`,
           data: {id: that.conferenceId}
         }).then(function (response) {
-              that.formItem.applicants = response['data']['amount']
+          that.formItem.applicants = response['data']['amount']
         })
       })
     },
     loadHotelInfo() {
-      var that = this
+      let that = this
       this.$axios({
         method: 'post',
         url: `${this.$baseURI}/api/hotel/getAll`,
@@ -186,7 +198,7 @@ export default {
       })
     },
     loadDriverInfo() {
-      var that = this
+      let that = this
       this.$axios({
         method: 'post',
         url: `${this.$baseURI}/api/fleet/getAll`,
@@ -200,6 +212,60 @@ export default {
             phone: v['telephone'],
             driverAmount: v['driverAmount']
           }
+        });
+      })
+    },
+    loadParticipantsInfo() {
+      let that = this
+      this.$axios({
+        method: 'post',
+        url: `${this.$baseURI}/api/conference/participant/get`,
+        data: {id: that.conferenceId}
+      }).then(function (response) {
+        that.fleetList = []
+        response['data'].forEach(v => {
+          that.participantsInfo = {}
+          console.log(v)
+          let newData = {
+            id: v['id'],
+            name: v['name'],
+            phone: v['telephone'],
+            workUnit: v['workplace'],
+            hotelProgress: '',
+            driverProgress: '',
+            account: v['accountId']
+          }
+          that.$axios({
+            method: 'post',
+            url: `${this.$baseURI}/api/conference/hotelReservation/get`,
+            data: {id: that.conferenceId, userId: newData.id}
+          }).then(function (response) {
+            if (response['data']['hotelCheck'] === true) {
+              if (response['data']['userCheck'] === true) {
+                newData.hotelProgress = 2
+              } else {
+                newData.hotelProgress = 1
+              }
+            } else {
+              newData.hotelProgress = 0
+            }
+          })
+          that.$axios({
+            method: 'post',
+            url: `${this.$baseURI}/api/conference/driverReservation/get`,
+            data: {id: that.conferenceId, userId: newData.id}
+          }).then(function (response) {
+            if (response['data']['driverCheck'] === true) {
+              if (response['data']['userCheck'] === true) {
+                newData.driverProgress = 2
+              } else {
+                newData.driverProgress = 1
+              }
+            } else {
+              newData.driverProgress = 0
+            }
+          })
+          that.participantsInfo.push(newData)
         });
       })
     },

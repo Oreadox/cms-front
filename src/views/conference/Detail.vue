@@ -1,7 +1,7 @@
 <template>
   <div :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
-    <ParticipantDetail v-if="isCreator"></ParticipantDetail>
-    <CreatorDetail v-else-if ="!isCreator" :conferenceId="id"></CreatorDetail>
+    <CreatorDetail v-if="isCreator" :conferenceId="id"></CreatorDetail>
+    <ParticipantDetail v-else-if ="!isCreator" :conferenceId="id"></ParticipantDetail>
   </div>
 </template>
 
@@ -14,7 +14,7 @@ export default {
   data(){
     return{
       id: 0,
-      isCreator: false,
+      isCreator: true,
     }
   },
   created() {

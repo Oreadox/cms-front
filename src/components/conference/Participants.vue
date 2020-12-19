@@ -3,7 +3,7 @@
     <a style="text-indent: 2em;" @click="arrowBack">
       <Icon type="ios-arrow-back"></Icon>
       返回</a>
-    <Table :columns="this.columns" :data="this.conference" :stripe="true">
+    <Table :columns="this.columns" :data="this.participantsInfo" :stripe="true">
     </Table>
 
   </div>
@@ -14,8 +14,6 @@ export default {
   name: "Participants",
   data() {
     return {
-      driveFinish:false,
-      hotelFinish:false,
       columns: [
         {
           title: '姓名',
@@ -34,24 +32,23 @@ export default {
         },
         {
           title: '酒店订单',
-          key: 'hotel',
+          key: 'hotelProgress',
           align: 'center',
-          render: (hotalFinish) => {
-            if (this.hotelFinish) {
-              return hotalFinish('div', [
-                hotalFinish('Tag', {
+          render: (hotelFinish, params) => {
+            if (params.row.hotelProgress === 2) {
+              return hotelFinish('div', [
+                hotelFinish('Tag', {
                   props: {
                     color: 'success'
                   },
                   style: {
                     marginRight: '5px'
                   },
-
                 }, '完成'),
               ]);
-            }else {
-              return hotalFinish('div', [
-                hotalFinish('Tag', {
+            } else if (params.row.hotelProgress === 1) {
+              return hotelFinish('div', [
+                hotelFinish('Tag', {
                   props: {
                     color: '#c5c8ce'
                   },
@@ -59,18 +56,28 @@ export default {
                     marginRight: '5px'
                   },
 
+                }, '待酒店确认'),
+              ]);
+            } else {
+              return hotelFinish('div', [
+                hotelFinish('Tag', {
+                  props: {
+                    color: '#c5c8ce',
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
                 }, '待完成'),
               ]);
-
             }
           }
         },
         {
           title: '接车订单',
-          key: 'drive',
+          key: 'driverProgress',
           align: 'center',
-          render: (driveFinish) => {
-            if(this.driveFinish){
+          render: (driveFinish, params) => {
+            if (params.row.driverProgress === 2) {
               return driveFinish('div', [
                 driveFinish('Tag', {
                   props: {
@@ -81,7 +88,18 @@ export default {
                   },
                 }, '完成'),
               ]);
-            }else {
+            } else if (params.row.driverProgress === 1) {
+              return driveFinish('div', [
+                driveFinish('Tag', {
+                  props: {
+                    color: '#c5c8ce',
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                }, '待司机确认'),
+              ]);
+            } else {
               return driveFinish('div', [
                 driveFinish('Tag', {
                   props: {
@@ -92,7 +110,6 @@ export default {
                   },
                 }, '待完成'),
               ]);
-
             }
           }
         },
@@ -130,7 +147,7 @@ export default {
           key: 'deleteMember',
           width: 100,
           align: 'center',
-          render: (deleteMember) => {
+          render: (deleteMember, params) => {
             return deleteMember('div', [
               deleteMember('Button', {
                 props: {
@@ -142,7 +159,7 @@ export default {
                 },
                 on: {
                   click: () => {
-
+                    this.deleteParticipant(params.row.id)
                   }
                 }
               }, 'delete'),
@@ -155,13 +172,28 @@ export default {
         phone: '1231231241',
         workUnit: 'xxx',
         hotel: 'xxx',
-        drive: 'xxx',
+        driveFinish: true,
         account: "xxx",
       },
       ],
     }
   },
+  props: ['participantsInfo', 'conferenceId'],
   methods: {
+    deleteParticipant(userId) {
+      let that = this
+      this.$axios({
+        method: 'post',
+        url: `${this.$baseURI}/api/conference/enrollment/remove`,
+        data: {id: that.conferenceId, userId: userId}
+      }).then(function (response) {
+        if (response['data']['success'] === true) {
+          that.$Message.success("删除成功");
+        } else {
+          that.$Message.error(response['data']['message'])
+        }
+      })
+    },
     arrowBack() {
       this.$emit('setCheckParticipants', false);
     }
