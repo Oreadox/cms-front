@@ -26,13 +26,23 @@ const driverHome = () => import('@/views/driver/Home')
 const driverProfile = () => import('@/views/driver/Profile')
 const driverReservation = () => import('@/views/driver/Reservation')
 
+const adminIndex = () => import("@/views/admin/Index")
 const adminHome = () => import('@/views/admin/Home')
-const adminSupervise = () => import('@/views/admin/Supervise')
+// const adminSupervise = () => import('@/views/admin/Supervise')
+const adminUser =()=>import('@/views/admin/User')
 const adminConference = () => import('@/views/admin/Conference')
 const adminHotel = () => import('@/views/admin/Hotel')
 const adminDriver = () => import('@/views/admin/Driver')
 const adminSystem = () => import('@/views/admin/System')
 
+
+function personalInfo() {
+
+}
+
+function adminMail() {
+
+}
 
 export default new VueRouter({
     routes: [
@@ -134,13 +144,48 @@ export default new VueRouter({
 
         // 管理员
         {
-            path: '/admin/home',
-            component: adminHome
+            path: '/admin/',
+            redirect: '/admin/home',
+            component: adminIndex,
+            children:[
+                {
+                    path: 'home',
+                    component: adminHome,
+                },
+                {
+                    path: 'user',
+                    component: adminUser,
+                },
+                {
+                    path: 'conference',
+                    component: adminConference
+                },
+                {
+                    path: 'hotel',
+                    component: adminHotel
+                },
+                {
+                    path: 'driver',
+                    component: adminDriver
+                },
+                {
+                    path: 'personalInfo',
+                    component: personalInfo
+                },
+                {
+                    path: 'message',
+                    component: adminMail
+                },
+            ]
         },
-        {
+/*        {
             path: '/admin/supervise/',
-            component: adminSupervise,
+            component: userIndex,
             children: [
+                {
+                    path: 'user',
+                    component: adminUser,
+                },
                 {
                     path: 'conference',
                     component: adminConference
@@ -154,7 +199,7 @@ export default new VueRouter({
                     component: adminDriver
                 },
             ]
-        },
+        },*/
         {
             path: '/admin/system',
             component: adminSystem

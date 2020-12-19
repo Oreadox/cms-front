@@ -6,7 +6,7 @@
       <Option v-for="(value, key) in userType" :value="key" :key="key">{{ value }}</Option>
     </Select>
     <Form hide-required-mark ref="formItem" :model="formItem" :rules="ruleInline">
-      <FormItem label="账号" prop="user">
+      <FormItem label="账号" prop="username">
         <Input type="text" v-model="formItem.username" placeholder="手机号/账号">
         </Input>
       </FormItem>
@@ -33,11 +33,11 @@ export default {
   name: "Login",
   data() {
     return {
-      formItem: [{
+      formItem: {
         usertype: '',
         username: '',
         password: '',
-      }],
+      },
       ruleInline: {
         username: [
           {required: true, message: '用户名不能为空', trigger: 'blur'}
