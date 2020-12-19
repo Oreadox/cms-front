@@ -11,7 +11,6 @@
 <script>
 import Navbar from "@/components/common/Navbar";
 import Sidebar from "@/components/common/Sidebar";
-// import Home from "@/views/user/Home";
 export default {
 name: "index",
   components: {Navbar, Sidebar},

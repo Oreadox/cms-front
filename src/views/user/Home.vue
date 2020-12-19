@@ -23,13 +23,21 @@
                 </Card>
               </Col>
               <Col span="6" offset="1" justify="center">
-                <Card to="/conference/detail" class="card">
-                  <p class="center">加入会议</p>
-                </Card>
+                <a @click="enterJoinNumber=true">
+                  <Card  class="card">
+                    <p class="center">加入会议</p>
+                  </Card>
+                </a>
               </Col>
             </Row>
-
           </div>
+          <Modal
+              style="padding: 20px"
+              footer-hide
+              :mask-closable="false"
+              v-model="enterJoinNumber">
+            <JoinConference></JoinConference>
+          </Modal>
         </div>
       </Content>
     </div>
@@ -38,16 +46,21 @@
 <script>
 
   // const HomePage = () => import("@/components/user/HomePage");
+  import JoinConference from "@/components/conference/JoinConference";
   export default {
     name: "home",
+    components: {JoinConference},
     data(){
       return {
+        enterJoinNumber: false,
         userInfo: {
           username: 'xxx',
 
         }
       }
     },
+    methods:{
+    }
   }
 </script>
 
