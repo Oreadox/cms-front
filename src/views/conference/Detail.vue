@@ -17,9 +17,8 @@ export default {
       isCreator: false,
     }
   },
-  mounted() {
+  created() {
     this.initData()
-
   },
   methods: {
     initData(){

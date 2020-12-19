@@ -153,7 +153,7 @@ export default {
             startTime: new Date(v['startTime']),
             state: v['progress'].toLowerCase()
           }
-          that.createdConference.append(newData)
+          that.createdConference.push(newData)
         });
       })
       this.$axios({
@@ -169,7 +169,7 @@ export default {
             startTime: new Date(v['startTime']),
             state: v['progress'].toLowerCase()
           }
-          that.participatedConference.append(newData)
+          that.participatedConference.push(newData)
         });
       })
       this.$axios({
@@ -191,7 +191,7 @@ export default {
               startTime: new Date(v['startTime']),
               state: v['progress'].toLowerCase()
             }
-            that.endedConference.append(newData)
+            that.endedConference.push(newData)
           });
         })
       })

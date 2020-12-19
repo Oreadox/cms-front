@@ -57,7 +57,7 @@ export default {
       }
     }
   },
-  mounted() {
+  created() {
     this.getProfile()
   },
   methods: {

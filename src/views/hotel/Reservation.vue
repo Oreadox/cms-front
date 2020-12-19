@@ -156,7 +156,7 @@ export default {
             startTime:new Date(v['startTime']),
             endTime:new Date(v['endTime']),
           }
-          that.processConference.append(newData)
+          that.processConference.push(newData)
         });
       })
       this.$axios({
@@ -171,7 +171,7 @@ export default {
             startTime:new Date(v['startTime']),
             endTime:new Date(v['endTime']),
           }
-          that.endedConference.append(newData)
+          that.endedConference.push(newData)
         });
       })
     },
