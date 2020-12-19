@@ -1,57 +1,53 @@
 <template>
-  <Card dis-hover :bordered=false :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
-    <div id="Profile">
-      <Content>
-        <div>
-          <List class="List" style="margin-top: 5%; text-align: center" header="司机资料" border>
-            <ListItem class="ListItem" v-for="(value, key) in listItem.driverData" :key="key" :value="value"
-                      v-model=driverData[value]>
-              <a @click="gotoChange(value, key)">
-                <div class="set_margin">{{ value }}</div>
-                <div>{{ driverData[key] }}</div>
-                <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
-              </a>
-            </ListItem>
-          </List>
-        </div>
-      </Content>
-      <Modal
-          footer-hide
-          :mask-closable="false"
-          v-model="modelInfo.changeModal">
-        <ChangeInfo driverData="driverData" :modelInfo="modelInfo"
-                    @gotoProfile="gotoProfile"></ChangeInfo>
-      </Modal>
-    </div>
-  </Card>
+  <div>
+    <Card dis-hover :bordered=false :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
+      <div id="Profile">
+        <Content>
+          <div>
+            <List class="List" style="margin-top: 5%; text-align: center" header="酒店资料" footer="" border>
+              <ListItem class="ListItem" v-for="(value, key) in listItem.hotelData" :key="key" :value="value"
+                        v-model=hotelData[value]>
+                <a @click="gotoChange(value, key)">
+                  <div class="set_margin">{{ value }}</div>
+                  <div>{{ hotelData[key] }}</div>
+                  <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
+                </a>
+                <div>
+                  <Switch v-model="switch1" @on-change="change">{{ 修改 }}</Switch>
+                </div>
+              </ListItem>
+            </List>
+          </div>
+        </Content>
+      </div>
+    </Card>
+  </div>
 </template>
 
-<script>
-import ChangeInfo from "@/components/driver/ChangeInfo";
 
+
+<script>
 export default {
-  name: "Profile",
-  components: {ChangeInfo},
+  name: "ShowProfile",
   data() {
     return {
-      driverData: {
+      switch1: false,
+      hotelData: {
         account:'xxx',
         password:'xxxx',
         name:'xxx',
-        gender:'xxx',
         celephone:'xxx',
-        idCard:'xxx',
-        team:'xxx'
+        address:'xxx',
+        detail:'xxx'
       },
       listItem: {
-        driverData: {
-          account:'司机账号',
+        hotelData: {
+          account:'酒店账号',
           password:'密码',
-          name:'姓名',
-          gender:'性别',
+          name:'酒店名',
           celephone:'联系电话',
-          idCard:'身份证号',
-          team:'所属车队'
+          address:'酒店地址',
+          detail:'酒店简介'
         },
       },
       modelInfo: {
@@ -65,6 +61,9 @@ export default {
     this.getProfile()
   },
   methods: {
+    change (status) {
+      this.$Message.info('开关状态：' + status);
+    },
     gotoProfile(child) {
       this.modelInfo.changeModal = child
     },
@@ -82,23 +81,20 @@ export default {
       this.$axios(
           {
             method: 'post',
-            url: `${this.$baseURI}/api/driver/profile`,
+            url: `${this.$baseURI}/api/hotel/profile`,
           }
       ).then(function (response) {
         var respData = response["data"]
         that.hotelData.account=respData['account']
         that.hotelData.password=respData['password']
         that.hotelData.name=respData['name']
-        that.hotelData.gender=respData['gender']
         that.hotelData.celephone=respData['celephone']
-        that.hotelData.idCard=respData['idCard']
-        that.hotelData.team=respData['team']
+        that.hotelData.address=respData['address']
+        that.hotelData.detail=respData['detail']
       })
     }
   },
-
 }
-
 </script>
 
 <style scoped>

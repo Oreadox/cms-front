@@ -1,13 +1,18 @@
 <template>
-  <div></div>
+  <div>
+    <show-profile></show-profile>
+  </div>
 </template>
 
 <script>
+
+import ShowProfile from "@/components/hotel/ShowProfile";
 export default {
-  name: "profile"
+  name: "Profile",
+  components: {ShowProfile},
 }
+
 </script>
 
 <style scoped>
-
 </style>

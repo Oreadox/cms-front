@@ -3,22 +3,19 @@
     <Form hide-required-mark style="margin-top: 5%" :rules="fromValidate" ref="formItem" :model="formItem">
       <h2 style="text-align: center">修改{{ modelInfo.changedTitle }}</h2>
       <FormItem show-message :label="modelInfo.changedTitle">
-        <Input disabled :placeholder=userData[modelInfo.changedType]></Input>
+        <Input disabled :placeholder=driverData[modelInfo.changedType]></Input>
+      </FormItem>
+      <FormItem label="性别" prop="gender" v-if="modelInfo.changedType==='gender'">
+        <RadioGroup v-model="formItem.newInfo">
+          <Radio label="MALE">男</Radio>
+          <Radio label="FEMALE">女</Radio>
+        </RadioGroup>
       </FormItem>
       <FormItem label="新密码" prop="password" v-if="modelInfo.changedType==='password'">
         <Input type="password" password v-model="formItem.newInfo" placeholder="长度为8-32, 需包含字母和数字"></Input>
       </FormItem>
       <FormItem label="确认密码" prop="passwordCheck" v-if="modelInfo.changedType==='password'">
         <Input type="password" password v-model="formItem.passwordCheck" placeholder="重复上述的密码"></Input>
-      </FormItem>
-      <FormItem label="性别" prop="gender" v-else-if="modelInfo.changedType==='gender'">
-        <RadioGroup v-model="formItem.newInfo">
-          <Radio label="MALE">男</Radio>
-          <Radio label="FEMALE">女</Radio>
-        </RadioGroup>
-      </FormItem>
-      <FormItem label="生日" prop="birthday" v-else-if="modelInfo.changedType==='birthday'">
-        <DatePicker type="date" v-model="formItem.newInfo"></DatePicker>
       </FormItem>
       <FormItem :label="'新的'+modelInfo.changedTitle" :prop="modelInfo.changedType" v-else>
         <Input v-model="formItem.newInfo"></Input>
@@ -68,7 +65,7 @@ export default {
       },
 
       fromValidate: {
-        username: [
+        account: [
           {required: true, message: '新用户名不能为空', trigger: 'blur'},
           {validator: validateUsername, trigger: 'blur'}
         ],
@@ -88,8 +85,9 @@ export default {
         gender: [
           {required: true, message: '性别不能为空', trigger: 'blur'},
         ],
-        birthday: [
-          {required: true, message: '生日不能为空', trigger: 'blur'},
+        phone: [
+          {required: true, message: '联系电话不能为空', trigger: 'blur'},
+          {pattern: /^[1][0-9]{10}$/, message: '电话号码不合法', trigger: 'blur'}
         ],
         idCard: [
           {required: true, message: '身份证号不能为空', trigger: 'blur'},
@@ -98,20 +96,17 @@ export default {
             , message: '身份证号不合法', trigger: 'blur'
           }
         ],
-        workUnit: '',
-        phone: [
-          {required: true, message: '手机号码不能为空', trigger: 'blur'},
-          {pattern: /^[1][0-9]{10}$/, message: '手机号不合法', trigger: 'blur'}
-        ]
+        team: [
+          {required: true, message: '所属车队不能为空', trigger: 'blur'},
+        ],
       }
 
     }
   },
-  props: ['userData', 'modelInfo'],
+  props: ['driverData', 'modelInfo'],
   methods: {
     resetForm() {
       this.formItem.newInfo = ''
-      this.formItem.newAge = Number
       this.formItem.passwordCheck = ''
     },
     cancelButton() {
@@ -121,18 +116,17 @@ export default {
     submitForm(changedType) {
       var that = this
       var data = {
-        name: changedType === 'name' ? this.formItem.newInfo : this.userData.name,
-        gender: changedType === 'gender' ? this.formItem.newInfo : this.userData.gender,
-        birthday: changedType === 'birthday' ? this.formItem.newInfo.toDateString() : this.userData.birthday.toDateString(),
-        residentIdNumber: changedType === 'idCard' ? this.formItem.newInfo : this.userData.idCard,
-        email: changedType === 'email' ? this.formItem.newInfo : this.userData.email,
-        telephone: changedType === 'phone' ? this.formItem.newInfo : this.userData.phone,
-        workplace: changedType === 'workUnit' ? this.formItem.newInfo : this.userData.workUnit,
+        account:changedType==='account'? this.formItem.newInfo:this.driverData.account,
+        name: changedType === 'name' ? this.formItem.newInfo : this.driverData.name,
+        gender:changedType === 'gender' ? this.formItem.newInfo : this.driverData.gender,
+        celephone:changedType === 'phone' ? this.formItem.newInfo : this.driverData.phone,
+        idCard:changedType==='idCard'?this.formItem.newInfo:this.driverData.idCard,
+        team:changedType==='team'?this.formItem.newInfo:this.driverData.team
       }
       this.$axios(
           {
             method: 'post',
-            url: `${this.$baseURI}/api/user/profile/modify`,
+            url: `${this.$baseURI}/api/driver/profile/modify`,
             data: data
           }
       ).then(function (response) {

@@ -18,7 +18,7 @@
                 </Card>
               </Col>
               <Col span="6" offset="1" justify="center">
-                <Card to="/conference/participate" class="card" style="color: white; background-color: #5cadff;">
+                <Card to="/conference/list" class="card" style="color: white; background-color: #5cadff;">
                   <p class="center">我的会议</p>
                 </Card>
               </Col>
