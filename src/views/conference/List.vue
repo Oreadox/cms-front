@@ -178,7 +178,7 @@ export default {
       }).then(function (response) {
         that.endedConference = []
         var respData = response['data']
-        this.$axios({
+        that.$axios({
           method: 'post',
           url: `${this.$baseURI}/api/user/conference/participated/ended`,
         }).then(function (response) {

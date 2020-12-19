@@ -1,7 +1,7 @@
 <template>
   <div :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
     <ParticipantDetail v-if="isCreator"></ParticipantDetail>
-    <CreatorDetail v-else-if ="!isCreator"></CreatorDetail>
+    <CreatorDetail v-else-if ="!isCreator" :conferenceId="id"></CreatorDetail>
   </div>
 </template>
 
