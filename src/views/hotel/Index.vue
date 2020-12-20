@@ -3,7 +3,7 @@
     <Navbar ></Navbar>
     <HotelSidebar></HotelSidebar>
     <Content >
-      <RouterView></RouterView>
+      <RouterView :style="{padding: '24px', margin: 'auto auto auto 15vw'}"></RouterView>
     </Content>
   </div>
 </template>
@@ -17,7 +17,6 @@ export default {
   components: { Navbar, HotelSidebar},
 }
 </script>
-
 <style scoped>
 .layout{
   background-color: #ffffff;

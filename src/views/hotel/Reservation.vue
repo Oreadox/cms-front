@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card dis-hover :bordered=false :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
+    <Card dis-hover :bordered=false>
       <div>
         <!--        <Button @click="showFinish = !showFinish">已结束</Button>-->
         <Collapse v-model="showingPanel" simple>
@@ -28,16 +28,9 @@
               </Table>
             </div>
           </Panel>
-          <Modal
-              footer-hide
-              :mask-closable="true"
-            v-model="modelInfo.changeModal">
-            <ConferenceDetail></ConferenceDetail>
-          </Modal>
         </Collapse>
       </div>
     </Card>
-    <CustomerMessage></CustomerMessage>
   </div>
 </template>
 
@@ -51,12 +44,11 @@ export default {
   },
   data() {
     return {
-      modelInfo: {
-        changedTitle: '名字',
-        changedType: 'name',
-        changeModal: false,
-      },
       columns: [
+        {
+          key: 'id',
+          title: '用户编号'
+        },
         {
           key: 'sendReservationTime',
           title: '发送预约时间'
@@ -97,28 +89,31 @@ export default {
                     this.show(params.row.id)
                   }
                 }
-              }, 'View'),
+              }, '查看'),
             ]);
           }
-        }
+        },
       ],
       waitingConfirmConference: [{
-        sendReservationTime:'2020/12/15',
+        id:1,
+        sendReservationTime:'2020-12-15',
         customerName:"one",
-        startTime:"2020/12/16",
-        endTime:"2020/12/18",
+        startTime:"2020-12-16",
+        endTime:"2020-12-18",
       }],
       processingConference: [{
-        sendReservationTime:'2020/12/15',
-        customerName:"one",
-        startTime:"2020/12/16",
-        endTime:"2020/12/18",
+        id:2,
+        sendReservationTime:'2020-12-15',
+        customerName:"two",
+        startTime:"2020-12-16",
+        endTime:"2020-12-18",
       }],
       endedConference: [{
-        sendReservationTime:'2020/12/15',
-        customerName:"one",
-        startTime:"2020/12/16",
-        endTime:"2020/12/18",
+        id:3,
+        sendReservationTime:'2020-12-15',
+        customerName:"three",
+        startTime:"2020-12-16",
+        endTime:"2020-12-18",
       }],
       showingPanel: ["waitingConfirm",'ended', 'processing'],
     }
@@ -136,6 +131,7 @@ export default {
         that.waitingConfirmConference = []
         response['data'].forEach(v => {
           var newData = {
+            id:Number(v['id']),
             sendReservationTime:new Date(v['sendReservationTime']),
             customerName:v['customerName'],
             startTime:new Date(v['startTime']),
@@ -151,6 +147,7 @@ export default {
         that.processConference = []
         response['data'].forEach(v => {
           var newData = {
+            id:Number(v['id']),
             sendReservationTime:new Date(v['sendReservationTime']),
             customerName:v['customerName'],
             startTime:new Date(v['startTime']),
@@ -166,6 +163,7 @@ export default {
         that.endedConference = []
         response['data'].forEach(v => {
           var newData = {
+            id:Number(v['id']),
             sendReservationTime:new Date(v['sendReservationTime']),
             customerName:v['customerName'],
             startTime:new Date(v['startTime']),
@@ -180,7 +178,7 @@ export default {
                     title: 'User Info',
                     content: `Name：${this.conference[index].name}<br>Age：${this.conference[index].address}<br>Address：${this.conference[index].startTime}`
                   })*/
-      this.$router.push(`/conference/detail/${id}`)
+      this.$router.push(`/hotel/detail/${id}`)
     },
 
   }
