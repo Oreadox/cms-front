@@ -58,6 +58,7 @@
 // import CollapseTransition from "@/plugins/CollapseTransition"
 
 import JoinConference from "@/components/conference/JoinConference";
+
 export default {
   name: "List",
   components: {
@@ -66,35 +67,30 @@ export default {
   },
   data() {
     return {
-      enterJoinNumber:false,
+      enterJoinNumber: false,
       columns: [
         {
           key: 'id',
-          title: 'id'
+          title: '会议编号'
         },
-
         {
           key: 'name',
-          title: 'name'
+          title: '会议名'
         },
-
         {
           key: 'address',
-          title: 'address'
+          title: '会议举办地点'
         },
-
         {
-          key: 'startTime',
-          title: 'startTime'
+          key: 'date',
+          title: '会议时间'
         },
-
         {
           key: 'state',
-          title: 'state',
+          title: '状态',
         },
-
         {
-          title: 'Action',
+          title: '查看',
           key: 'action',
           width: 150,
           align: 'center',
@@ -113,7 +109,7 @@ export default {
                     this.show(params.row.id)
                   }
                 }
-              }, 'View'),
+              }, '查看'),
             ]);
           }
         }
@@ -122,21 +118,21 @@ export default {
         id: 1000,
         name: 'one',
         address: 'xxx',
-        startTime: '2020/12/12-2020/12/13',
+        date: '2020/12/12-2020/12/13',
         state: 'finish',
       }],
       participatedConference: [{
         id: 1000,
         name: 'one',
         address: 'xxx',
-        startTime: '2020/12/12-2020/12/13',
+        date: '2020/12/12-2020/12/13',
         state: 'finish',
       }],
       endedConference: [{
         id: 1000,
         name: 'one',
         address: 'xxx',
-        startTime: '2020/12/12-2020/12/13',
+        date: '2020/12/12-2020/12/13',
         state: 'finish',
       }],
       showingPanel: ['ended', 'processing'],
@@ -148,22 +144,44 @@ export default {
     this.initData()
   },
   methods: {
+    getInfo(v) {
+      let newData = {
+        id: v['id'],
+        name: v['name'],
+        address: v['address'],
+      }
+      let startTime = new Date(v['startTime'])
+      let endTime = new Date(v['endTime'])
+      newData.date = `${startTime.getFullYear()}/${startTime.getMonth()}/${startTime.getDate()}-`
+      newData.date += `${endTime.getFullYear()}/${endTime.getMonth()}/${endTime.getDate()}`
+      switch (v['progress']) {
+        case "ENROLLMENT":
+          newData.state = '报名阶段'
+          break;
+        case "OWNER_CONFIRM":
+          newData.state = '报名确认'
+          break;
+        case "RESERVATION_CONFIRM":
+          newData.state = '车队，酒店确认'
+          break;
+        case "READY":
+          newData.state = '会议进行'
+          break;
+        case "ENDED":
+          newData.state = '会议结束\n'
+          break;
+      }
+      return newData
+    },
     initData() {
-      var that = this
+      let that = this
       this.$axios({
         method: 'post',
         url: `${this.$baseURI}/api/user/conference/created/ongoing`,
       }).then(function (response) {
         that.createdConference = []
         response['data'].forEach(v => {
-          var newData = {
-            id: v['id'],
-            name: v['name'],
-            address: v['address'],
-            startTime: new Date(v['startTime']),
-            state: v['progress'].toLowerCase()
-          }
-          that.createdConference.push(newData)
+          that.participatedConference.push(that.getInfo(v))
         });
       })
       this.$axios({
@@ -172,14 +190,7 @@ export default {
       }).then(function (response) {
         that.participatedConference = []
         response['data'].forEach(v => {
-          var newData = {
-            id: v['id'],
-            name: v['name'],
-            address: v['address'],
-            startTime: new Date(v['startTime']),
-            state: v['progress'].toLowerCase()
-          }
-          that.participatedConference.push(newData)
+          that.participatedConference.push(that.getInfo(v))
         });
       })
       this.$axios({
@@ -187,21 +198,14 @@ export default {
         url: `${this.$baseURI}/api/user/conference/created/ended`,
       }).then(function (response) {
         that.endedConference = []
-        var respData = response['data']
+        let respData = response['data']
         that.$axios({
           method: 'post',
           url: `${this.$baseURI}/api/user/conference/participated/ended`,
         }).then(function (response) {
           respData = respData.concat(response['data'])
           respData.forEach(v => {
-            var newData = {
-              id: v['id'],
-              name: v['name'],
-              address: v['address'],
-              startTime: new Date(v['startTime']),
-              state: v['progress'].toLowerCase()
-            }
-            that.endedConference.push(newData)
+            that.participatedConference.push(that.getInfo(v))
           });
         })
       })

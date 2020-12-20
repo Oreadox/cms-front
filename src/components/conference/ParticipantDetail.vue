@@ -93,7 +93,7 @@
               </FormItem>
             </Form>
             <FormItem v-if="driverInfo.status===1">
-              <Button type="primary">确认信息</Button>
+              <Button type="primary" @click="confirmDriver">确认信息</Button>
             </FormItem>
           </div>
         </Form>
@@ -127,7 +127,7 @@
               <Input type="text" v-model="hotelInfo.roomNumber" :readonly="true" style="width: 50px"></Input>
             </FormItem>
             <FormItem v-if="hotelInfo.status===1">
-              <Button type="primary">确认</Button>
+              <Button type="primary" @click="confirmHotel">确认</Button>
             </FormItem>
           </div>
         </Form>
@@ -341,6 +341,34 @@ export default {
           that.hotelInfo.status = 0
           that.hotelInfo.statusMessage += '待酒店接单'
           this.conferenceInfo.statusMessage += '待酒店接单 '
+        }
+      })
+    },
+    confirmDriver(){
+      let that = this
+      this.$axios({
+        method: 'post',
+        url: `${this.$baseURI}/api/conference/driverReservation`,
+        data: {id: this.conferenceId}
+      }).then(function (response) {
+        if(response['data']['success']===true){
+          that.$Message.success('确认成功')
+        } else {
+          that.$Message.error(response['data']['message'])
+        }
+      })
+    },
+    confirmHotel(){
+      let that = this
+      this.$axios({
+        method: 'post',
+        url: `${this.$baseURI}/api/conference/hotelReservation/check`,
+        data: {id: this.conferenceId}
+      }).then(function (response) {
+        if(response['data']['success']===true){
+          that.$Message.success('确认成功')
+        } else {
+          that.$Message.error(response['data']['message'])
         }
       })
     }
