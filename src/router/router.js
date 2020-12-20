@@ -35,7 +35,7 @@ const adminHotel = () => import('@/views/admin/Hotel')
 const adminDriver = () => import('@/views/admin/Driver')
 const adminSystem = () => import('@/views/admin/System')
 const personalInfo = () => import('@/views/admin/Supervise')
-const adminMail = () => import('@/views/admin/User')
+const adminMail = () => import('@/views/admin/Mail')
 
 
 export default new VueRouter({
@@ -88,7 +88,7 @@ export default new VueRouter({
                     component: conferenceDetail
                 },
                 {
-                    path: 'participate',
+                    path: 'participate/:id',
                     component: conferenceParticipate
                 },
             ]
