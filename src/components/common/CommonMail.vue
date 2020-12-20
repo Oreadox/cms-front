@@ -1,53 +1,64 @@
 <template>
   <div>
-        <Card dis-hover :bordered=false >
-          <div style="margin-bottom: 2vw">
-            <Button size="large" type="primary">写信</Button>
-          </div>
-          <div>
-            <Collapse v-model="showingAll" simple>
-              <Panel name="receive">
-                收信箱
-                <div slot="content" >
-                        <Table :columns="this.columns" :data="this.receiveBox" :stripe="true"
-                               highlight-row  @on-row-click="openReceiveDetail" >
-                        </Table>
-                </div>
-              </Panel>
-              <Panel name="send">
-                发信箱
-                <div slot="content">
-                  <Table :columns="this.columns2" :data="this.sendBox" :stripe="true"
-                         highlight-row @on-row-click="openSendDetail"
-                         max-height="500px" style="overflow-y: auto" >
-                    <template slot-scope="{row}" slot="ifRead">
-                      <Tag color="primary"  style="margin-right: 5px" v-if="!row.read">未读</Tag>
-                      <Tag color="success"  style="margin-right: 5px" v-else-if="row.read">已读</Tag>
-                    </template>
-                  </Table>
-                </div>
-              </Panel>
-            </Collapse>
-          </div>
-        </Card>
-        <Modal
-            style="padding: 20px"
-            footer-hide
-            v-model="openModal"
-            >
-          <div style="padding: 5%">
-              <Form>
-                <FormItem label="内容详情">
-                  <Input :rows=4 type="textarea" v-model="contentDetail" readonly/>
-                </FormItem>
-              </Form>
-          </div>
-        </Modal>
+    <Card dis-hover :bordered=false>
+      <div style="margin-bottom: 2vw">
+        <Button size="large" type="primary" @click="openWriteMail=true">写信</Button>
+      </div>
+      <div>
+        <Collapse v-model="showingAll" simple>
+          <Panel name="receive">
+            收信箱
+            <div slot="content">
+              <Table :columns="this.columns" :data="this.receiveBox" :stripe="true"
+                     highlight-row @on-row-click="openReceiveDetail">
+              </Table>
+            </div>
+          </Panel>
+          <Panel name="send">
+            发信箱
+            <div slot="content">
+              <Table :columns="this.columns2" :data="this.sendBox" :stripe="true"
+                     highlight-row @on-row-click="openSendDetail"
+                     max-height="500px" style="overflow-y: auto">
+                <template slot-scope="{row}" slot="ifRead">
+                  <Tag color="primary" style="margin-right: 5px" v-if="!row.read">未读</Tag>
+                  <Tag color="success" style="margin-right: 5px" v-else-if="row.read">已读</Tag>
+                </template>
+              </Table>
+            </div>
+          </Panel>
+        </Collapse>
+      </div>
+    </Card>
+    <Modal
+        style="padding-top: 20px"
+        footer-hide
+        v-model="openModal"
+    >
+      <div>
+        <Form>
+          <FormItem label="内容详情">
+            <Input :rows=4 type="textarea" v-model="contentDetail" readonly/>
+          </FormItem>
+        </Form>
+      </div>
+    </Modal>
+    <Modal
+        style="padding: 20px"
+        footer-hide
+        v-model="openWriteMail"
+    >
+      <div style="padding: 5%">
+        <WriteMail @closeSendModal="closeSendModal"></WriteMail>
+      </div>
+    </Modal>
   </div>
 </template>
 <script>
+import WriteMail from "@/components/common/WriteMail";
 export default {
-  name: "Mail",
+  name: "CommonMail",
+  components:{WriteMail},
   data() {
     return {
       columns: [
@@ -116,6 +127,7 @@ export default {
       showingAll: ['receive', 'send'],
       contentDetail:'xxx',
       openModal: false,
+      openWriteMail:false,
     }
   },
   created() {
@@ -183,11 +195,12 @@ export default {
       })
     },
     openSendDetail(currentRow){
-
       this.contentDetail = currentRow.content
       this.openModal = true
-
     },
+    closeSendModal(fromChild){
+      this.openWriteMail=fromChild
+    }
   }
 }
 </script>
