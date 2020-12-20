@@ -181,7 +181,7 @@ export default {
       }).then(function (response) {
         that.createdConference = []
         response['data'].forEach(v => {
-          that.participatedConference.push(that.getInfo(v))
+          that.createdConference.push(that.getInfo(v))
         });
       })
       this.$axios({
@@ -205,7 +205,7 @@ export default {
         }).then(function (response) {
           respData = respData.concat(response['data'])
           respData.forEach(v => {
-            that.participatedConference.push(that.getInfo(v))
+            that.endedConference.push(that.getInfo(v))
           });
         })
       })
