@@ -60,12 +60,12 @@ export default {
         },
 
         {
-          key: 'place',
+          key: 'arriveSite',
           title: '到站地点'
         },
 
         {
-          key: 'time',
+          key: 'arriveTime',
           title: '到站时间'
         },
 
@@ -98,22 +98,22 @@ export default {
         id:1,
         sendReservationTime:'2020-12-15',
         customerName:"one",
-        place:"a",
-        time:"2020-12-18",
+        arriveSite:"a",
+        arriveTime:"2020-12-18",
       }],
       processingConference: [{
         id:2,
         sendReservationTime:'2020-12-15',
         customerName:"two",
-        place:"b",
-        time:"2020-12-18",
+        arriveSite:"b",
+        arriveTime:"2020-12-18",
       }],
       endedConference: [{
         id:3,
         sendReservationTime:'2020-12-15',
         customerName:"three",
-        place:"c",
-        time:"2020-12-18",
+        arriveSite:"c",
+        arriveTime:"2020-12-18",
       }],
       showingPanel: ["waitingConfirm",'ended', 'processing'],
     }
@@ -134,8 +134,8 @@ export default {
             id:Number(v['id']),
             sendReservationTime:new Date(v['sendReservationTime']),
             customerName:v['customerName'],
-            place:v['place'],
-            time:new Date(v['time']),
+            arriveSite:v['place'],
+            arriveTime:new Date(v['time']),
           }
           that.waitingConfirmConference.append(newData)
         });
@@ -150,8 +150,8 @@ export default {
             id:Number(v['id']),
             sendReservationTime:new Date(v['sendReservationTime']),
             customerName:v['customerName'],
-            place:v['place'],
-            time:new Date(v['time']),
+            arriveSite:v['place'],
+            arriveTime:new Date(v['time']),
           }
           that.processConference.push(newData)
         });
@@ -166,8 +166,8 @@ export default {
             id:Number(v['id']),
             sendReservationTime:new Date(v['sendReservationTime']),
             customerName:v['customerName'],
-            place:v['place'],
-            time:new Date(v['time']),
+            arriveSite:v['place'],
+            arriveTime:new Date(v['time']),
           }
           that.endedConference.push(newData)
         });

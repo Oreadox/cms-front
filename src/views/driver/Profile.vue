@@ -37,7 +37,7 @@
 
 <script>
 import ChangeInfo from "@/components/driver/ChangeInfo";
-import ChangePassword from "@/components/hotel/ChangePassword";
+import ChangePassword from "@/components/driver/ChangePassword";
 
 
 export default {
@@ -47,12 +47,12 @@ export default {
     return {
       driverData: {
         account:'xxx',
-        password:'xxxx',
+        password:'xxx',
         name:'xxx',
         gender:'xxx',
-        celephone:'xxx',
-        idCard:'xxx',
-        team:'xxx'
+        telephone:'xxx',
+        residentIdNumber:'xxx',
+        fleetId:'xxx'
       },
       listItem: {
         driverData: {
@@ -60,9 +60,9 @@ export default {
           password:'密码',
           name:'姓名',
           gender:'性别',
-          celephone:'联系电话',
-          idCard:'身份证号',
-          team:'所属车队'
+          telephone:'联系电话',
+          residentIdNumber:'身份证号',
+          fleetId:'所属车队'
         },
       },
       modelInfo: {
@@ -107,9 +107,9 @@ export default {
         that.driverData.password=respData['password']
         that.driverData.name=respData['name']
         that.driverData.gender=respData['gender']
-        that.driverData.celephone=respData['celephone']
-        that.driverData.idCard=respData['idCard']
-        that.driverData.team=respData['team']
+        that.driverData.telephone=respData['telephone']
+        that.driverData.residentIdNumber=respData['residentIdNumber']
+        that.driverData.fleetId=respData['fleetId']
       })
     }
   },
@@ -119,6 +119,7 @@ export default {
 </script>
 
 <style scoped>
+
 .card {
   color: #4d5669;
   font: 20px bold;
@@ -156,4 +157,5 @@ a {
     width: 90%;
   }
 }
+
 </style>

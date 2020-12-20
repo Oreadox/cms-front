@@ -13,7 +13,7 @@
           {{userFormItem.arriveTime}}
         </FormItem>
         <FormItem  label="到达地点">
-          {{userFormItem.arrivePlace}}
+          {{userFormItem.arriveSite}}
         </FormItem>
       </Form>
     </Card>
@@ -23,10 +23,10 @@
           {{orderInfoFormItem.Appointment}}
         </FormItem>
         <FormItem  label="接车时间">
-          {{orderInfoFormItem.pickTime}}
+          {{orderInfoFormItem.pickupTime}}
         </FormItem>
         <FormItem  label="接车地点">
-          {{orderInfoFormItem.pickPlace}}
+          {{orderInfoFormItem.pickupSite}}
         </FormItem>
         <FormItem  label="车牌号">
           {{orderInfoFormItem.carNumber}}
@@ -50,13 +50,13 @@ export default {
         name:'xxx',
         contact:'xxx',
         arriveTime:'2020-10-02',
-        arrivePlace: 'a'
+        arriveSite: 'a'
       },
 
       orderInfoFormItem:{
         Appointment:'2020-10-02',
-        pickTime:'2020-12-03',
-        pickPlace:'a',
+        pickupTime:'2020-12-03',
+        pickupSite:'a',
         carNumber:'123',
       }
     }

@@ -15,15 +15,15 @@
       </FormItem>
 
       <FormItem label="联系电话" prop="phone">
-        <Input type="text" v-model="formItem.phone"/>
+        <Input type="text" v-model="formItem.telephone"/>
       </FormItem>
 
       <FormItem label="身份证号" prop="idCard">
-        <Input type="text" v-model="formItem.idCard"/>
+        <Input type="text" v-model="formItem.residentIdNumber"/>
       </FormItem>
 
       <FormItem label="所属车队" prop="team">
-        <Input type="text" v-model="formItem.team"/>
+        <Input type="text" v-model="formItem.fleetId"/>
       </FormItem>
 
       <FormItem>
@@ -43,9 +43,9 @@ export default {
       formItem: {
         name: this.driverData.name,
         gender: this.driverData.gender,
-        phone: this.driverData.phone,
-        idCard: this.driverData.idCard,
-        team: this.driverData.team
+        phone: this.driverData.telephone,
+        idCard: this.driverData.residentIdNumber,
+        team: this.driverData.fleetId
       },
 
       formValidate: {
@@ -55,18 +55,18 @@ export default {
         gender: [
           {required: true, message: '性别不能为空', trigger: 'blur'},
         ],
-        phone: [
+        telephone: [
           {required: true, message: '联系电话不能为空', trigger: 'blur'},
           {pattern: /^[1][0-9]{10}$/, message: '电话号码不合法', trigger: 'blur'}
         ],
-        idCard: [
+        residentIdNumber: [
           {required: true, message: '身份证号不能为空', trigger: 'blur'},
           {
             pattern: /^[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
             , message: '身份证号不合法', trigger: 'blur'
           }
         ],
-        team: [
+        fleetId: [
           {required: true, message: '所属车队不能为空', trigger: 'blur'},
         ],
       }
@@ -88,9 +88,9 @@ export default {
       let data = {
         name: this.driverData.name,
         gender: this.driverData.gender,
-        phone: this.driverData.phone,
-        idCard: this.driverData.idCard,
-        team: this.driverData.team
+        phone: this.driverData.telephone,
+        idCard: this.driverData.residentIdNumber,
+        team: this.driverData.fleetId
       }
 
       this.$axios(
