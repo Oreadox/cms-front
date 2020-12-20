@@ -11,10 +11,10 @@
               </a>v
             </ListItem>
             <ListItem class="ListItem" v-for="(value, key) in listItem.personalData" :key="key" :value="value"
-                      v-model=userData[value]>
+                      v-model=hotelData[value]>
               <a @click="gotoChange(value, key)">
                 <div class="set_margin">{{ value }}</div>
-                <div>{{ userData[key] }}</div>
+                <div>{{ hotelData[key] }}</div>
                 <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
               </a>
             </ListItem>
@@ -24,7 +24,7 @@
             <ListItem class="ListItem" v-for="(value, key) in listItem.contactInformation" :key="key" :value="value">
               <a @click="gotoChange(value, key)">
                 <div class="set_margin">{{ value }}</div>
-                <div>{{ userData[key] }}</div>
+                <div>{{ hotelData[key] }}</div>
                 <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
               </a>
             </ListItem>
@@ -35,14 +35,14 @@
           footer-hide
           :mask-closable="false"
           v-model="modelInfo.changeModal">
-        <ChangeInfo :userData="userData"
+        <ChangeInfo :userData="hotelData"
                     @gotoProfile="gotoProfile"></ChangeInfo>
       </Modal>
       <Modal
           footer-hide
           :mask-closable="false"
           v-model="passwordModel.changeModal">
-        <ChangePassword :userData="userData"
+        <ChangePassword :userData="hotelData"
                     @gotoProfile="gotoProfile"></ChangePassword>
       </Modal>
     </div>
@@ -58,7 +58,7 @@ export default {
   components: {ChangePassword, ChangeInfo},
   data() {
     return {
-      userData: {
+      hotelData: {
         name: 'xxx',
         birthday: '2000-01-01',
         gender: 'xxx',

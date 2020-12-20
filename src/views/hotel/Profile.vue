@@ -12,68 +12,83 @@
                   <div>{{ hotelData[key] }}</div>
                   <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
                 </a>
-                <div>
-                  <Switch v-model="switch1" @on-change="change"></Switch>
-                </div>
               </ListItem>
             </List>
           </div>
         </Content>
       </div>
     </Card>
+    <Modal
+        footer-hide
+        :mask-closable="false"
+        v-model="modelInfo.changeModal">
+      <ChangeInfo :hotelData="hotelData"
+                  @gotoProfile="gotoProfile"></ChangeInfo>
+    </Modal>
+    <Modal
+        footer-hide
+        :mask-closable="false"
+        v-model="passwordModel.changePasswordModal">
+      <ChangePassword :hotelData="hotelData"
+                      @gotoProfile="gotoProfile"></ChangePassword>
+    </Modal>
   </div>
 </template>
 
 <script>
-
+import ChangeInfo from "@/components/hotel/ChangeInfo";
+import ChangePassword from "@/components/hotel/ChangePassword";
 export default {
   name: "Profile",
+  components:{ChangeInfo,ChangePassword},
   data() {
     return {
-    switch1: false,
-    hotelData: {
-      account:'xxx',
-      password:'xxxx',
-      name:'xxx',
-      celephone:'xxx',
-      address:'xxx',
-      detail:'xxx'
-    },
-    listItem: {
       hotelData: {
-        account:'酒店账号',
-        password:'密码',
-        name:'酒店名',
-        celephone:'联系电话',
-        address:'酒店地址',
-        detail:'酒店简介'
+        account: 'xxx',
+        password: 'xxxx',
+        name: 'xxx',
+        celephone: 'xxx',
+        address: 'xxx',
+        detail: 'xxx'
       },
-    },
-    modelInfo: {
-      changedTitle: '名字',
-      changedType: 'name',
-      changeModal: false,
+      listItem: {
+        hotelData: {
+          account: '酒店账号',
+          password: '密码',
+          name: '酒店名',
+          celephone: '联系电话',
+          address: '酒店地址',
+          detail: '酒店简介'
+        },
+      },
+      modelInfo: {
+        changeModal: false,
+      },
+      passwordModel: {
+        changePasswordModal: false,
+      }
     }
-  }
-},
+  },
   created() {
-  this.getProfile()
-},
+    this.getProfile()
+  },
   methods: {
-    change (status) {
-      this.$Message.info('开关状态：' + status);
-    },
     gotoProfile(child) {
       this.modelInfo.changeModal = child
+      this.passwordModel.changePasswordModal = child
     },
     gotoChange(title, type) {
-      console.log(`${title} ${type}`)
       if (type === 'account') {
         return
       }
-      this.modelInfo.changedTitle = title
-      this.modelInfo.changedType = type
-      this.modelInfo.changeModal = true
+      if (type === 'password') {
+        console.log(`123123`)
+        this.passwordModel.changePasswordModal = true
+      } else {
+        console.log(`12`)
+        this.modelInfo.changeModal = true
+      }
+
     },
     getProfile() {
       var that = this
@@ -84,12 +99,12 @@ export default {
           }
       ).then(function (response) {
         var respData = response["data"]
-        that.hotelData.account=respData['account']
-        that.hotelData.password=respData['password']
-        that.hotelData.name=respData['name']
-        that.hotelData.celephone=respData['celephone']
-        that.hotelData.address=respData['address']
-        that.hotelData.detail=respData['detail']
+        that.hotelData.account = respData['account']
+        that.hotelData.password = respData['password']
+        that.hotelData.name = respData['name']
+        that.hotelData.celephone = respData['celephone']
+        that.hotelData.address = respData['address']
+        that.hotelData.detail = respData['detail']
       })
     }
   },
