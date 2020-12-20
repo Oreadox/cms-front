@@ -1,37 +1,48 @@
 <template>
-  <Card dis-hover :bordered=false :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
-    <div id="Profile">
-      <Content>
-        <div>
-          <List class="List" style="margin-top: 5%; text-align: center" header="司机资料" border>
-            <ListItem class="ListItem" v-for="(value, key) in listItem.driverData" :key="key" :value="value"
-                      v-model=driverData[value]>
-              <a @click="gotoChange(value, key)">
-                <div class="set_margin">{{ value }}</div>
-                <div>{{ driverData[key] }}</div>
-                <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
-              </a>
-            </ListItem>
-          </List>
-        </div>
-      </Content>
-      <Modal
-          footer-hide
-          :mask-closable="false"
-          v-model="modelInfo.changeModal">
-        <ChangeInfo driverData="driverData" :modelInfo="modelInfo"
-                    @gotoProfile="gotoProfile"></ChangeInfo>
-      </Modal>
-    </div>
-  </Card>
+  <div>
+    <Card dis-hover :bordered=false>
+      <div id="Profile">
+        <Content>
+          <div>
+            <List class="List" style="margin-top: 5%; text-align: center" header="司机资料" footer="" border>
+              <ListItem class="ListItem" v-for="(value, key) in listItem.driverData" :key="key" :value="value"
+                        v-model=driverData[value]>
+                <a @click="gotoChange(value, key)">
+                  <div class="set_margin">{{ value }}</div>
+                  <div>{{ driverData[key] }}</div>
+                  <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
+                </a>
+              </ListItem>
+            </List>
+          </div>
+        </Content>
+      </div>
+    </Card>
+    <Modal
+        footer-hide
+        :mask-closable="false"
+        v-model="modelInfo.changeModal">
+      <ChangeInfo :driverData="driverData"
+                  @gotoProfile="gotoProfile"></ChangeInfo>
+    </Modal>
+    <Modal
+        footer-hide
+        :mask-closable="false"
+        v-model="passwordModel.changePasswordModal">
+      <ChangePassword :driverData="driverData"
+                      @gotoProfile="gotoProfile"></ChangePassword>
+    </Modal>
+  </div>
 </template>
 
 <script>
 import ChangeInfo from "@/components/driver/ChangeInfo";
+import ChangePassword from "@/components/hotel/ChangePassword";
+
 
 export default {
   name: "Profile",
-  components: {ChangeInfo},
+  components: {ChangeInfo,ChangePassword},
   data() {
     return {
       driverData: {
@@ -55,9 +66,10 @@ export default {
         },
       },
       modelInfo: {
-        changedTitle: '名字',
-        changedType: 'name',
         changeModal: false,
+      },
+      passwordModel: {
+        changePasswordModal: false,
       }
     }
   },
@@ -67,15 +79,20 @@ export default {
   methods: {
     gotoProfile(child) {
       this.modelInfo.changeModal = child
+      this.passwordModel.changePasswordModal = child
     },
     gotoChange(title, type) {
-      console.log(`${title} ${type}`)
       if (type === 'account') {
         return
       }
-      this.modelInfo.changedTitle = title
-      this.modelInfo.changedType = type
-      this.modelInfo.changeModal = true
+      if (type === 'password') {
+        console.log(`123123`)
+        this.passwordModel.changePasswordModal = true
+      } else {
+        console.log(`12`)
+        this.modelInfo.changeModal = true
+      }
+
     },
     getProfile() {
       var that = this
@@ -86,13 +103,13 @@ export default {
           }
       ).then(function (response) {
         var respData = response["data"]
-        that.hotelData.account=respData['account']
-        that.hotelData.password=respData['password']
-        that.hotelData.name=respData['name']
-        that.hotelData.gender=respData['gender']
-        that.hotelData.celephone=respData['celephone']
-        that.hotelData.idCard=respData['idCard']
-        that.hotelData.team=respData['team']
+        that.driverData.account=respData['account']
+        that.driverData.password=respData['password']
+        that.driverData.name=respData['name']
+        that.driverData.gender=respData['gender']
+        that.driverData.celephone=respData['celephone']
+        that.driverData.idCard=respData['idCard']
+        that.driverData.team=respData['team']
       })
     }
   },

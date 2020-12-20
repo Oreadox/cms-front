@@ -1,29 +1,35 @@
 <template>
   <div>
-    <Form hide-required-mark style="margin-top: 5%" :rules="fromValidate" ref="formItem" :model="formItem">
-      <h2 style="text-align: center">修改{{ modelInfo.changedTitle }}</h2>
-      <FormItem show-message :label="modelInfo.changedTitle">
-        <Input disabled :placeholder=driverData[modelInfo.changedType]></Input>
+    <Form hide-required-mark style="margin-top: 5%" :rules="formValidate" ref="formItem" :model="formItem">
+      <h2 style="text-align: center">修改个人信息</h2>
+
+      <FormItem label="姓名" prop="name" >
+        <Input type="text" v-model="formItem.name"/>
       </FormItem>
-      <FormItem label="性别" prop="gender" v-if="modelInfo.changedType==='gender'">
-        <RadioGroup v-model="formItem.newInfo">
+
+      <FormItem label="性别" prop="gender">
+        <RadioGroup v-model="formItem.gender">
           <Radio label="MALE">男</Radio>
           <Radio label="FEMALE">女</Radio>
         </RadioGroup>
       </FormItem>
-      <FormItem label="新密码" prop="password" v-if="modelInfo.changedType==='password'">
-        <Input type="password" password v-model="formItem.newInfo" placeholder="长度为8-32, 需包含字母和数字"></Input>
+
+      <FormItem label="联系电话" prop="phone">
+        <Input type="text" v-model="formItem.phone"/>
       </FormItem>
-      <FormItem label="确认密码" prop="passwordCheck" v-if="modelInfo.changedType==='password'">
-        <Input type="password" password v-model="formItem.passwordCheck" placeholder="重复上述的密码"></Input>
+
+      <FormItem label="身份证号" prop="idCard">
+        <Input type="text" v-model="formItem.idCard"/>
       </FormItem>
-      <FormItem :label="'新的'+modelInfo.changedTitle" :prop="modelInfo.changedType" v-else>
-        <Input v-model="formItem.newInfo"></Input>
+
+      <FormItem label="所属车队" prop="team">
+        <Input type="text" v-model="formItem.team"/>
       </FormItem>
+
       <FormItem>
-        <Button style="float: right; margin-left: 16px" type="primary" @click="submitForm(modelInfo.changedType)">修改
+        <Button style="float: right; margin-left: 16px" type="primary" @click="submitForm()">修改
         </Button>
-        <Button type="text" style="float: right; " @click="cancelButton()">取消</Button>
+        <Button type="text" style="float: right; " @click="function() {resetForm('formItem');cancelButton()}">取消</Button>
       </FormItem>
     </Form>
   </div>
@@ -33,52 +39,16 @@
 export default {
   name: "ChangeInfo",
   data() {
-    const validatePassCheck = (rule, value, callback) => {
-      if (value !== this.formItem.password) {
-        return callback(new Error('密码验证不一致'))
-      } else {
-        return callback()
-      }
-    };
-    const validateUsername = (rule, value, callback) => {
-      this.$axios(
-          {
-            method: 'post',
-            url: this.$baseURI + '/api/register/checkUsername',
-            data: {
-              "username": value
-            }
-          }
-      ).then(function (response) {
-        if (response['data']['result'] === false) {
-          callback(new Error('用户名重复'))
-        } else {
-          callback();
-        }
-      })
-    }
-
     return {
       formItem: {
-        newInfo: '',
-        passwordCheck: '',
+        name: this.driverData.name,
+        gender: this.driverData.gender,
+        phone: this.driverData.phone,
+        idCard: this.driverData.idCard,
+        team: this.driverData.team
       },
 
-      fromValidate: {
-        account: [
-          {required: true, message: '新用户名不能为空', trigger: 'blur'},
-          {validator: validateUsername, trigger: 'blur'}
-        ],
-        password: [
-          {required: true, message: '新密码不能为空', trigger: 'blur'},
-          {type: 'string', min: 8, message: '密码至少需8位', trigger: 'blur'},
-          {type: 'string', max: 32, message: '密码最多32位', trigger: 'blur'},
-          {pattern: /(?=.*[0-9])(?=.*[a-zA-Z])/, message: '密码需包含字母和数字', trigger: 'blur'}
-        ],
-        passwordCheck: [
-          {required: true, message: '确认密码不能为空', trigger: 'blur'},
-          {validator: validatePassCheck, trigger: 'blur'}
-        ],
+      formValidate: {
         name: [
           {required: true, message: '姓名不能为空', trigger: 'blur'},
         ],
@@ -103,31 +73,31 @@ export default {
 
     }
   },
-  props: ['driverData', 'modelInfo'],
-  methods: {
-    resetForm() {
-      this.formItem.newInfo = ''
-      this.formItem.passwordCheck = ''
+
+  props:['driverData'],
+  methods:{
+
+    resetForm(name) {
+      this.$refs[name].resetFields();
     },
     cancelButton() {
       this.$emit('gotoProfile', false);
-      this.resetForm();
     },
-    submitForm(changedType) {
-      var that = this
-      var data = {
-        account:changedType==='account'? this.formItem.newInfo:this.driverData.account,
-        name: changedType === 'name' ? this.formItem.newInfo : this.driverData.name,
-        gender:changedType === 'gender' ? this.formItem.newInfo : this.driverData.gender,
-        celephone:changedType === 'phone' ? this.formItem.newInfo : this.driverData.phone,
-        idCard:changedType==='idCard'?this.formItem.newInfo:this.driverData.idCard,
-        team:changedType==='team'?this.formItem.newInfo:this.driverData.team
+    submitForm() {
+      let that = this
+      let data = {
+        name: this.driverData.name,
+        gender: this.driverData.gender,
+        phone: this.driverData.phone,
+        idCard: this.driverData.idCard,
+        team: this.driverData.team
       }
+
       this.$axios(
           {
             method: 'post',
             url: `${this.$baseURI}/api/driver/profile/modify`,
-            data: data
+            data:data
           }
       ).then(function (response) {
         if (response['data']['success'] === true) {
