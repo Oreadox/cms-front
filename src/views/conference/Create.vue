@@ -1,5 +1,5 @@
 <template>
-  <div :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
+  <div>
     <Form label-colon :label-width="120">
       <FormItem label="会议名">
         <Input type="text" style="width: 150px"></Input>

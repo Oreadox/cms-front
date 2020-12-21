@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card dis-hover :bordered=false :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
+    <Card dis-hover :bordered=false >
       <div style="margin-bottom: 2vw">
         <Button size="large" type="primary" to="/conference/create">创建会议</Button>
         <Button size="large" style="margin-left: 5vw " @click="enterJoinNumber=true">加入会议</Button>

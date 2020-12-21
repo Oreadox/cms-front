@@ -1,6 +1,6 @@
 <template>
-  <Card dis-hover :bordered=false  :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
-    <div >
+  <Card dis-hover :bordered=false>
+    <div>
       <Content>
         <div style="text-align: center">
           <div style="margin-top: 12vh">

@@ -1,5 +1,5 @@
 <template>
-  <Card dis-hover :bordered=false :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
+  <Card dis-hover :bordered=false>
     <div id="Profile">
       <Content>
         <div>
