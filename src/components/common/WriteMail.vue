@@ -33,32 +33,21 @@
 <script>
 export default {
   name: "WriteMail",
-  props: {
-    sendId:{
-      type: String
-    }
-  },
+  props: ['sendId'],
   data(){
 
     return{
       formItem:{
-        senderAccount: '',
+        senderAccount:'',
         content: ''
       },
       openModal:false,
     }
   },
-  created(){
-      if (typeof(this.sendId)=='undefined') {
-        console.log("asda");
-        this.senderAccount = ''
-      }
-      else {
-        console.log("ad");
-        return this.senderAccount = this.sendId
-      }
-  },
   methods:{
+    autoFillAccount(){
+      this.formItem.senderAccount = this.sendId.account
+    },
     clickForCheck(){
       this.openModal = true
     },

@@ -5,15 +5,26 @@
       返回</a>
     <Table :columns="this.columns" :data="this.participantsInfo" :stripe="true">
     </Table>
-
+    <Modal
+        style="padding: 20px"
+        footer-hide
+        v-model="openWriteMail">
+      <div style="padding: 5%">
+        <WriteMail ref="fillAccount" :send-id="sendMailAccount" @closeSendModal="closeSendModal"></WriteMail>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
+import WriteMail from "@/components/common/WriteMail";
+
 export default {
   name: "Participants",
+  components:{WriteMail},
   data() {
     return {
+      // TODO 记得完善删除人员等功能
       columns: [
         {
           title: '姓名',
@@ -123,7 +134,7 @@ export default {
           key: 'send',
           width: 100,
           align: 'center',
-          render: (sent) => {
+          render: (sent, params) => {
             return sent('div', [
               sent('Button', {
                 props: {
@@ -135,10 +146,10 @@ export default {
                 },
                 on: {
                   click: () => {
-
+                    this.sendMail(params.row.account)
                   }
                 }
-              }, 'send'),
+              }, '发信息'),
             ]);
           },
         },
@@ -162,7 +173,7 @@ export default {
                     this.deleteParticipant(params.row.id)
                   }
                 }
-              }, 'delete'),
+              }, '删除'),
             ]);
           }
         }
@@ -176,7 +187,10 @@ export default {
         account: "xxx",
       },
       ],
+      sendMailAccount: { account:'1233'},
+      openWriteMail:false,
     }
+
   },
   props: ['participantsInfo', 'conferenceId'],
   methods: {
@@ -196,6 +210,15 @@ export default {
     },
     arrowBack() {
       this.$emit('setCheckParticipants', false);
+    },
+    closeSendModal(fromChild){
+      this.openWriteMail=fromChild
+    },
+    sendMail(userId){
+      this.sendMailAccount.account = userId;
+      this.$refs.fillAccount.autoFillAccount()
+      console.log("传前"+this.sendMailAccount)
+      this.openWriteMail=true
     }
   }
 }

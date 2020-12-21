@@ -173,26 +173,28 @@ export default {
       var that = this
       this.contentDetail = currentRow.content
       this.openModal = true
-      var data = {
-        id: currentRow.id
+      if (currentRow.read!==true){
+        var data = {
+          id: currentRow.id
+        }
+        this.$axios({
+          method: 'post',
+          url: `${this.$baseURI}/api/message/setRead`,
+          data: data,
+        }).then(function (response) {
+          response['data'].forEach(v => {
+            var massage = {
+              success: v['success'],
+              message: v['massage']
+            }
+            if (Boolean(massage['success']) === true) {
+              that.$Message.success(massage['message'])
+            } else {
+              that.$Message.error(massage['message'])
+            }
+          });
+        })
       }
-      this.$axios({
-        method: 'post',
-        url: `${this.$baseURI}/api/message/setRead`,
-        data:data,
-      }).then(function (response) {
-        response['data'].forEach(v => {
-          var massage = {
-            success:v['success'],
-            message:v['massage']
-          }
-          if (Boolean(massage['success']) === true) {
-            that.$Message.success(massage['message'])
-          } else {
-            that.$Message.error(massage['message'])
-          }
-        });
-      })
     },
     openSendDetail(currentRow){
       this.contentDetail = currentRow.content

@@ -1,5 +1,5 @@
 <template>
-  <div :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
+  <div>
     <CreatorDetail v-if="isCreator" :conferenceId="id"></CreatorDetail>
     <ParticipantDetail v-else-if ="!isCreator" :conferenceId="id"></ParticipantDetail>
   </div>
