@@ -56,7 +56,7 @@ export default {
                     marginRight: '5px'
                   },
 
-                }, '待酒店确认'),
+                }, '待用户确认'),
               ]);
             } else {
               return hotelFinish('div', [
@@ -67,7 +67,7 @@ export default {
                   style: {
                     marginRight: '5px'
                   },
-                }, '待完成'),
+                }, '待酒店接单'),
               ]);
             }
           }
@@ -97,7 +97,7 @@ export default {
                   style: {
                     marginRight: '5px'
                   },
-                }, '待司机确认'),
+                }, '待用户确认'),
               ]);
             } else {
               return driveFinish('div', [
@@ -108,7 +108,7 @@ export default {
                   style: {
                     marginRight: '5px'
                   },
-                }, '待完成'),
+                }, '待司机接单'),
               ]);
             }
           }
