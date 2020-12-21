@@ -80,11 +80,6 @@ export default {
     this.formItem.conferenceId = this.$route.params.id
   },
   methods: {
-    toDateTimeString(date) {
-      let datetime = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} `
-      datetime += `${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}`
-      return datetime
-    },
     submitForm(name) {
       let that = this
       this.$refs[name].validate((valid) => {
@@ -92,10 +87,10 @@ export default {
           let data = {
             id: that.formItem.conferenceId,
             tripNumber: that.formItem.tripNumber,
-            arriveTime: that.toDateTimeString(that.formItem.arriveTime),
+            arriveTime: that.formItem.arriveTime.getTime(),
             arriveSite: that.formItem.arriveSite,
-            stayStart: that.formItem.stayStart.toDateString(),
-            stayEnd: that.formItem.stayEnd.toDateString(),
+            stayStart: that.formItem.stayStart.getTime(),
+            stayEnd: that.formItem.stayEnd.getTime(),
             stayNeeds: that.formItem.stayNeeds,
             remark: that.formItem.remark,
             inviteCode: that.formItem.inviteCode,

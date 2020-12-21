@@ -81,7 +81,7 @@ export default {
           let data = {
             name: this.formItem.name,
             gender: this.formItem.gender,
-            birthday: this.formItem.birthday.toDateString(),
+            birthday: this.formItem.birthday.getTime(),
             residentIdNumber: this.formItem.idCard,
             email: this.formItem.email,
             telephone: this.formItem.phone,

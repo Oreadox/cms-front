@@ -64,9 +64,9 @@ export default {
         name: this.formItem.name,
         detail: this.formItem.introduction,
         address: this.formItem.address,
-        startTime: this.formItem.startTime.toDateString(),
-        endTime: this.formItem.endTime.toDateString(),
-        enrollTime: this.formItem.enrollTime.toDateString(),
+        startTime: this.formItem.startTime.getTime(),
+        endTime: this.formItem.endTime.getTime(),
+        enrollTime: this.formItem.enrollTime.getTime(),
         inviteCode: this.useInviteCode?this.formItem.inviteCode:null
       }
       this.$axios(
