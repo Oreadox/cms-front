@@ -17,12 +17,12 @@ const conferenceDetail = () => import('@/views/conference/Detail')
 const conferenceParticipate = () => import('@/views/conference/Participate')
 
 const hotelIndex = () => import('@/views/hotel/Index')
-const hotelHome = () => import('@/views/hotel/Home')
+const hotelDetail = () => import('@/views/hotel/Detail')
 const hotelProfile = () => import('@/views/hotel/Profile')
 const hotelReservation = () => import('@/views/hotel/Reservation')
 
 const driverIndex = () => import('@/views/driver/Index')
-const driverHome = () => import('@/views/driver/Home')
+// const driverHome = () => import('@/views/driver/Home')
 const driverProfile = () => import('@/views/driver/Profile')
 const driverReservation = () => import('@/views/driver/Reservation')
 
@@ -35,7 +35,7 @@ const adminHotel = () => import('@/views/admin/Hotel')
 const adminDriver = () => import('@/views/admin/Driver')
 const adminSystem = () => import('@/views/admin/System')
 const personalInfo = () => import('@/views/admin/Supervise')
-const adminMail = () => import('@/views/admin/User')
+const adminMail = () => import('@/views/admin/Mail')
 
 
 export default new VueRouter({
@@ -88,7 +88,7 @@ export default new VueRouter({
                     component: conferenceDetail
                 },
                 {
-                    path: 'participate',
+                    path: 'participate/:id',
                     component: conferenceParticipate
                 },
             ]
@@ -97,20 +97,20 @@ export default new VueRouter({
         // 酒店
         {
             path: '/hotel/',
-            redirect: '/hotel/home',
+            redirect: '/hotel/reservation',
             component: hotelIndex,
             children: [
                 {
-                    path: 'home',
-                    component: hotelHome
+                    path: 'reservation/',
+                    component: hotelReservation
                 },
                 {
                     path: 'profile',
                     component: hotelProfile
                 },
                 {
-                    path: 'reservation',
-                    component: hotelReservation
+                    path: 'detail/:id',
+                    component: hotelDetail
                 },
             ]
         },
@@ -118,13 +118,13 @@ export default new VueRouter({
         // 司机
         {
             path: '/driver/',
-            redirect: '/driver/home',
+            redirect: '/driver/reservation',
             component: driverIndex,
             children: [
-                {
-                    path: 'home',
-                    component: driverHome
-                },
+                // {
+                //     path: 'home',
+                //     component: driverHome
+                // },
                 {
                     path: 'profile',
                     component: driverProfile

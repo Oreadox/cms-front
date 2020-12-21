@@ -3,7 +3,7 @@
     <Navbar></Navbar>
     <DriverSidebar></DriverSidebar>
     <Content>
-      <RouterView></RouterView>
+      <RouterView :style="{padding: '24px', margin: 'auto auto auto 15vw'}"></RouterView>
     </Content>
   </div>
 </template>

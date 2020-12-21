@@ -2,31 +2,30 @@
   <div>
     <Form>
       <FormItem label="会议号: ">
-        <Input type="text" v-model="invitationCode"></Input>
+        <Input type="text" v-model="conferenceId"></Input>
       </FormItem>
       <FormItem >
-        <Button long type="primary" @click="Verification()">确定</Button>
+        <Button long type="primary" @click="gotoParticipate">确定</Button>
       </FormItem>
     </Form>
   </div>
 </template>
 
 <script>
-import router from "@/router/router";
 
 export default {
   name: "JoinConference",
   data(){
     return{
-      invitationCode:"",
-      VerifyCode:"123456",
+      conferenceId:"",
+      // VerifyCode:"123456",
     }
   },
   methods:{
-    Verification(){
-        if (this.invitationCode===this.VerifyCode){
-          router.push("/conference/participate")
-        }
+    gotoParticipate(){
+      if(this.conferenceId!=null&&this.conferenceId.length>0){
+        this.$router.push(`/conference/participate/${this.conferenceId}`)
+      }
     }
   }
 }
