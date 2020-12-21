@@ -8,7 +8,7 @@
               <a>
                 头像
                 <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
-              </a>v
+              </a>
             </ListItem>
             <ListItem class="ListItem" v-for="(value, key) in listItem.personalData" :key="key" :value="value"
                       v-model=userData[value]>
