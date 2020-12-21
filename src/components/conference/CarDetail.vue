@@ -10,7 +10,7 @@
 
 <script>
 export default {
-name: "CarDetail"
+  name: "CarDetail"
 }
 </script>
 

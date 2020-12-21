@@ -14,6 +14,10 @@ Vue.use(ViewUI)
 
 Vue.config.productionTip = false
 
+axios.interceptors.request.use(res => {
+    res.headers.common['token'] = store.state.token || ''
+    return res;
+});
 
 new Vue({
     el: '#app',

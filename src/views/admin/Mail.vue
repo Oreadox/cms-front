@@ -1,15 +1,14 @@
 <template>
   <div>
-      <CommonMail></CommonMail>
+    <CommonMail></CommonMail>
   </div>
 </template>
 
 <script>
 import CommonMail from "@/components/common/CommonMail";
 export default {
-  name: "message",
-  components:{CommonMail},
-
+name: "Mail",
+  components:{CommonMail}
 }
 </script>
 

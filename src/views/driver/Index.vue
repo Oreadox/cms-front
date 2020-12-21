@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="layout">
     <Navbar></Navbar>
-    <Sidebar></Sidebar>
+    <DriverSidebar></DriverSidebar>
     <Content>
       <RouterView :style="{padding: '24px', margin: 'auto auto auto 15vw'}"></RouterView>
     </Content>
@@ -10,21 +10,17 @@
 
 <script>
 import Navbar from "@/components/common/Navbar";
-import Sidebar from "@/components/common/Sidebar"
+import DriverSidebar from "@/components/driver/DriverSidebar";
 
 export default {
-
-
-  name: "index",
-  components: {Navbar, Sidebar},
-  data(){
-    return{
-      showHome: true
-    }
-  },
+  name: "Index",
+  components: {Navbar, DriverSidebar},
 }
 </script>
 
 <style scoped>
-
+.layout {
+  background-color: #ffffff;
+  position: relative;
+}
 </style>

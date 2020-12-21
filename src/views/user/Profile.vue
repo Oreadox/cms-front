@@ -1,5 +1,5 @@
 <template>
-  <Card dis-hover :bordered=false :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
+  <Card dis-hover :bordered=false>
     <div id="Profile">
       <Content>
         <div>
@@ -8,7 +8,7 @@
               <a>
                 头像
                 <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
-              </a>
+              </a>v
             </ListItem>
             <ListItem class="ListItem" v-for="(value, key) in listItem.personalData" :key="key" :value="value"
                       v-model=userData[value]>
@@ -35,8 +35,15 @@
           footer-hide
           :mask-closable="false"
           v-model="modelInfo.changeModal">
-        <ChangeInfo :userData="userData" :modelInfo="modelInfo"
+        <ChangeInfo :userData="userData"
                     @gotoProfile="gotoProfile"></ChangeInfo>
+      </Modal>
+      <Modal
+          footer-hide
+          :mask-closable="false"
+          v-model="passwordModel.changeModal">
+        <ChangePassword :userData="userData"
+                    @gotoProfile="gotoProfile"></ChangePassword>
       </Modal>
     </div>
   </Card>
@@ -44,22 +51,23 @@
 
 <script>
 import ChangeInfo from "@/components/user/ChangeInfo";
+import ChangePassword from "@/components/user/ChangePassword";
 
 export default {
   name: "Profile",
-  components: {ChangeInfo},
+  components: {ChangePassword, ChangeInfo},
   data() {
     return {
       userData: {
         name: 'xxx',
-        birthday: 'xxx',
+        birthday: '2000-01-01',
         gender: 'xxx',
         password: '●●●●●●●●●●●●',
         account: 'xxx',
         email: 'xxx',
         phone: 'xxx',
         idCard: '',
-        workUnit: '',
+        workUnit: 'xxx',
       },
       listItem: {
         personalData: {
@@ -67,6 +75,7 @@ export default {
           birthday: '生日',
           gender: '性别',
           password: '密码',
+          workUnit: '工作单位',
         },
         contactInformation: {
           account: '账号',
@@ -75,28 +84,35 @@ export default {
         }
       },
       modelInfo: {
-        changedTitle: '名字',
-        changedType: 'name',
+        // changedTitle: '名字',
+        // changedType: 'name',
+        changeModal: false,
+      },
+      passwordModel: {
         changeModal: false,
       }
 
     }
   },
-  mounted() {
+  created() {
     this.getProfile()
   },
   methods: {
     gotoProfile(child) {
-      this.modelInfo.changeModal = child
+      this.modelInfo.changeModal = child;
+      this.passwordModel.changeModal = child
     },
     gotoChange(title, type) {
-      console.log(`${title} ${type}`)
       if (type === 'account') {
         return
       }
-      this.modelInfo.changedTitle = title
-      this.modelInfo.changedType = type
-      this.modelInfo.changeModal = true
+      console.log(type!=="password")
+      if(type!=="password"){
+        this.modelInfo.changeModal = true
+      }else {
+        this.passwordModel.changeModal = true
+      }
+
     },
     getProfile() {
       var that = this

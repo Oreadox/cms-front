@@ -1,7 +1,7 @@
 <template>
-  <div :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
-    <ParticipantDetail v-if="whichChoose"></ParticipantDetail>
-    <CreatorDetail v-else-if ="!whichChoose"></CreatorDetail>
+  <div>
+    <CreatorDetail v-if="isCreator" :conferenceId="id"></CreatorDetail>
+    <ParticipantDetail v-else-if ="!isCreator" :conferenceId="id"></ParticipantDetail>
   </div>
 </template>
 
@@ -13,7 +13,29 @@ export default {
   components:{CreatorDetail,ParticipantDetail},
   data(){
     return{
-      whichChoose: false,
+      id: 0,
+      isCreator: true,
+    }
+  },
+  created() {
+    this.initData()
+  },
+  methods: {
+    initData(){
+      var that = this
+      this.id = this.$route.params.id
+      var data = {
+        id: this.id
+      }
+      this.$axios(
+          {
+            method: 'post',
+            url: `${this.$baseURI}/api/user/conference/created/checkById`,
+            data: data
+          }
+      ).then(function (response) {
+        that.isCreator = response['data']['result']
+      })
     }
   }
 }
