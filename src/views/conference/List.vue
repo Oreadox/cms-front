@@ -201,7 +201,7 @@ export default {
         let respData = response['data']
         that.$axios({
           method: 'post',
-          url: `${this.$baseURI}/api/user/conference/participated/ended`,
+          url: `${that.$baseURI}/api/user/conference/participated/ended`,
         }).then(function (response) {
           respData = respData.concat(response['data'])
           respData.forEach(v => {

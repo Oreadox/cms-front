@@ -12,11 +12,13 @@
       <Step content="会议进行"></Step>
       <Step content="会议结束"></Step>
     </Steps>
-    <Button type="primary" style="margin: 2vw 1vw 1vw 0">确认信息</Button>
-    <Divider/>
-    <Form label-colon :label-width="120">
+    <Button type="primary" style="margin: 2vw 1vw 1vw 0" v-if="currentProgress===1" @click="confirmConference">
+      确认信息
+    </Button>
+    <Form label-colon :label-width="120" :model="formItem">
+      <Divider/>
       <FormItem label="会议名">
-        <Input type="text" :readonly="true" style="width: 150px"></Input>
+        <Input type="text" v-model="formItem.name" :readonly="true" style="width: 150px"></Input>
       </FormItem>
       <FormItem label="会议简介">
         <Input type="textarea" v-model="formItem.detail" :readonly="true" class="input_size"></Input>
@@ -31,19 +33,19 @@
       </FormItem>
       <FormItem label="报名人数">
         <InputNumber v-model="formItem.applicants" :readonly="true"></InputNumber>
-        <Button style="margin-left: 1vw" type="primary" @click="checkParticipants=true">详情</Button>
+        <Button style="margin-left: 1vw" type="primary" @click="participantModal=true">详情</Button>
       </FormItem>
       <FormItem label="酒店管理">
-        <Select class="input_size" v-model="formItem.hotelId">
+        <Select class="input_size" v-model="formItem.hotelId" :value="formItem.hotelId" filterable>
           <Option v-for="(value, key) in hotelList" :value="key" :key="key">{{ value.name }}</Option>
         </Select>
-        <Button style="margin-left: 1vw" type="primary" @click="checkHotel=true">详情</Button>
+        <Button style="margin-left: 1vw" type="primary" @click="checkHotel">详情</Button>
       </FormItem>
       <FormItem label="车队管理">
-        <Select class="input_size" v-model="formItem.fleetId">
+        <Select class="input_size" v-model="formItem.fleetId" :value="formItem.fleetId" filterable>
           <Option v-for="(value, key) in fleetList" :value="key" :key="key">{{ value.name }}</Option>
         </Select>
-        <Button style="margin-left: 1vw" type="primary" @click="checkFleet=true">详情</Button>
+        <Button style="margin-left: 1vw" type="primary" @click="checkFleet">详情</Button>
       </FormItem>
     </Form>
     <Modal style="padding: 20px;"
@@ -51,23 +53,21 @@
            width="85"
            scrollable
            :mask-closable="false"
-           v-model="checkParticipants">
+           v-model="participantModal">
       <Participants style="height:40vw;overflow-y:auto;overflow-x:hidden;" @setCheckParticipants=setCheckParticipants
                     :participantsInfo="participantsInfo" :conferenceId="conferenceId"></Participants>
     </Modal>
-    <Modal style="padding: 20px" width="45"
+    <Modal style="padding: 20px" width="40"
            footer-hide
            :mask-closable="false"
-           v-model="checkHotel">
-      <HotelDetail style="height: 30vw" @setCheckHotel=setCheckHotel
-                   :hotelId="formItem.hotelId" :hotelData="hotelList[formItem.hotelId]"></HotelDetail>
+           v-model="hotelModal">
+      <HotelDetail ref="hotel" @setCheckHotel=setCheckHotel></HotelDetail>
     </Modal>
-    <Modal style="padding: 20px" width="45"
+    <Modal style="padding: 20px" width="40"
            footer-hide
            :mask-closable="false"
-           v-model="checkFleet">
-      <FleetDetail style="height: 30vw" @setCheckFleet=setCheckFleet
-                   :fleetId="formItem.fleetId" :fleetData="fleetList[formItem.fleetId]"></FleetDetail>
+           v-model="fleetModal">
+      <FleetDetail ref="fleet" @setCheckFleet=setCheckFleet></FleetDetail>
     </Modal>
   </div>
 </template>
@@ -83,16 +83,7 @@ export default {
   data() {
     return {
       currentProgress: 0,
-      formItem: {
-        name: 'xxx',
-        detail: '...',
-        startTime: '2020-10-11',
-        endTime: '2020-12-11',
-        address: 'xxx',
-        applicants: 10,     //
-        hotelId: 0,
-        fleetId: 0,
-      },
+      formItem: {},
       hotelList: {
         0: {
           id: '123',
@@ -112,20 +103,10 @@ export default {
           driverAmount: 0
         },
       },
-      participantsInfo: [
-        {
-          id: 0,
-          name: 'name',
-          phone: 'phone',
-          workUnit: 'workUnit',
-          hotelProgress: 2,
-          driverProgress: 1,
-          account: 'account'
-        }
-      ],
-      checkParticipants: false,
-      checkHotel: false,
-      checkFleet: false,
+      participantsInfo: [],
+      participantModal: false,
+      hotelModal: false,
+      fleetModal: false,
     }
   },
   props: ['conferenceId'],
@@ -141,43 +122,44 @@ export default {
       this.$axios({
         method: 'post',
         url: `${this.$baseURI}/api/conference/getById`,
-        data: {id: that.conferenceId}
+        data: {id: that.conferenceId},
       }).then(function (response) {
         let resData = response['data']
-        that.formItem = {
-          name: resData['name'],
-          detail: resData['resData'],
-          startTime: new Date(resData['startTime']),
-          endTime: new Date(resData['endTime']),
-          address: resData['address'],
-          hotelId: resData['hotelId'],
-          fleetId: resData['fleetId'],
-        }
-        switch (resData['progress']) {
-          case "ENROLLMENT":
-            that.currentProgress = 0;
-            break;
-          case "OWNER_CONFIRM":
-            that.currentProgress = 1;
-            break;
-          case "RESERVATION_CONFIRM":
-            that.currentProgress = 2;
-            break;
-          case "READY":
-            that.currentProgress = 3;
-            break;
-          case "ENDED":
-            that.currentProgress = 4;
-            break;
-        }
         that.$axios({
           method: 'post',
-          url: `${this.$baseURI}/api/conference/participant/count`,
+          url: `${that.$baseURI}/api/conference/participant/count`,
           data: {id: that.conferenceId}
         }).then(function (response) {
-          that.formItem.applicants = response['data']['amount']
+          that.formItem = {
+            name: resData['name'],
+            detail: resData['detail'],
+            startTime: new Date(resData['startTime']),
+            endTime: new Date(resData['endTime']),
+            address: resData['address'],
+            hotelId: resData['hotelId'] != null ? resData['hotelId'].toString() : null,
+            fleetId: resData['fleetId'] != null ? resData['fleetId'].toString() : null,
+            applicants: response['data']['amount']
+          }
+          switch (resData['progress']) {
+            case "ENROLLMENT":
+              that.currentProgress = 0;
+              break;
+            case "OWNER_CONFIRM":
+              that.currentProgress = 1;
+              break;
+            case "RESERVATION_CONFIRM":
+              that.currentProgress = 2;
+              break;
+            case "READY":
+              that.currentProgress = 3;
+              break;
+            case "ENDED":
+              that.currentProgress = 4;
+              break;
+          }
         })
       })
+
     },
     loadHotelInfo() {
       let that = this
@@ -185,7 +167,7 @@ export default {
         method: 'post',
         url: `${this.$baseURI}/api/hotel/getAll`,
       }).then(function (response) {
-        that.hotelList = []
+        that.hotelList = {}
         response['data'].forEach(v => {
           that.hotelList[v['id']] = {
             account: v['accountId'],
@@ -203,7 +185,7 @@ export default {
         method: 'post',
         url: `${this.$baseURI}/api/fleet/getAll`,
       }).then(function (response) {
-        that.fleetList = []
+        that.fleetList = {}
         response['data'].forEach(v => {
           that.fleetList[v['id']] = {
             name: v['name'],
@@ -222,10 +204,8 @@ export default {
         url: `${this.$baseURI}/api/conference/participant/get`,
         data: {id: that.conferenceId}
       }).then(function (response) {
-        that.fleetList = []
+        that.participantsInfo = []
         response['data'].forEach(v => {
-          that.participantsInfo = {}
-          console.log(v)
           let newData = {
             id: v['id'],
             name: v['name'],
@@ -269,14 +249,42 @@ export default {
         });
       })
     },
+    confirmConference() {
+      let that = this
+      this.$axios({
+        method: 'post',
+        url: `${this.$baseURI}/api/conference/confirm`,
+        data: {id: that.conferenceId}
+      }).then(function (response) {
+        if(response['data']['success']===true){
+          that.$Message.success("确认成功")
+        } else {
+          that.$Message.error(response['data']['message'])
+        }
+      })
+    },
+    checkHotel() {
+      if (this.formItem.hotelId != null) {
+        this.$refs.hotel.loadData(this.hotelList[this.formItem.hotelId]
+            , this.conferenceId, this.currentProgress, this.formItem.hotelId)
+        this.hotelModal = true
+      }
+    },
+    checkFleet() {
+      if (this.formItem.fleetId != null) {
+        this.$refs.fleet.loadData(this.fleetList[this.formItem.fleetId]
+            , this.conferenceId, this.currentProgress, this.formItem.fleetId)
+        this.fleetModal = true
+      }
+    },
     setCheckParticipants(fromChild) {
-      this.checkParticipants = fromChild;
+      this.participantModal = fromChild;
     },
     setCheckHotel(fromChild) {
-      this.checkHotel = fromChild;
+      this.hotelModal = fromChild;
     },
     setCheckFleet(fromChild) {
-      this.checkFleet = fromChild;
+      this.fleetModal = fromChild;
     },
   }
 }
