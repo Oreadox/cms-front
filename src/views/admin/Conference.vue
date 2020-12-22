@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Input suffix="ios-search" style="width: auto" v-model='keyword'/>
+    <Input suffix="ios-search" style="width: auto" placeholder="查找会议" v-model='keyword'/>
     <Table :columns="this.columns" :data="this.currentConferenceData" :stripe="true" style="margin: 30px auto">
     </Table>
     <Page :total="allConferenceData.length" show-sizer show-elevator
@@ -20,7 +20,7 @@
           {{ deletedConferenceValue.name }}</b> 以再次确认</p>
         <Input style="width: 100%; margin-bottom: 5px"
                v-model="deletedConferenceValue.nameCheck"></Input>
-        <Button class="button" type="text" @click="deleteUserCheck">
+        <Button class="button" type="text" @click="deleteConferenceCheck">
           我明白这意味着什么，删除该账号
         </Button>
       </div>
@@ -139,11 +139,10 @@ export default {
     deleteConferenceCheck() {
       if (this.deletedConferenceValue.name === this.deletedConferenceValue.nameCheck) {
         let that = this
-        // 获取会议基本信息
         this.$axios({
           method: 'post',
-          url: `${this.$baseURI}/api/admin/user/remove`,
-          data: {userId: that.deletedConferenceValue.id}
+          url: `${this.$baseURI}/api/admin/conference/remove`,
+          data: {conferenceId: that.deletedConferenceValue.id}
         }).then(function (response) {
           if (response['data']['result'] === true) {
             that.$Message.success("删除成功");

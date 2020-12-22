@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <Button type="primary">添加车队</Button>
+      <Button type="primary" @click="registerModal=true">添加车队</Button>
       <Input suffix="ios-search" style="width: auto; margin-left: 15px"
              placeholder="查找车队" v-model='keyword'/>
     </div>
@@ -17,14 +17,23 @@
            v-model="registerModal">
       <FleetRegister @setRegisterModal=setRegisterModal></FleetRegister>
     </Modal>
+    <Modal style="padding: 20px"
+           footer-hide
+           :mask-closable="false"
+           v-model="driverDetailModal">
+      <DriverDetail @setdriverDetailModal=setDriverDetailModal
+                    :fleetInfo="showingFleetInfo"></DriverDetail>
+    </Modal>
   </div>
 </template>
 
 <script>
 import FleetRegister from "@/components/admin/FleetRegister";
+import DriverDetail from "@/components/admin/DriverDetail";
+
 export default {
   name: "Driver",
-  components: {FleetRegister},
+  components: {DriverDetail, FleetRegister},
   data() {
     return {
       columns: [
@@ -74,7 +83,7 @@ export default {
                 },
                 on: {
                   click: () => {
-
+                    this.showDriverInfo(params.row.fleetId)
                   }
                 }
               }, '司机管理'),
@@ -85,12 +94,17 @@ export default {
       currentPage: 0,
       prePageNum: 10,
       driverData: {},
+      showingFleetInfo: {
+        driverData: [],
+        fleetId: 0,
+      },
       currentFleetData: [],
       allFleetData: [],
       allFleetDataBackup: [],     // 搜索时用来备份原结果
       keyword: '',
       searching: false,
-      registerModal: false
+      registerModal: false,
+      driverDetailModal: false
     }
   },
   created() {
@@ -111,9 +125,30 @@ export default {
             driverAmount: v['driverAmount']
           }
           that.allFleetData.push(newData)
+          that.$axios({
+            method: 'post',
+            url: `${this.$baseURI}/api/admin/driver/getAll`,
+            data: {fleetId: v['fleetId']}
+          }).then(function (response) {
+            that.driverData[v['fleetId']] = []
+            response['data'].forEach(v => {
+              let newDriverData = {
+                accountId: v['accountId'],
+                username: v['username'],
+                driverId: v['driverId'],
+                name: v['name']
+              }
+              that.driverData[v['id']].push(newDriverData)
+            })
+          })
         })
         that.currentFleetData = that.allFleetData.slice(0, 10)
       })
+    },
+    showDriverInfo(fleetId) {
+      this.showingFleetInfo.fleetId = fleetId
+      this.showingFleetInfo.driverData = this.driverData[fleetId].split(0)
+      this.driverDetailModal = true
     },
     changePrePageNum(num) {
       this.prePageNum = num
@@ -125,6 +160,9 @@ export default {
     setRegisterModal(fromChild) {
       this.registerModal = fromChild;
     },
+    setDriverDetailModal(fromChild){
+      this.driverDetailModal = fromChild;
+    }
   },
   watch: {
     keyword() {

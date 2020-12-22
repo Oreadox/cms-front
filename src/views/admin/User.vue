@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Input suffix="ios-search" style="width: auto" v-model='keyword'/>
+    <Input suffix="ios-search" style="width: auto" placeholder="查找用户" v-model='keyword'/>
     <Table :columns="this.columns" :data="this.currentUserData" :stripe="true" style="margin: 30px auto">
     </Table>
     <Page :total="allUserData.length" show-sizer show-elevator
@@ -111,12 +111,7 @@ export default {
       ],
       currentPage: 0,
       prePageNum: 10,
-      currentUserData: [{
-        account: 1,
-        userId: 'one',
-        name: 'xx',
-        username: 'xxx',
-      }],
+      currentUserData: [],
       allUserData: [],
       allUserDataBackup: [],     // 搜索时用来备份原结果
       keyword: '',
@@ -161,7 +156,6 @@ export default {
     deleteUserCheck() {
       if (this.deletedUserValue.usernameCheck === this.deletedUserValue.username) {
         let that = this
-        // 获取会议基本信息
         this.$axios({
           method: 'post',
           url: `${this.$baseURI}/api/admin/user/remove`,
