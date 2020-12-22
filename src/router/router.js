@@ -19,6 +19,7 @@ const hotelIndex = () => import('@/views/hotel/Index')
 const hotelDetail = () => import('@/views/hotel/Detail')
 const hotelProfile = () => import('@/views/hotel/Profile')
 const hotelReservation = () => import('@/views/hotel/Reservation')
+const hotelMail = ()=> import('@/views/hotel/HotelMail')
 
 const driverIndex = () => import('@/views/driver/Index')
 // const driverHome = () => import('@/views/driver/Home')
@@ -123,6 +124,11 @@ export default new VueRouter({
                     path: 'detail/:id',
                     component: hotelDetail,
                     meta: { title: 'hotelDetail' },
+                },
+                {
+                    path: 'message',
+                    component: hotelMail,
+                    meta: { title: 'hotelMail' },
                 },
             ]
         },

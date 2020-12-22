@@ -15,15 +15,11 @@
       </FormItem>
 
       <FormItem label="联系电话" prop="phone">
-        <Input type="text" v-model="formItem.phone"/>
+        <Input type="text" v-model="formItem.telephone"/>
       </FormItem>
 
       <FormItem label="身份证号" prop="idCard">
-        <Input type="text" v-model="formItem.idCard"/>
-      </FormItem>
-
-      <FormItem label="所属车队" prop="team">
-        <Input type="text" v-model="formItem.team"/>
+        <Input type="text" v-model="formItem.residentIdNumber"/>
       </FormItem>
 
       <FormItem>
@@ -43,9 +39,8 @@ export default {
       formItem: {
         name: '',
         gender: 'MALE',
-        phone: '',
-        idCard: '',
-        team: ''
+        telephone: '',
+        residentIdNumber: '',
       },
 
       formValidate: {
@@ -55,19 +50,16 @@ export default {
         gender: [
           {required: true, message: '性别不能为空', trigger: 'blur'},
         ],
-        phone: [
+        telephone: [
           {required: true, message: '联系电话不能为空', trigger: 'blur'},
           {pattern: /^[1][0-9]{10}$/, message: '电话号码不合法', trigger: 'blur'}
         ],
-        idCard: [
+        residentIdNumber: [
           {required: true, message: '身份证号不能为空', trigger: 'blur'},
           {
             pattern: /^[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
             , message: '身份证号不合法', trigger: 'blur'
           }
-        ],
-        team: [
-          {required: true, message: '所属车队不能为空', trigger: 'blur'},
         ],
       }
 
@@ -79,10 +71,8 @@ export default {
     checkGender(){
       this.formItem.gender=this.driverData.gender==='男'?'MALE':'FEMALE'
       this.formItem.name = this.driverData.name,
-      this.formItem.phone=this.driverData.telephone,
-      this.formItem.idCard=this.driverData.residentIdNumber,
-      this.formItem.team=this.driverData.fleetId
-
+      this.formItem.telephone=this.driverData.telephone,
+      this.formItem.residentIdNumber=this.driverData.residentIdNumber
     },
     resetForm(name) {
       this.$refs[name].resetFields();
@@ -92,25 +82,27 @@ export default {
     },
     submitForm() {
       let that = this
-      let data = {
-        name: this.driverData.name,
-        gender: this.driverData.gender,
-        phone: this.driverData.telephone,
-        idCard: this.driverData.residentIdNumber,
-        team: this.driverData.fleetId
-      }
-
-      this.$axios(
-          {
-            method: 'post',
-            url: `${this.$baseURI}/api/driver/profile/modify`,
-            data:data
+      this.$refs['formItem'].validate((valid) => {
+        if (valid) {
+          let data = {
+            name: this.formItem.name,
+            gender: this.formItem.gender,
+            telephone: this.formItem.telephone,
+            residentIdNumber: this.formItem.residentIdNumber,
           }
-      ).then(function (response) {
-        if (response['data']['success'] === true) {
-          that.$Message.success("修改成功");
-        } else {
-          that.$Message.error(response['data']['message']);
+          this.$axios(
+              {
+                method: 'post',
+                url: `${this.$baseURI}/api/driver/profile/modify`,
+                data: data
+              }
+          ).then(function (response) {
+            if (response['data']['success'] === true) {
+              that.$Message.success("修改成功");
+            } else {
+              that.$Message.error(response['data']['message']);
+            }
+          })
         }
       })
     }
