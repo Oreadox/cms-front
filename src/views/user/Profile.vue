@@ -43,7 +43,7 @@
           :mask-closable="false"
           v-model="passwordModel.changeModal">
         <ChangePassword :userData="userData"
-                    @gotoProfile="gotoProfile"></ChangePassword>
+                        @gotoProfile="gotoProfile"></ChangePassword>
       </Modal>
     </div>
   </Card>
@@ -101,16 +101,16 @@ export default {
     gotoProfile(child) {
       this.modelInfo.changeModal = child;
       this.passwordModel.changeModal = child
+      this.getProfile()
     },
     gotoChange(title, type) {
-    this.$refs.setDefault.setDataDefault()
+      this.$refs.setDefault.setDataDefault()
       if (type === 'account') {
         return
       }
-      console.log(type!=="password")
-      if(type!=="password"){
+      if (type !== "password") {
         this.modelInfo.changeModal = true
-      }else {
+      } else {
         this.passwordModel.changeModal = true
       }
 
@@ -126,21 +126,21 @@ export default {
         let respData = response["data"]
         that.userData.name = respData['name']
         that.userData.birthday = (function () {
-         var formatDate =  new Date(respData['birthday'])
+          var formatDate = new Date(respData['birthday'])
           var opt =
-              formatDate.getFullYear().toString()+'-'+
-              (formatDate.getMonth()+1).toString()+'-'+
+              formatDate.getFullYear().toString() + '-' +
+              (formatDate.getMonth() + 1).toString() + '-' +
               formatDate.getDate().toString()
-          return  opt
+          return opt
         })()
-        that.userData.gender = respData['gender']==='MALE'?'男':'女'
+        that.userData.gender = respData['gender'] === 'MALE' ? '男' : '女'
         that.userData.account = respData['accountId']
         that.userData.email = respData['email']
         that.userData.phone = respData['telephone']
         that.userData.idCard = respData['residentIdNumber']
         that.userData.workUnit = respData['workplace']
       })
-    }
+    },
   },
 
 }

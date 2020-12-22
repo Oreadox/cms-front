@@ -68,14 +68,24 @@ export default {
   },
   props: ['userData'],
   methods: {
-    setDataDefault(){
-          this.formItem.name= this.userData.name
-          this.formItem.gender=this.userData.gender
-          this.formItem.birthday=this.userData.birthday
-          this.formItem.email= this.userData.email
-          this.formItem. phone= this.userData.phone
-          this.formItem. idCard= this.userData.idCard
-          this.formItem.workUnit=this.userData.workUnit
+    setDataDefault() {
+      this.formItem.name = this.userData.name
+      this.formItem.gender = this.userData.gender
+      this.formItem.birthday = this.userData.birthday
+      this.formItem.email = this.userData.email
+      this.formItem.phone = this.userData.phone
+      this.formItem.idCard = this.userData.idCard
+      this.formItem.workUnit = this.userData.workUnit
+      switch (this.userData.gender) {
+        case "男": {
+          this.formItem.gender = "MALE"
+          break
+        }
+        case "女": {
+          this.formItem.gender = "FEMALE"
+          break
+        }
+      }
     },
     resetForm(name) {
       this.$refs[name].resetFields();
@@ -85,7 +95,6 @@ export default {
     },
     submitForm(name) {
       let that = this
-      console.log(this.formItem.birthday)
       this.$refs[name].validate((valid) => {
         if (valid) {
           let data = {
@@ -103,7 +112,8 @@ export default {
             data: data
           }).then(function (response) {
             if (response['data']['success'] === true) {
-              that.$Message.success("修改成功");
+                that.$Message.success("修改成功");
+                that.$emit('gotoProfile', false);
             } else {
               that.$Message.error(response['data']['message']);
             }
