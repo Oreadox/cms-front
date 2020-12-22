@@ -8,7 +8,7 @@ import App from "@/App";
 
 
 Vue.prototype.$axios = axios
-Vue.prototype.$baseURI = "http://rap2api.taobao.org/app/mock/272096"
+Vue.prototype.$baseURI = "http://localhost:8081"
 Vue.use(ViewUI)
 
 
@@ -32,5 +32,6 @@ router.beforeEach((to, from, next) => {
     }
     next()
 });
+
 
 // })

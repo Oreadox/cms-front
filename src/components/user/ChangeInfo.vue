@@ -36,13 +36,13 @@ export default {
   data() {
     return {
       formItem: {
-        name: this.userData.name,
-        gender: this.userData.gender,
-        birthday: this.userData.birthday,
-        email: this.userData.email,
-        phone: this.userData.phone,
-        idCard: this.userData.idCard,
-        workUnit: this.userData.workUnit,
+        name: '',
+        gender: '',
+        birthday: '',
+        email: '',
+        phone: '',
+        idCard: '',
+        workUnit: ''
       },
       formValidate: {
         name: [
@@ -68,6 +68,15 @@ export default {
   },
   props: ['userData'],
   methods: {
+    setDataDefault(){
+          this.formItem.name= this.userData.name
+          this.formItem.gender=this.userData.gender
+          this.formItem.birthday=this.userData.birthday
+          this.formItem.email= this.userData.email
+          this.formItem. phone= this.userData.phone
+          this.formItem. idCard= this.userData.idCard
+          this.formItem.workUnit=this.userData.workUnit
+    },
     resetForm(name) {
       this.$refs[name].resetFields();
     },
@@ -76,6 +85,7 @@ export default {
     },
     submitForm(name) {
       let that = this
+      console.log(this.formItem.birthday)
       this.$refs[name].validate((valid) => {
         if (valid) {
           let data = {

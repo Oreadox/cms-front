@@ -35,7 +35,7 @@
           footer-hide
           :mask-closable="false"
           v-model="modelInfo.changeModal">
-        <ChangeInfo :userData="userData"
+        <ChangeInfo ref="setDefault" :userData="userData"
                     @gotoProfile="gotoProfile"></ChangeInfo>
       </Modal>
       <Modal
@@ -66,7 +66,7 @@ export default {
         account: 'xxx',
         email: 'xxx',
         phone: 'xxx',
-        idCard: '',
+        idCard: 'xxx',
         workUnit: 'xxx',
       },
       listItem: {
@@ -103,6 +103,7 @@ export default {
       this.passwordModel.changeModal = child
     },
     gotoChange(title, type) {
+    this.$refs.setDefault.setDataDefault()
       if (type === 'account') {
         return
       }
@@ -122,10 +123,17 @@ export default {
             url: `${this.$baseURI}/api/user/profile`,
           }
       ).then(function (response) {
-        var respData = response["data"]
+        let respData = response["data"]
         that.userData.name = respData['name']
-        that.userData.birthday = new Date(respData['birthday'])
-        that.userData.gender = respData['gender']
+        that.userData.birthday = (function () {
+         var formatDate =  new Date(respData['birthday'])
+          var opt =
+              formatDate.getFullYear().toString()+'-'+
+              (formatDate.getMonth()+1).toString()+'-'+
+              formatDate.getDate().toString()
+          return  opt
+        })()
+        that.userData.gender = respData['gender']==='MALE'?'男':'女'
         that.userData.account = respData['accountId']
         that.userData.email = respData['email']
         that.userData.phone = respData['telephone']
