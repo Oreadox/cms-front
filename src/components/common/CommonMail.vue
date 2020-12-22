@@ -64,7 +64,7 @@ export default {
       columns: [
         {
           key: 'senderId',
-          title: '用户编号',
+          title: '用户名',
           maxWidth: 200
         },
         {
@@ -75,7 +75,7 @@ export default {
       ],
       columns2: [
         {
-          key: 'recipient',
+          key: 'id',
           title: '用户编号',
           maxWidth: 200
         },
@@ -99,20 +99,6 @@ export default {
         sendTime: '2020-10-22',
         read: false,
       },
-        {
-          id:2,
-          senderId: 1001,
-          content:'asd',
-          sendTime: '2020-10-22',
-          read: false,
-        },
-        {
-          id:3,
-          senderId: 1002,
-          content:'asd',
-          sendTime: '2020-10-22',
-          read: false,
-        },
       ],
       sendBox: [{
         id:1,
@@ -149,9 +135,22 @@ export default {
             sendTime:v['sendTime'],
             read:v['read'],
           }
-          that.receiveBox.push(newData)
+          var receiveId = {
+            accountId: newData.id
+          };
+          that.$axios({
+            method: "post",
+            url: `${that.$baseURI}/api/message/getAccount`,
+            data: receiveId
+          }).then(function (res){
+            // console.log(res['data']['username'])
+            newData.id = res['data']['username']
+            that.sendBox.push(newData)
+          });
         });
       })
+
+
       this.$axios({
         method: 'post',
         url: `${this.$baseURI}/api/message/sent`,
@@ -164,8 +163,20 @@ export default {
             content: v['content'],
             sendTime:v['sendTime'],
             read:v['read'],
-          }
-          that.sendBox.push(newData2)
+          };
+          var sendId = {
+            accountId: newData2.id
+          };
+          that.$axios({
+            method: "post",
+            url: `${that.$baseURI}/api/message/getAccount`,
+            data: sendId
+          }).then(function (res){
+            // console.log(res['data']['username'])
+            newData2.id = res['data']['username']
+            that.sendBox.push(newData2)
+          });
+
         });
       })
     },

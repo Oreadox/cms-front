@@ -46,7 +46,20 @@ export default {
   },
   methods:{
     autoFillAccount(){
-      this.formItem.senderAccount = this.sendId.account
+      {
+        var data = {
+          accountId:this.sendId.account,
+        }
+        this.$axios(
+            {
+              method: 'post',
+              url: `${this.$baseURI}/api/message/getAccount`,
+              data: data
+            }
+        ).then(function (response) {
+          this.formItem.senderAccount = response['data']['username']
+        })
+      }
     },
     clickForCheck(){
       this.openModal = true
@@ -55,18 +68,18 @@ export default {
       {
         var that = this
         var data = {
-          account:that.formItem.senderAccount,
+          username:that.formItem.senderAccount,
           content:that.formItem.content,
         }
         this.$axios(
             {
               method: 'post',
-              url: `${this.$baseURI}/api/message/sendByAccountId`,
+              url: `${this.$baseURI}/api/message/sendByUsername`,
               data: data
             }
         ).then(function (response) {
           if (response['data']['success'] === true) {
-            that.$Message.success("修改成功");
+            that.$Message.success("发送成功");
             this.openModal = false
             this.$emit('closeSendModal',false)
           } else {
