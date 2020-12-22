@@ -12,7 +12,7 @@
         </RadioGroup>
       </FormItem>
       <FormItem label="生日" prop="birthday">
-        <DatePicker type="date" v-model="formItem.birthday"></DatePicker>
+        <DatePicker :options="ControlTime" type="date" v-model="formItem.birthday"></DatePicker>
       </FormItem>
       <FormItem label="邮箱" prop="email">
         <Input type="email" v-model="formItem.email"></Input>
@@ -43,6 +43,11 @@ export default {
         phone: '',
         idCard: '',
         workUnit: ''
+      },
+      ControlTime: {
+        disabledDate: (time)=>{
+          return time && time.getTime() > Date.now()
+        }
       },
       formValidate: {
         name: [

@@ -217,7 +217,7 @@ export default {
           }
           that.$axios({
             method: 'post',
-            url: `${this.$baseURI}/api/conference/hotelReservation/get`,
+            url: `${that.$baseURI}/api/conference/hotelReservation/get`,
             data: {id: that.conferenceId, userId: newData.id}
           }).then(function (response) {
             if (response['data']['hotelCheck'] === true) {
@@ -232,7 +232,7 @@ export default {
           })
           that.$axios({
             method: 'post',
-            url: `${this.$baseURI}/api/conference/driverReservation/get`,
+            url: `${that.$baseURI}/api/conference/driverReservation/get`,
             data: {id: that.conferenceId, userId: newData.id}
           }).then(function (response) {
             if (response['data']['driverCheck'] === true) {

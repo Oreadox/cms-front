@@ -26,14 +26,19 @@
           邮箱:{{ adminInfo.email }}
         </div>
       </Poptip>
-      <div style="float: right">
-        <Submenu name="">
-          <template slot="title">
-            <Icon type="md-person"/>
-            {{ userInfo.username }}
-          </template>
-          <MenuItem name="quit" to="/index">退出登录</MenuItem>
-        </Submenu>
+      <div style="float: right; margin-right: 5%">
+        <Dropdown>
+          <a style="font-size: 20px">
+              <Icon type="ios-person" size="24"/>
+              {{ userInfo.username }}
+          </a>
+          <DropdownMenu  slot="list">
+            <DropdownItem name="exit">
+              <a @click="LogOut">退出登录</a></DropdownItem>
+          </DropdownMenu>
+
+
+        </Dropdown>
       </div>
     </Menu>
   </header>
@@ -55,8 +60,9 @@ export default {
       }
     }
   },
-  created() {
-    // this.initData()
+  created: function () {
+    let _this=this;
+    window.add_data=_this.add_data;
   },
   methods: {
     initData() {
@@ -77,11 +83,26 @@ export default {
           that.adminInfo.append(newData)
         });
       })
+    },
+    LogOut(){
+      console.log("name")
+      window.sessionStorage.clear()
+      this.$Message.success('退出成功')
+      this.$router.replace('/index')
     }
   }
 }
 </script>
 <style>
+a{
+  color: black;
+}
+a:link{
+  color: #2d8cf0;
+}
+a:hover{
+  color: #5cadff;
+}
 .control-layout {
   height: auto;
   max-width: 100%;

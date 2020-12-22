@@ -74,14 +74,14 @@ export default {
         this.$axios(
             {
               method: 'post',
-              url: `${this.$baseURI}/api/message/sendByUsername`,
+              url: `${that.$baseURI}/api/message/sendByUsername`,
               data: data
             }
         ).then(function (response) {
           if (response['data']['success'] === true) {
             that.$Message.success("发送成功");
-            this.openModal = false
-            this.$emit('closeSendModal',false)
+            that.openModal = false
+            that.$emit('closeSendModal',false)
           } else {
             that.$Message.error(response['data']['message']);
           }
