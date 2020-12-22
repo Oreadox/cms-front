@@ -49,12 +49,20 @@ export default {
       id:this.$route.params.id,
 
       userFormItem:{
-        name:'xxx',
-        contact:'xxx',
-        identityNumber:'1231293471458972305',
-        stayTimeStart:'2020-10-02',
-        stayTimeEnd:'2020-12-02',
-        requirements:'abc',
+        conferenceId:'',
+        userId:'',
+        name:'',
+        gender:'',
+        residentIdNumber:'',
+        telephone:'',
+        startStart:'',
+        startEnd:'',
+        stayNeeds:'',
+        reserveTime:'',
+        hotelCheck:'',
+        checkinTime:'',
+        roomNumber:'',
+        userCheck:'',
       },
 
       orderInfoFormItem:{

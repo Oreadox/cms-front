@@ -22,7 +22,7 @@
         footer-hide
         :mask-closable="false"
         v-model="modelInfo.changeModal">
-      <ChangeInfo :driverData="driverData"
+      <ChangeInfo ref="checkGender" :driverData="driverData"
                   @gotoProfile="gotoProfile"></ChangeInfo>
     </Modal>
     <Modal
@@ -49,8 +49,8 @@ export default {
         account:'xxx',
         password:'xxx',
         name:'xxx',
-        gender:'xxx',
-        telephone:'xxx',
+        gender:'女',
+        telephone:'12312312411',
         residentIdNumber:'xxx',
         fleetId:'xxx'
       },
@@ -78,6 +78,7 @@ export default {
   },
   methods: {
     gotoProfile(child) {
+
       this.modelInfo.changeModal = child
       this.passwordModel.changePasswordModal = child
     },
@@ -86,10 +87,9 @@ export default {
         return
       }
       if (type === 'password') {
-        console.log(`123123`)
         this.passwordModel.changePasswordModal = true
       } else {
-        console.log(`12`)
+        this.$refs.checkGender.checkGender()
         this.modelInfo.changeModal = true
       }
 
@@ -106,7 +106,7 @@ export default {
         that.driverData.account=respData['account']
         that.driverData.password=respData['password']
         that.driverData.name=respData['name']
-        that.driverData.gender=respData['gender']
+        that.driverData.gender=respData['gender']==='MALE'?'男':'女'
         that.driverData.telephone=respData['telephone']
         that.driverData.residentIdNumber=respData['residentIdNumber']
         that.driverData.fleetId=respData['fleetId']

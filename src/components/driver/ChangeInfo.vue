@@ -15,15 +15,15 @@
       </FormItem>
 
       <FormItem label="联系电话" prop="phone">
-        <Input type="text" v-model="formItem.telephone"/>
+        <Input type="text" v-model="formItem.phone"/>
       </FormItem>
 
       <FormItem label="身份证号" prop="idCard">
-        <Input type="text" v-model="formItem.residentIdNumber"/>
+        <Input type="text" v-model="formItem.idCard"/>
       </FormItem>
 
       <FormItem label="所属车队" prop="team">
-        <Input type="text" v-model="formItem.fleetId"/>
+        <Input type="text" v-model="formItem.team"/>
       </FormItem>
 
       <FormItem>
@@ -41,11 +41,11 @@ export default {
   data() {
     return {
       formItem: {
-        name: this.driverData.name,
-        gender: this.driverData.gender,
-        phone: this.driverData.telephone,
-        idCard: this.driverData.residentIdNumber,
-        team: this.driverData.fleetId
+        name: '',
+        gender: 'MALE',
+        phone: '',
+        idCard: '',
+        team: ''
       },
 
       formValidate: {
@@ -55,18 +55,18 @@ export default {
         gender: [
           {required: true, message: '性别不能为空', trigger: 'blur'},
         ],
-        telephone: [
+        phone: [
           {required: true, message: '联系电话不能为空', trigger: 'blur'},
           {pattern: /^[1][0-9]{10}$/, message: '电话号码不合法', trigger: 'blur'}
         ],
-        residentIdNumber: [
+        idCard: [
           {required: true, message: '身份证号不能为空', trigger: 'blur'},
           {
             pattern: /^[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
             , message: '身份证号不合法', trigger: 'blur'
           }
         ],
-        fleetId: [
+        team: [
           {required: true, message: '所属车队不能为空', trigger: 'blur'},
         ],
       }
@@ -76,7 +76,14 @@ export default {
 
   props:['driverData'],
   methods:{
+    checkGender(){
+      this.formItem.gender=this.driverData.gender==='男'?'MALE':'FEMALE'
+      this.formItem.name = this.driverData.name,
+      this.formItem.phone=this.driverData.telephone,
+      this.formItem.idCard=this.driverData.residentIdNumber,
+      this.formItem.team=this.driverData.fleetId
 
+    },
     resetForm(name) {
       this.$refs[name].resetFields();
     },

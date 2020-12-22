@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
 Vue.use(VueRouter)
 
 const index = () => import('@/views/Index')
@@ -26,6 +25,7 @@ const driverIndex = () => import('@/views/driver/Index')
 const driverProfile = () => import('@/views/driver/Profile')
 const driverReservation = () => import('@/views/driver/Reservation')
 const driverDetail = () => import('@/views/driver/Detail')
+const driverMail = ()=> import('@/views/driver/DriverMail')
 
 const adminIndex = () => import("@/views/admin/Index")
 const adminHome = () => import('@/views/admin/Home')
@@ -137,6 +137,10 @@ export default new VueRouter({
                 {
                     path: 'detail/:id',
                     component: driverDetail
+                },
+                {
+                    path: 'message',
+                    component: driverMail
                 },
             ]
         },

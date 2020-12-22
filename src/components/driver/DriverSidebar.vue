@@ -20,7 +20,7 @@
 </template>
 <script>
 export default {
-  name: "DriverSiderbar",
+  name: "DriverSidebar",
   data() {
     return {
       activeItem: "home"

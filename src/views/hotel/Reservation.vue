@@ -46,21 +46,21 @@ export default {
     return {
       columns: [
         {
-          key: 'id',
+          key: 'userId',
           title: '用户编号'
         },
         {
-          key: 'sendReservationTime',
+          key: 'reserveTime',
           title: '发送预约时间'
         },
 
         {
-          key: 'customerName',
+          key: 'name',
           title: '顾客姓名'
         },
 
         {
-          key: 'startTime',
+          key: 'startStart',
           title: '住宿开始时间'
         },
 
@@ -95,25 +95,53 @@ export default {
         },
       ],
       waitingConfirmConference: [{
-        id:1,
-        sendReservationTime:'2020-12-15',
-        customerName:"one",
-        startTime:"2020-12-16",
-        endTime:"2020-12-18",
+        conferenceId:'',
+        userId:'123123',
+        name:'123',
+        gender:'',
+        residentIdNumber:'',
+        telephone:'',
+        startStart:'',
+        startEnd:'',
+        stayNeeds:'',
+        reserveTime:'',
+        hotelCheck:'',
+        checkinTime:'',
+        roomNumber:'',
+        userCheck:'',
       }],
       processingConference: [{
-        id:2,
-        sendReservationTime:'2020-12-15',
-        customerName:"two",
-        startTime:"2020-12-16",
-        endTime:"2020-12-18",
+        conferenceId:'',
+        userId:'',
+        name:'',
+        gender:'',
+        residentIdNumber:'',
+        telephone:'',
+        startStart:'',
+        startEnd:'',
+        stayNeeds:'',
+        reserveTime:'',
+        hotelCheck:'',
+        checkinTime:'',
+        roomNumber:'',
+        userCheck:'',
       }],
       endedConference: [{
-        id:3,
-        sendReservationTime:'2020-12-15',
-        customerName:"three",
-        startTime:"2020-12-16",
-        endTime:"2020-12-18",
+        hotelId:'',
+        conferenceId:'',
+        userId:'',
+        name:'',
+        gender:'',
+        residentIdNumber:'',
+        telephone:'',
+        startStart:'',
+        startEnd:'',
+        stayNeeds:'',
+        reserveTime:'',
+        hotelCheck:'',
+        checkinTime:'',
+        roomNumber:'',
+        userCheck:'',
       }],
       showingPanel: ["waitingConfirm",'ended', 'processing'],
     }
@@ -128,14 +156,23 @@ export default {
         method: 'post',
         url: `${this.$baseURI}/api/hotel/reservation/unchecked`,
       }).then(function (response) {
-        that.waitingConfirmConference = []
+        // that.waitingConfirmConference = []
         response['data'].forEach(v => {
           var newData = {
-            id:Number(v['id']),
-            sendReservationTime:new Date(v['sendReservationTime']),
-            customerName:v['customerName'],
-            startTime:new Date(v['startTime']),
-            endTime:new Date(v['endTime']),
+            conferenceId:Number(v['conferenceId']),
+            userId:Number(v['userId']),
+            name:v['name'],
+            gender:v['gender'],
+            residentIdNumber:v['residentIdNumber'],
+            telephone:v['telephone'],
+            startStart:new Date(v['startStart']),
+            startEnd:new Date(v['startEnd']),
+            stayNeeds:new Date(v['stayNeeds']),
+            reserveTime:new Date(v['reserveTime']),
+            hotelCheck:v['hotelCheck'],
+            checkinTime:new Date(v['checkinTime']),
+            roomNumber:v['roomNumber'],
+            userCheck:v['userCheck'],
           }
           that.waitingConfirmConference.append(newData)
         });
@@ -144,14 +181,23 @@ export default {
         method: 'post',
         url: `${this.$baseURI}/api/hotel/reservation/checked`,
       }).then(function (response) {
-        that.processConference = []
+        // that.processConference = []
         response['data'].forEach(v => {
           var newData = {
-            id:Number(v['id']),
-            sendReservationTime:new Date(v['sendReservationTime']),
-            customerName:v['customerName'],
-            startTime:new Date(v['startTime']),
-            endTime:new Date(v['endTime']),
+            conferenceId:Number(v['conferenceId']),
+            userId:Number(v['userId']),
+            name:v['name'],
+            gender:v['gender'],
+            residentIdNumber:v['residentIdNumber'],
+            telephone:v['telephone'],
+            startStart:new Date(v['startStart']),
+            startEnd:new Date(v['startEnd']),
+            stayNeeds:new Date(v['stayNeeds']),
+            reserveTime:new Date(v['reserveTime']),
+            hotelCheck:v['hotelCheck'],
+            checkinTime:new Date(v['checkinTime']),
+            roomNumber:v['roomNumber'],
+            userCheck:v['userCheck'],
           }
           that.processConference.push(newData)
         });
@@ -160,14 +206,24 @@ export default {
         method:'post',
         url:`${this.$baseURI}/api/hotel/reservation/ended`,
       }).then(function (response) {
-        that.endedConference = []
+        // that.endedConference = []
         response['data'].forEach(v => {
           var newData = {
-            id:Number(v['id']),
-            sendReservationTime:new Date(v['sendReservationTime']),
-            customerName:v['customerName'],
-            startTime:new Date(v['startTime']),
-            endTime:new Date(v['endTime']),
+            hotelId:Number(v['conferenceId']),
+            conferenceId:Number(v['conferenceId']),
+            userId:Number(v['userId']),
+            name:v['name'],
+            gender:v['gender'],
+            residentIdNumber:v['residentIdNumber'],
+            telephone:v['telephone'],
+            startStart:new Date(v['startStart']),
+            startEnd:new Date(v['startEnd']),
+            stayNeeds:new Date(v['stayNeeds']),
+            reserveTime:new Date(v['reserveTime']),
+            hotelCheck:v['hotelCheck'],
+            checkinTime:new Date(v['checkinTime']),
+            roomNumber:v['roomNumber'],
+            userCheck:v['userCheck'],
           }
           that.endedConference.push(newData)
         });

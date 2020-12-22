@@ -46,16 +46,16 @@ export default {
     return {
       columns: [
         {
-          key: 'id',
+          key: 'userId',
           title: '用户编号'
         },
         {
-          key: 'sendReservationTime',
+          key: 'reserveTime',
           title: '发送预约时间'
         },
 
         {
-          key: 'customerName',
+          key: 'name',
           title: '顾客姓名'
         },
 
@@ -86,7 +86,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.show(params.row.id)
+                    this.show(params.row.userId, params.row)
                   }
                 }
               }, '查看'),
@@ -95,31 +95,58 @@ export default {
         },
       ],
       waitingConfirmConference: [{
-        id:1,
-        sendReservationTime:'2020-12-15',
-        customerName:"one",
-        arriveSite:"a",
-        arriveTime:"2020-12-18",
+        conferenceId:'',
+        userId:'11123123',
+        name:'123',
+        gender:'',
+        telephone:'',
+        arriveTime:'2020-12-01',
+        arriveSite:'',
+        reserveTime:'',
+        driverCheck:'',
+        driverId:'',
+        pickupTime:'',
+        pickupSite:'',
+        carNumber:'',
+        userCheck:'',
       }],
       processingConference: [{
-        id:2,
-        sendReservationTime:'2020-12-15',
-        customerName:"two",
-        arriveSite:"b",
-        arriveTime:"2020-12-18",
+        conferenceId:'',
+        userId:'',
+        name:'',
+        gender:'',
+        telephone:'',
+        arriveTime:'',
+        arriveSite:'',
+        reserveTime:'',
+        driverCheck:'',
+        driverId:'',
+        pickupTime:'',
+        pickupSite:'',
+        carNumber:'',
+        userCheck:'',
       }],
       endedConference: [{
-        id:3,
-        sendReservationTime:'2020-12-15',
-        customerName:"three",
-        arriveSite:"c",
-        arriveTime:"2020-12-18",
+        conferenceId:'',
+        userId:'',
+        name:'',
+        gender:'',
+        telephone:'',
+        arriveTime:'',
+        arriveSite:'',
+        reserveTime:'',
+        driverCheck:'',
+        driverId:'',
+        pickupTime:'',
+        pickupSite:'',
+        carNumber:'',
+        userCheck:'',
       }],
       showingPanel: ["waitingConfirm",'ended', 'processing'],
     }
   },
   created() {
-    this.initData()
+    // this.initData()
   },
   methods: {
     initData() {
@@ -131,11 +158,20 @@ export default {
         that.waitingConfirmConference = []
         response['data'].forEach(v => {
           var newData = {
-            id:Number(v['id']),
-            sendReservationTime:new Date(v['sendReservationTime']),
-            customerName:v['customerName'],
-            arriveSite:v['place'],
-            arriveTime:new Date(v['time']),
+            conferenceId:v['conferenceId'],
+            userId:v['userId'],
+            name:v['name'],
+            gender:v['gender'],
+            telephone:v['telephone'],
+            arriveTime:new Date(v['arriveTime']),
+            arriveSite:v['arriveSite'],
+            reserveTime:new Date(v['reserveTime']),
+            driverCheck:v['driverCheck'],
+            driverId:v['driverId'],
+            pickupTime:new Date(v['pickupTime']),
+            pickupSite:v['pickupSite'],
+            carNumber:v['carNumber'],
+            userCheck:v['userCheck'],
           }
           that.waitingConfirmConference.append(newData)
         });
@@ -147,11 +183,20 @@ export default {
         that.processConference = []
         response['data'].forEach(v => {
           var newData = {
-            id:Number(v['id']),
-            sendReservationTime:new Date(v['sendReservationTime']),
-            customerName:v['customerName'],
-            arriveSite:v['place'],
-            arriveTime:new Date(v['time']),
+            conferenceId:v['conferenceId'],
+            userId:v['userId'],
+            name:v['name'],
+            gender:v['gender'],
+            telephone:v['telephone'],
+            arriveTime:new Date(v['arriveTime']),
+            arriveSite:v['arriveSite'],
+            reserveTime:new Date(v['reserveTime']),
+            driverCheck:v['driverCheck'],
+            driverId:v['driverId'],
+            pickupTime:new Date(v['pickupTime']),
+            pickupSite:v['pickupSite'],
+            carNumber:v['carNumber'],
+            userCheck:v['userCheck'],
           }
           that.processConference.push(newData)
         });
@@ -163,22 +208,32 @@ export default {
         that.endedConference = []
         response['data'].forEach(v => {
           var newData = {
-            id:Number(v['id']),
-            sendReservationTime:new Date(v['sendReservationTime']),
-            customerName:v['customerName'],
-            arriveSite:v['place'],
-            arriveTime:new Date(v['time']),
+            conferenceId:v['conferenceId'],
+            userId:v['userId'],
+            name:v['name'],
+            gender:v['gender'],
+            telephone:v['telephone'],
+            arriveTime:new Date(v['arriveTime']),
+            arriveSite:v['arriveSite'],
+            reserveTime:new Date(v['reserveTime']),
+            driverCheck:v['driverCheck'],
+            driverId:v['driverId'],
+            pickupTime:new Date(v['pickupTime']),
+            pickupSite:v['pickupSite'],
+            carNumber:v['carNumber'],
+            userCheck:v['userCheck'],
           }
           that.endedConference.push(newData)
         });
       })
     },
-    show(id) {
+    show(userId, data) {
       /*            this.$Modal.info({
                     title: 'User Info',
                     content: `Name：${this.conference[index].name}<br>Age：${this.conference[index].address}<br>Address：${this.conference[index].startTime}`
                   })*/
-      this.$router.push(`/driver/detail/${id}`)
+      console.log(userId,data)
+      this.$router.push({path:`/driver/detail/${userId}`, query: {data}})
     },
 
   }

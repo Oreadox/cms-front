@@ -180,7 +180,7 @@ export default {
       ],
       conference: [{
         name: 'one',
-        phone: '1231231241',
+        phone: '12312312411',
         workUnit: 'xxx',
         hotel: 'xxx',
         driveFinish: true,
@@ -190,7 +190,6 @@ export default {
       sendMailAccount: { account:'1233'},
       openWriteMail:false,
     }
-
   },
   props: ['participantsInfo', 'conferenceId'],
   methods: {

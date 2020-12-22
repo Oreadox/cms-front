@@ -11,12 +11,12 @@
         <Input type="textarea" v-model="formItem.address" class="input_size"></Input>
       </FormItem>
       <FormItem label="会议时间">
-        <DatePicker v-model="formItem.startTime"></DatePicker>
+        <DatePicker :options="ControlStartTime" v-model="formItem.startTime"></DatePicker>
         至
-        <DatePicker v-model="formItem.endTime"></DatePicker>
+        <DatePicker :options="ControlEndTime" v-model="formItem.endTime"></DatePicker>
       </FormItem>
-      <FormItem label="报名截止时间">
-        <DatePicker v-model="formItem.enrollTime"></DatePicker>
+      <FormItem  label="报名截止时间">
+        <DatePicker :options="ControlEnrollTime" v-model="formItem.enrollTime"></DatePicker>
       </FormItem>
       <FormItem label="使用邀请码">
         <i-switch v-model="useInviteCode"/>
@@ -46,18 +46,38 @@ export default {
         name: 'xxx',
         introduction: '...',
         address: 'xxx',
-        startTime: '2020-10-11',
-        endTime: '2020-12-11',
-        enrollTime: '2020-11-11',
+        startTime: '2020-12-23',
+        endTime: '2020-12-25',
+        enrollTime: '2020-12-20',
         inviteCode: '111123',
       },
+      ControlStartTime: {
+        disabledDate: (time)=>{
+          return time && time.getTime() < Date.now()
+        }
+      },
+      ControlEndTime: {
+        disabledDate: (time)=>{
+          if (this.formItem.endTime==='')
+            return time.getTime()>Date.now()
+          else
+            return time.getTime()<Date.now()||time.getTime()<new Date(this.formItem.startTime).getTime()
+        }
+      },
+      ControlEnrollTime:{
+        disabledDate: (time) => {
+          if (this.formItem.startTime==='')
+            return time.getTime()>Date.now()
+          else
+            return time.getTime()>new Date(this.formItem.startTime).getTime()-86400000
+        }
+      }
     }
   },
   methods: {
     changeSwitch() {
       this.useInviteCode = !this.useInviteCode;
     },
-
     submitForm(){
       var that = this
       var data = {
