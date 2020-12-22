@@ -4,7 +4,8 @@
 
 <script>
 export default {
-name: "Meeting"
+  name: "Meeting",
+
 }
 </script>
 

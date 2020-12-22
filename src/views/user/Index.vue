@@ -3,15 +3,13 @@
   <Navbar ></Navbar>
     <Sidebar></Sidebar>
   <Content >
-    <RouterView></RouterView>
+    <RouterView :style="{padding: '24px', margin: 'auto auto auto 15vw'}"></RouterView>
   </Content>
 </div>
 </template>
-
 <script>
 import Navbar from "@/components/common/Navbar";
 import Sidebar from "@/components/common/Sidebar";
-// import Home from "@/views/user/Home";
 export default {
 name: "index",
   components: {Navbar, Sidebar},

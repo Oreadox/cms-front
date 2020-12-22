@@ -19,7 +19,7 @@
       <Register @setLoginModal="setLoginModal" @setRegisterModal=setRegisterModal></Register>
     </Modal>
     <div class="font-stype form-wrapper">
-      <Row type="flex" justify="center" gutter=40 style="padding:5%;margin-top: 5%">
+      <Row type="flex" justify="center" :gutter=40 style="padding:5%;margin-top: 5%">
         <Col span="10">
           <p class="title-font-stlye">
             随时随地组织会议
@@ -36,7 +36,7 @@
         </Col>
       </Row>
 
-      <Row type="flex" justify="center" gutter=40 style="padding:5%;background-color: #F5F5F5">
+      <Row type="flex" justify="center" :gutter=40 style="padding:5%;background-color: #F5F5F5">
         <Col span="10">
           <img src="https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE3oNUA?ver=2548&q=90&h=675&w=830&b=%23FFFFFFFF&aim=true"
                class="control-layout">
@@ -51,13 +51,13 @@
         </Col>
       </Row>
 
-      <Row type="flex" justify="center" gutter=40 style="padding:5%;">
+      <Row type="flex" justify="center" :gutter=40 style="padding:5%;">
         <Col span="10">
           <p class="title-font-stlye">
             丰富的组织方式
           </p>
           <p class="text-font-style">
-            既可以设置为公开页面供大家加入，也能够设置为私人会议，通过id来查询加入。
+            立即加入、开启您的会议，多种形式，线上线下，一步到位。
           </p>
         </Col>
         <Col span="10">

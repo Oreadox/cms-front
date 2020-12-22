@@ -1,10 +1,10 @@
 <template>
-  <Card dis-hover :bordered=false  :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
-    <div >
+  <Card dis-hover :bordered=false>
+    <div>
       <Content>
         <div style="text-align: center">
           <div style="margin-top: 12vh">
-            <h1>你好, {{ userInfo['username'] }}</h1>
+            <h1>您好, {{ userInfo['username'] }}</h1>
             <h2>welcome to NCU-CMS</h2>
           </div>
           <div style="position: relative; left: 4%; ">
@@ -18,18 +18,26 @@
                 </Card>
               </Col>
               <Col span="6" offset="1" justify="center">
-                <Card to="/conference/participate" class="card" style="color: white; background-color: #5cadff;">
+                <Card to="/conference/list" class="card" style="color: white; background-color: #5cadff;">
                   <p class="center">我的会议</p>
                 </Card>
               </Col>
               <Col span="6" offset="1" justify="center">
-                <Card to="/conference/detail" class="card">
-                  <p class="center">加入会议</p>
-                </Card>
+                <a @click="enterJoinNumber=true">
+                  <Card  class="card">
+                    <p class="center">加入会议</p>
+                  </Card>
+                </a>
               </Col>
             </Row>
-
           </div>
+          <Modal
+              style="padding: 20px"
+              footer-hide
+              :mask-closable="false"
+              v-model="enterJoinNumber">
+            <JoinConference></JoinConference>
+          </Modal>
         </div>
       </Content>
     </div>
@@ -38,16 +46,21 @@
 <script>
 
   // const HomePage = () => import("@/components/user/HomePage");
+  import JoinConference from "@/components/conference/JoinConference";
   export default {
     name: "home",
+    components: {JoinConference},
     data(){
       return {
+        enterJoinNumber: false,
         userInfo: {
-          username: 'xxx',
+          username: this.$store.state.username,
 
         }
       }
     },
+    methods:{
+    }
   }
 </script>
 

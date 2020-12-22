@@ -6,7 +6,7 @@
       <Option v-for="(value, key) in userType" :value="key" :key="key">{{ value }}</Option>
     </Select>
     <Form hide-required-mark ref="formItem" :model="formItem" :rules="ruleInline">
-      <FormItem label="账号" prop="user">
+      <FormItem label="账号" prop="username">
         <Input type="text" v-model="formItem.username" placeholder="手机号/账号">
         </Input>
       </FormItem>
@@ -33,11 +33,11 @@ export default {
   name: "Login",
   data() {
     return {
-      formItem: [{
+      formItem: {
         usertype: '',
         username: '',
         password: '',
-      }],
+      },
       ruleInline: {
         username: [
           {required: true, message: '用户名不能为空', trigger: 'blur'}
@@ -79,14 +79,15 @@ export default {
             data: data
           }).then(function (response) {
             var respData = response['data']
-            if (Boolean(respData['data']['loginSuccess']) === true) {
+            if (Boolean(respData['success']) === true) {
               that.$Message.success("登录成功");
-              that.$store.commit("setToken", respData['data']['token'])
-              that.$store.commit("setUsername", respData['data']['username'])
-              that.$store.commit("setRole", respData['data']['role'].toLowerCase())
+              that.$store.commit("setToken", respData['token'])
+              that.$store.commit("setUsername", respData['username'])
+              that.$store.commit("setAccountId", respData['account_id'])
+              that.$store.commit("setRole", respData['role'].toLowerCase())
               that.$router.push(`/${that.selected}/home`)
             } else {
-              that.$Message.error(response['data']['message'])
+              that.$Message.error(respData['message'])
             }
           })
         }

@@ -1,21 +1,15 @@
 <template>
   <div>
-    <Card dis-hover :bordered=false  :style="{padding: '24px', margin: 'auto auto auto 15vw'}">
-      <Button :size="buttonSize" type="primary">写信</Button>
-      <Collapse>
-        <Panel 收信箱>
-
-        </Panel>
-      </Collapse>
-
-
-    </Card>
+      <CommonMail></CommonMail>
   </div>
 </template>
 
 <script>
+import CommonMail from "@/components/common/CommonMail";
 export default {
-name: "message"
+  name: "message",
+  components:{CommonMail},
+
 }
 </script>
 
