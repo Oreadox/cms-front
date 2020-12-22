@@ -103,7 +103,7 @@ export default {
         arriveTime:'2020-12-01',
         arriveSite:'',
         reserveTime:'',
-        driverCheck:'',
+        driverCheck:false,
         driverId:'',
         pickupTime:'',
         pickupSite:'',
@@ -111,15 +111,15 @@ export default {
         userCheck:'',
       }],
       processingConference: [{
-        conferenceId:'',
-        userId:'',
+        conferenceId:111,
+        userId:123123123,
         name:'',
         gender:'',
         telephone:'',
         arriveTime:'',
         arriveSite:'',
         reserveTime:'',
-        driverCheck:'',
+        driverCheck:true,
         driverId:'',
         pickupTime:'',
         pickupSite:'',
@@ -128,14 +128,14 @@ export default {
       }],
       endedConference: [{
         conferenceId:'',
-        userId:'',
+        userId:123345,
         name:'',
         gender:'',
         telephone:'',
         arriveTime:'',
         arriveSite:'',
         reserveTime:'',
-        driverCheck:'',
+        driverCheck:true,
         driverId:'',
         pickupTime:'',
         pickupSite:'',
@@ -232,7 +232,6 @@ export default {
                     title: 'User Info',
                     content: `Name：${this.conference[index].name}<br>Age：${this.conference[index].address}<br>Address：${this.conference[index].startTime}`
                   })*/
-      console.log(userId,data)
       this.$router.push({path:`/driver/detail/${userId}`, query: {data}})
     },
 
