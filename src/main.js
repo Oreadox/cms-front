@@ -25,4 +25,12 @@ new Vue({
     store,
     render: h => h(App),
 }).$mount('#app')
+
+router.beforeEach((to, from, next) => {
+    if (to.meta.title) {
+        document.title = to.meta.title
+    }
+    next()
+});
+
 // })

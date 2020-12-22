@@ -43,12 +43,13 @@ export default new VueRouter({
     routes: [
         {
             path: '/',
-            redirect: '/index'
+            redirect: '/index',
         },
         {
             path: '/index',
             name: '主页',
-            component: index
+            component: index,
+            meta: { title: 'CMS' },
         },
         {
             path: '/user/',
@@ -57,15 +58,18 @@ export default new VueRouter({
             children: [
                 {
                     path: 'home',
-                    component: userHome
+                    component: userHome,
+                    meta: { title: 'userHome' },
                 },
                 {
                     path: 'profile',
-                    component: userProfile
+                    component: userProfile,
+                    meta: { title: 'userProfile' },
                 },
                 {
                     path: 'message',
-                    component: userMessage
+                    component: userMessage,
+                    meta: { title: 'userMessage' },
                 },
             ]
         },
@@ -78,19 +82,23 @@ export default new VueRouter({
             children: [
                 {
                     path: 'create',
-                    component: conferenceCreate
+                    component: conferenceCreate,
+                    meta: { title: 'conferenceCreate' },
                 },
                 {
                     path: 'list',
-                    component: conferenceList
+                    component: conferenceList,
+                    meta: { title: 'conferenceList' },
                 },
                 {
                     path: 'detail/:id',
-                    component: conferenceDetail
+                    component: conferenceDetail,
+                    meta: { title: 'conferenceDetail' },
                 },
                 {
                     path: 'participate/:id',
-                    component: conferenceParticipate
+                    component: conferenceParticipate,
+                    meta: { title: 'conferenceParticipate' },
                 },
             ]
         },
@@ -103,15 +111,18 @@ export default new VueRouter({
             children: [
                 {
                     path: 'reservation/',
-                    component: hotelReservation
+                    component: hotelReservation,
+                    meta: { title: 'hotelReservation' },
                 },
                 {
                     path: 'profile',
-                    component: hotelProfile
+                    component: hotelProfile,
+                    meta: { title: 'hotelProfile' },
                 },
                 {
                     path: 'detail/:id',
-                    component: hotelDetail
+                    component: hotelDetail,
+                    meta: { title: 'hotelDetail' },
                 },
             ]
         },
@@ -128,19 +139,23 @@ export default new VueRouter({
                 // },
                 {
                     path: 'profile',
-                    component: driverProfile
+                    component: driverProfile,
+                    meta: { title: 'driverProfile' },
                 },
                 {
                     path: 'reservation',
-                    component: driverReservation
+                    component: driverReservation,
+                    meta: { title: 'driverReservation' },
                 },
                 {
                     path: 'detail/:id',
-                    component: driverDetail
+                    component: driverDetail,
+                    meta: { title: 'driverDetail' },
                 },
                 {
                     path: 'message',
-                    component: driverMail
+                    component: driverMail,
+                    meta: { title: 'driverMail' },
                 },
             ]
         },
@@ -154,30 +169,37 @@ export default new VueRouter({
                 {
                     path: 'home',
                     component: adminHome,
+                    meta: { title: 'adminHome' },
                 },
                 {
                     path: 'user',
                     component: adminUser,
+                    meta: { title: 'adminUser' },
                 },
                 {
                     path: 'conference',
-                    component: adminConference
+                    component: adminConference,
+                    meta: { title: 'adminConference' },
                 },
                 {
                     path: 'hotel',
-                    component: adminHotel
+                    component: adminHotel,
+                    meta: { title: 'adminHotel' },
                 },
                 {
                     path: 'driver',
-                    component: adminDriver
+                    component: adminDriver,
+                    meta: { title: 'adminDriver' },
                 },
                 {
                     path: 'personalInfo',
-                    component: personalInfo
+                    component: personalInfo,
+                    meta: { title: 'personalInfo' },
                 },
                 {
                     path: 'message',
-                    component: adminMail
+                    component: adminMail,
+                    meta: { title: 'adminMail' },
                 },
             ]
         },
@@ -205,7 +227,8 @@ export default new VueRouter({
         },*/
         {
             path: '/admin/system',
-            component: adminSystem
+            component: adminSystem,
+            meta: { title: 'adminSystem' },
         }
     ]
 })
