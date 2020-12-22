@@ -12,20 +12,20 @@
            :mask-closable="false"
            v-model="deleteUserModal">
       <div>
-        <h3 style="text-align: center">确定要删除账号{{ deleteUserValue.deletedUsername }}吗？</h3>
+        <h3 style="text-align: center">确定要删除账号{{ deletedUserValue.username }}吗？</h3>
         <hr style="margin: 5px"/>
         <p style="text-indent: 2em; margin-bottom: 5px">这个选项<b>不能</b>被回滚，这会导致账号<b>
-          {{ deleteUserValue.deletedUsername }}</b> 被永久移除，这将导致其永久性的不能登录等关联性的后果</p>
+          {{ deletedUserValue.username }}</b> 被永久移除，这将导致其永久性的不能登录等关联性的后果</p>
         <p style="text-indent: 2em; margin-bottom: 8px">如果确实要删除，请在下方输入<b>
-          {{ deleteUserValue.deletedUsername }}</b> 以再次确认</p>
+          {{ deletedUserValue.username }}</b> 以再次确认</p>
         <Input style="width: 100%; margin-bottom: 5px"
-               v-model="deleteUserValue.deletedUsernameCheck"></Input>
+               v-model="deletedUserValue.usernameCheck"></Input>
         <Button class="button" type="text" @click="deleteUserCheck">
-          我明白这意味着什么，删除该账号</Button>
+          我明白这意味着什么，删除该账号
+        </Button>
       </div>
     </Modal>
   </div>
-
 </template>
 
 <script>
@@ -121,10 +121,10 @@ export default {
       allUserDataBackup: [],     // 搜索时用来备份原结果
       keyword: '',
       searching: false,
-      deleteUserValue: {
-        deleteUserId: 0,
-        deletedUsername: '',
-        deletedUsernameCheck: ''
+      deletedUserValue: {
+        id: 0,
+        username: '',
+        usernameCheck: ''
       },
       deleteUserModal: false,
 
@@ -132,21 +132,10 @@ export default {
   },
   created() {
     this.loadUserData()
-    for (let i = 0; i < 100; i++) {   // TODO: 记得删
-      let newData = {
-        account: i,
-        userId: 'one',
-        name: 'xx',
-        username: 'xxx',
-      }
-      this.allUserData.push(newData)
-    }
-    this.currentUserData = this.allUserData.slice(0, 10)
   },
   methods: {
     loadUserData() {
       let that = this
-      // 获取会议基本信息
       this.$axios({
         method: 'post',
         url: `${this.$baseURI}/api/admin/user/getAll`,
@@ -161,31 +150,24 @@ export default {
           }
           that.allUserData.push(newData)
         })
+        that.currentUserData = that.allUserData.slice(0, 10)
       })
     },
-    addConferenceData() {
-      // TODO: 自增完毕后再加载表格
-      let conferenceData = {
-        userID: 'two',
-        name: 'xx',
-        username: 'xxx',
-      }
-      this.currentUserData.push(conferenceData)
-    },
     deleteUser(userId, username) {
+      this.deletedUserValue.id = userId
+      this.deletedUserValue.username = username
       this.deleteUserModal = true
-      this.deleteUserValue.deletedUsername = username
     },
     deleteUserCheck() {
-      if(this.deleteUserValue.deletedUsernameCheck===this.deleteUserValue.deletedUsername){
+      if (this.deletedUserValue.usernameCheck === this.deletedUserValue.username) {
         let that = this
         // 获取会议基本信息
         this.$axios({
           method: 'post',
           url: `${this.$baseURI}/api/admin/user/remove`,
-          data: {userId: that.deleteUserValue.deleteUserId}
+          data: {userId: that.deletedUserValue.id}
         }).then(function (response) {
-          if(response['data']['result']===true){
+          if (response['data']['result'] === true) {
             that.$Message.success("删除成功");
             that.deleteUserModal = false
           } else {

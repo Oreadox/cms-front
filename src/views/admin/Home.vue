@@ -85,6 +85,36 @@ export default {
   },
   created() {
     this.radius = window.innerHeight * 0.3 >= 200 ? 200 : window.innerHeight * 0.3
+    this.loadData()
+  },
+  methods: {
+    loadData(){
+      let that = this
+      this.$axios({
+        method: 'post',
+        url: `${this.$baseURI}/api/admin/user/count`,
+      }).then(function (response) {
+        that.userNumber = response.data.amount
+      })
+      this.$axios({
+        method: 'post',
+        url: `${this.$baseURI}/api/admin/conference/count`,
+      }).then(function (response) {
+        that.conferenceNumber = response.data.amount
+      })
+      this.$axios({
+        method: 'post',
+        url: `${this.$baseURI}/api/admin/hotel/count`,
+      }).then(function (response) {
+        that.hotelNumber = response.data.amount
+      })
+      this.$axios({
+        method: 'post',
+        url: `${this.$baseURI}/api/admin/fleet/count`,
+      }).then(function (response) {
+        that.driverNumber = response.data.amount
+      })
+    }
   }
 }
 </script>
