@@ -2,7 +2,7 @@
   <div>
     <Form label-colon :label-width="120">
       <FormItem label="会议名">
-        <Input type="text" style="width: 150px"></Input>
+        <Input type="text" v-model="formItem.name" style="width: 150px"></Input>
       </FormItem>
       <FormItem label="会议简介">
         <Input type="textarea" v-model="formItem.introduction" class="input_size"></Input>
@@ -43,9 +43,9 @@ export default {
     return {
       useInviteCode: false,
       formItem: {
-        name: 'xxx',
+        name: '',
         introduction: '...',
-        address: 'xxx',
+        address: '',
         startTime: '2020-12-23',
         endTime: '2020-12-25',
         enrollTime: '2020-12-20',
