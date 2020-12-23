@@ -79,32 +79,41 @@ export default {
       this.useInviteCode = !this.useInviteCode;
     },
     submitForm(){
-      var that = this
-      var data = {
-        name: this.formItem.name,
-        detail: this.formItem.introduction,
-        address: this.formItem.address,
-        startTime: this.formItem.startTime.getTime(),
-        endTime: this.formItem.endTime.getTime(),
-        enrollTime: this.formItem.enrollTime.getTime(),
-        inviteCode: this.useInviteCode?this.formItem.inviteCode:null
-      }
-      this.$axios(
-          {
-            method: 'post',
-            url: `${this.$baseURI}/api/user/conference/create`,
-            data: data
-          }
-      ).then(function (response) {
-        if (response['data']['success'] === true) {
-          that.$Message.success("创建成功");
-          setTimeout(function(){
-            that.$router.push("/conference/list")
-          }, 1500);
-        } else {
-          that.$Message.error(response['data']['message']);
+      let that = this
+      let canSubmit = 0
+      for (var itemKey in Object.values(that.formItem))
+        if (itemKey){
+          canSubmit++
         }
-      })
+      if (canSubmit===0) {
+        var data = {
+          name: that.formItem.name,
+          detail: that.formItem.introduction,
+          address: that.formItem.address,
+          startTime: that.formItem.startTime.getTime(),
+          endTime: that.formItem.endTime.getTime(),
+          enrollTime: that.formItem.enrollTime.getTime(),
+          inviteCode: that.useInviteCode ? this.formItem.inviteCode : null
+        }
+        this.$axios(
+            {
+              method: 'post',
+              url: `${that.$baseURI}/api/user/conference/create`,
+              data: data
+            }
+        ).then(function (response) {
+          if (response['data']['success'] === true) {
+            that.$Message.success("创建成功");
+            setTimeout(function () {
+              that.$router.push("/conference/list")
+            }, 1500);
+          } else {
+            that.$Message.error(response['data']['message']);
+          }
+        })
+      }else {
+        that.$Message.error("请把内容填充完毕！");
+      }
 
     }
   }

@@ -24,7 +24,6 @@ export default {
   components:{WriteMail},
   data() {
     return {
-      // TODO 记得完善删除人员等功能
       columns: [
         {
           title: '姓名',
