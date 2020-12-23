@@ -59,15 +59,15 @@ export default {
   data() {
     return {
       userData: {
-        name: 'xxx',
-        birthday: '2000-01-01',
-        gender: 'xxx',
-        password: '●●●●●●●●●●●●',
-        account: 'xxx',
-        email: 'xxx',
-        phone: 'xxx',
-        idCard: 'xxx',
-        workUnit: 'xxx',
+        name: '',
+        birthday: '',
+        gender: '',
+        password: '',
+        account: '',
+        email: '',
+        phone: '',
+        idCard: '',
+        workUnit: '',
       },
       listItem: {
         personalData: {

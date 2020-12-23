@@ -33,7 +33,7 @@
               邮箱：{{ conferenceInfo.creatorEmail }}
             </div>
           </Poptip>
-          <Button style="margin-left: 1vw" type="primary" @click="$router.push('/conference/list')">
+          <Button style="margin-left: 1vw" type="primary" @click="sendMail()">
             <Icon size="24" type="ios-mail"/>
           </Button>
         </FormItem>
@@ -57,10 +57,15 @@
             已结束
           </Tag>
         </FormItem>
-        <FormItem label="行程信息">
-          <div>{{ conferenceInfo.statusMessage }}</div>
-        </FormItem>
       </Form>
+      <Modal
+          style="padding: 20px"
+          footer-hide
+          v-model="openWriteMail">
+        <div style="padding: 5%">
+        <WriteMail ref="fillAccount" :send-id="sendMailAccount" @closeSendModal="closeSendModal"></WriteMail>
+        </div>
+      </Modal>
       <Card dis-hover class="card_size" :title="driverInfo.statusMessage">
         <Form label-colon :label-width="120">
           <FormItem label="我的车次/航班">
@@ -69,7 +74,7 @@
           <FormItem label="我的到达时间" :label-width="120">
             <DatePicker type="datetime" v-model="driverInfo.arriveTime" :readonly="true"></DatePicker>
           </FormItem>
-          <div v-if="driverInfo.status>=1">
+          <div >
             <FormItem label="接车司机" :label-width="120">
               <Input type="text" v-model="driverInfo.driverName" :readonly="true" style="width: 80px"></Input>
               <Poptip trigger="hover">
@@ -106,7 +111,7 @@
             <br>至<br>
             <DatePicker v-model="hotelInfo.stayEndTime" :readonly="true"></DatePicker>
           </FormItem>
-          <div v-if="hotelInfo.status>=1">
+          <div >
             <FormItem label="住宿酒店" :label-width="120">
               <Input type="text" v-model="hotelInfo.hotelName" :readonly="true" style="width: 75%"></Input>
               <Poptip trigger="hover">
@@ -137,28 +142,42 @@
 </template>
 
 <script>
+import WriteMail from "@/components/common/WriteMail";
 export default {
   name: "ParticipantDetail",
+  components:{WriteMail},
   data() {
     return {
       currentProgress: 0,
       conferenceInfo: {
-        name: 'xxx',
-        creatorName: 'xxx',
-        creatorPhone: 'xxxssssssssssssssssss',
-        creatorEmail: 'xxx',
-        detail: '...',
-        address: 'xxx',
-        startTime: '2020-10-11',
-        endTime: '2020-10-11',
-        enrollTime: '2020-10-12',
+        name: '',
+        creatorName: '',
+        creatorPhone: '',
+        creatorEmail: '',
+        detail: '',
+        address: '',
+        startTime: '',
+        endTime: '',
+        enrollTime: '',
         enrollStatus: 0,
-        statusMessage: "",
+      },
+      sendMailAccount: { account:'1233'},
+      hotelInfo: {
+        status: 1,
+        statusMessage: '住宿信息: 待用户确认',
+        stayStartTime: '',
+        stayEndTime: '',
+        hotelAccount: '',
+        hotelName: '',
+        hotelPhone: '',
+        hotelAddress: '',
+        checkinTime: '',
+        roomNumber: '',
       },
       driverInfo: {
         status: 1,
         statusMessage: '行程信息: 待用户确认',
-        tripNumber: 'G1',
+        tripNumber: '',
         arriveTime: new Date(),
         driverAccount: '',
         driverName: '',
@@ -167,24 +186,15 @@ export default {
         pickupSite: '',
         carNumber: ''
       },
-      hotelInfo: {
-        status: 1,
-        statusMessage: '住宿信息: 待用户确认',
-        stayStartTime: '2020-10-11',
-        stayEndTime: '2020-10-11',
-        hotelAccount: '',
-        hotelName: '',
-        hotelPhone: '',
-        hotelAddress: '',
-        checkinTime: '2020-10-11',
-        roomNumber: '',
-      }
+      openWriteMail: false
     }
   },
   props: ['conferenceId'],
   created() {
     this.loadConferenceInfo();
     this.loadEnrollmentInfo();
+  },
+  mounted() {
     this.loadDriverInfo();
     this.loadHotelInfo();
     if (this.conferenceInfo.statusMessage === '') {
@@ -197,7 +207,7 @@ export default {
       // 获取会议基本信息
       this.$axios({
         method: 'post',
-        url: `${this.$baseURI}/api/conference/getById`,
+        url: `${that.$baseURI}/api/conference/getById`,
         data: {id: that.conferenceId}
       }).then(function (response) {
         let resData = response['data']
@@ -208,7 +218,9 @@ export default {
           detail: resData['detail'],
           address: resData['address'],
           enrollTime: new Date(resData['enrollTime']),
-          statusMessage: ''
+          creatorName: '',
+          creatorPhone: '',
+          creatorEmail: '',
         }
         switch (resData['progress']) {
           case "ENROLLMENT":
@@ -235,13 +247,14 @@ export default {
         // 获取创建者信息
         that.$axios({
           method: 'post',
-          url: `${this.$baseURI}/api/user/profile/getById`,
+          url: `${that.$baseURI}/api/user/profile/getById`,
           data: {id: resData['userId']}
         }).then(function (response) {
-          let resData = response['data']
-          that.conferenceInfo.creatorName = resData['name']
-          that.conferenceInfo.creatorPhone = resData['telephone']
-          that.conferenceInfo.creatorEmail = resData['email']
+          let resData2 = response['data']
+          that.conferenceInfo.creatorName = resData2['name']
+          that.conferenceInfo.creatorPhone = resData2['telephone']
+          that.conferenceInfo.creatorEmail = resData2['email']
+          that.sendMailAccount.account = resData2['accountId']
         })
       })
     },
@@ -250,7 +263,7 @@ export default {
       let that = this
       this.$axios({
         method: 'post',
-        url: `${this.$baseURI}/api/conference/enrollment`,
+        url: `${that.$baseURI}/api/conference/enrollment`,
         data: {id: that.conferenceId}
       }).then(function (response) {
         let resData = response['data']
@@ -271,7 +284,7 @@ export default {
       let that = this
       this.$axios({
         method: 'post',
-        url: `${this.$baseURI}/api/conference/driverReservation`,
+        url: `${that.$baseURI}/api/conference/driverReservation`,
         data: {id: that.conferenceId}
       }).then(function (response) {
         let resData = response['data']
@@ -282,26 +295,27 @@ export default {
           } else {
             that.driverInfo.status = 1
             that.driverInfo.statusMessage += '待用户确认'
-            this.conferenceInfo.statusMessage += '待确认接车信息 '
+            that.conferenceInfo.statusMessage += '待确认接车信息 '
           }
           that.driverInfo.pickupTime = resData['pickupTime']
+          that.driverInfo.arriveTime = resData['reserveTime']
           that.driverInfo.pickupSite = resData['pickupSite']
           that.driverInfo.carNumber = resData['carNumber']
           // 获取司机信息
           that.$axios({
             method: 'post',
-            url: `${this.$baseURI}/api/driver/getById`,
+            url: `${that.$baseURI}/api/driver/getById`,
             data: {id: resData['driverId']}
           }).then(function (response) {
-            let resData = response['data']
-            that.driverInfo.driverAccount = resData['accountId']
-            that.driverInfo.driverName = resData['name']
-            that.driverInfo.driverPhone = resData['telephone']
+            let resData2 = response['data']
+            that.driverInfo.driverAccount = resData2['accountId']
+            that.driverInfo.driverName = resData2['name']
+            that.driverInfo.driverPhone = resData2['telephone']
           })
         } else {
           that.driverInfo.status = 0
           that.driverInfo.statusMessage += '待司机接单'
-          this.conferenceInfo.statusMessage += '待司机接单 '
+          that.conferenceInfo.statusMessage += '待司机接单 '
         }
       })
     },
@@ -310,37 +324,37 @@ export default {
       let that = this
       this.$axios({
         method: 'post',
-        url: `${this.$baseURI}/api/conference/hotelReservation`,
+        url: `${that.$baseURI}/api/conference/hotelReservation`,
         data: {id: that.conferenceId}
       }).then(function (response) {
         let resData = response['data']
-        if (resData['hotelCheck'] === true) {
+        if (resData['hotelCheck'] === true||resData['hotelCheck'] === false) {
           if (resData['userCheck'] === true) {
             that.hotelInfo.status = 2
             that.hotelInfo.statusMessage += '用户已确认'
           } else {
             that.hotelInfo.status = 1
             that.hotelInfo.statusMessage += '待用户确认'
-            this.conferenceInfo.statusMessage += '待确认酒店信息 '
+            that.conferenceInfo.statusMessage += '待确认酒店信息 '
           }
           that.hotelInfo.checkinTime = new Date(resData['checkinTime'])
-          that.hotelInfo.roomNumber = new Date(resData['roomNumber'])
+          that.hotelInfo.roomNumber = (resData['roomNumber'])===null?'':resData['roomNumber']
           // 获取酒店信息
           that.$axios({
             method: 'post',
-            url: `${this.$baseURI}/api/hotel/get`,
+            url: `${that.$baseURI}/api/hotel/get`,
             data: {id: resData['hotelId']}
           }).then(function (response) {
-            let resData = response['data']
-            that.hotelInfo.hotelAccount = resData['accountId']
-            that.hotelInfo.hotelName = resData['name']
-            that.hotelInfo.hotelPhone = resData['telephone']
-            that.hotelInfo.hotelAddress = resData['address']
+            let resData2 = response['data']
+            that.hotelInfo.hotelAccount = resData2['accountId']
+            that.hotelInfo.hotelName = resData2['name']
+            that.hotelInfo.hotelPhone = resData2['telephone']
+            that.hotelInfo.hotelAddress = resData2['address']
           })
         } else {
           that.hotelInfo.status = 0
           that.hotelInfo.statusMessage += '待酒店接单'
-          this.conferenceInfo.statusMessage += '待酒店接单 '
+          that.conferenceInfo.statusMessage += '待酒店接单 '
         }
       })
     },
@@ -348,7 +362,7 @@ export default {
       let that = this
       this.$axios({
         method: 'post',
-        url: `${this.$baseURI}/api/conference/driverReservation`,
+        url: `${that.$baseURI}/api/conference/driverReservation/check`,
         data: {id: this.conferenceId}
       }).then(function (response) {
         if(response['data']['success']===true){
@@ -362,7 +376,7 @@ export default {
       let that = this
       this.$axios({
         method: 'post',
-        url: `${this.$baseURI}/api/conference/hotelReservation/check`,
+        url: `${that.$baseURI}/api/conference/hotelReservation/check`,
         data: {id: this.conferenceId}
       }).then(function (response) {
         if(response['data']['success']===true){
@@ -371,6 +385,14 @@ export default {
           that.$Message.error(response['data']['message'])
         }
       })
+    },
+    closeSendModal(fromChild){
+      this.openWriteMail=fromChild
+    },
+    sendMail(){
+      console.log(this.sendMailAccount.account);
+      this.$refs.fillAccount.autoFillAccount()
+      this.openWriteMail=true
     }
   }
 }

@@ -216,7 +216,6 @@ export default {
     sendMail(userId){
       this.sendMailAccount.account = userId;
       this.$refs.fillAccount.autoFillAccount()
-      console.log("传前"+this.sendMailAccount)
       this.openWriteMail=true
     }
   }

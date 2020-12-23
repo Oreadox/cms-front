@@ -44,12 +44,12 @@ export default {
       useInviteCode: false,
       formItem: {
         name: '',
-        introduction: '...',
+        introduction: '',
         address: '',
-        startTime: '2020-12-23',
-        endTime: '2020-12-25',
-        enrollTime: '2020-12-20',
-        inviteCode: '111123',
+        startTime: '',
+        endTime: '',
+        enrollTime: '',
+        inviteCode: '',
       },
       ControlStartTime: {
         disabledDate: (time)=>{

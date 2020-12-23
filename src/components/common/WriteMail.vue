@@ -47,17 +47,18 @@ export default {
   methods:{
     autoFillAccount(){
       {
+        let that = this
         var data = {
-          accountId:this.sendId.account,
+          accountId:that.sendId.account,
         }
         this.$axios(
             {
               method: 'post',
-              url: `${this.$baseURI}/api/message/getAccount`,
+              url: `${that.$baseURI}/api/message/getAccount`,
               data: data
             }
         ).then(function (response) {
-          this.formItem.senderAccount = response['data']['username']
+          that.formItem.senderAccount = response['data']['username']
         })
       }
     },
@@ -66,12 +67,12 @@ export default {
     },
     sendMessage(){
       {
-        var that = this
+        let that = this
         var data = {
           username:that.formItem.senderAccount,
           content:that.formItem.content,
         }
-        this.$axios(
+        that.$axios(
             {
               method: 'post',
               url: `${that.$baseURI}/api/message/sendByUsername`,

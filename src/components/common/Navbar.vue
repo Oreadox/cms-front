@@ -86,7 +86,7 @@ export default {
     },
     LogOut(){
       console.log("name")
-      window.sessionStorage.clear()
+      window.localStorage.clear()
       this.$Message.success('退出成功')
       this.$router.replace('/index')
     }

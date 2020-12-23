@@ -63,7 +63,7 @@ export default {
       this.$axios({
         method: 'post',
         url: `${that.$baseURI}/api/conference/chooseFleet`,
-        data: {id: that.conferenceId, hotelId: parseInt(that.fleetId) }
+        data: {id: that.conferenceId, fleetId: parseInt(that.fleetId) }
       }).then(function (response) {
         if(response['data']['success']===true){
           that.$Message.success("选择成功")

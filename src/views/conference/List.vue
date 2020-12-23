@@ -152,8 +152,8 @@ export default {
       }
       let startTime = new Date(v['startTime'])
       let endTime = new Date(v['endTime'])
-      newData.date = `${startTime.getFullYear()}/${startTime.getMonth()}/${startTime.getDate()}-`
-      newData.date += `${endTime.getFullYear()}/${endTime.getMonth()}/${endTime.getDate()}`
+      newData.date = `${startTime.getFullYear()}/${startTime.getMonth()+1}/${startTime.getDate()}-`
+      newData.date += `${endTime.getFullYear()}/${endTime.getMonth()+1}/${endTime.getDate()}`
       switch (v['progress']) {
         case "ENROLLMENT":
           newData.state = '报名阶段'
@@ -215,6 +215,7 @@ export default {
                     title: 'User Info',
                     content: `Name：${this.conference[index].name}<br>Age：${this.conference[index].address}<br>Address：${this.conference[index].startTime}`
                   })*/
+
       this.$router.push(`/conference/detail/${id}`)
     },
   }
