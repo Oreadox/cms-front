@@ -11,6 +11,10 @@
             <div slot="content">
               <Table :columns="this.columns" :data="this.receiveBox" :stripe="true"
                      highlight-row @on-row-click="openReceiveDetail">
+                <template slot-scope="{row}" slot="ifRead">
+                  <Tag color="primary" style="margin-right: 5px" v-if="!row.read">未读</Tag>
+                  <Tag color="success" style="margin-right: 5px" v-else-if="row.read">已读</Tag>
+                </template>
               </Table>
             </div>
           </Panel>
@@ -63,20 +67,8 @@ export default {
     return {
       columns: [
         {
-          key: 'senderId',
-          title: '用户编号',
-          maxWidth: 200
-        },
-        {
-          key: 'content',
-          title: '内容',
-          ellipsis:true,
-        },
-      ],
-      columns2: [
-        {
-          key: 'recipient',
-          title: '用户编号',
+          key: 'username',
+          title: '用户名',
           maxWidth: 200
         },
         {
@@ -89,7 +81,24 @@ export default {
           slot: 'ifRead',
           ellipsis:true,
           maxWidth: 100
-
+        },
+      ],
+      columns2: [
+        {
+          key: 'username',
+          title: '用户名',
+          maxWidth: 200
+        },
+        {
+          key: 'content',
+          title: '内容',
+          ellipsis:true,
+        },
+        {
+          title: '状态',
+          slot: 'ifRead',
+          ellipsis:true,
+          maxWidth: 100
         },
       ],
       receiveBox: [{
@@ -99,20 +108,6 @@ export default {
         sendTime: '2020-10-22',
         read: false,
       },
-        {
-          id:2,
-          senderId: 1001,
-          content:'asd',
-          sendTime: '2020-10-22',
-          read: false,
-        },
-        {
-          id:3,
-          senderId: 1002,
-          content:'asd',
-          sendTime: '2020-10-22',
-          read: false,
-        },
       ],
       sendBox: [{
         id:1,
@@ -144,17 +139,58 @@ export default {
         response['data'].forEach(v => {
           var newData = {
             id: v['id'],
-            sender:v['senderId'],
+            senderId:v['senderId'],
             content: v['content'],
             sendTime:v['sendTime'],
             read:v['read'],
+            username:v['']
           }
-          that.receiveBox.push(newData)
+          var receiveName = {
+            accountId: newData.senderId
+          };
+          that.$axios({
+            method: "post",
+            url: `${that.$baseURI}/api/message/getAccount`,
+            data: receiveName
+          }).then(function (res){
+            // console.log(res['data']['username'])
+            newData.username = res['data']['username']
+            that.receiveBox.push(newData)
+          });
         });
-      })
+      }).then(function (){
+        that.$axios({
+          method: 'post',
+          url: `${that.$baseURI}/api/message/read`,
+        }).then(function (response){
+          response['data'].forEach(v => {
+            var newData = {
+              id: v['id'],
+              senderId:v['senderId'],
+              content: v['content'],
+              sendTime:v['sendTime'],
+              read:v['read'],
+              username:v[''],
+            }
+            var receiveName = {
+              accountId: newData.senderId
+            };
+            that.$axios({
+              method: "post",
+              url: `${that.$baseURI}/api/message/getAccount`,
+              data: receiveName
+            }).then(function (res){
+              // console.log(res['data']['username'])
+              newData.username = res['data']['username']
+              that.receiveBox.push(newData)
+            });
+          })
+        })
+      });
+
       this.$axios({
         method: 'post',
-        url: `${this.$baseURI}/api/message/sent`,
+        url: `${that.$baseURI}/api/message/sent`,
       }).then(function (response) {
         that.sendBox = []
         response['data'].forEach(v => {
@@ -164,38 +200,49 @@ export default {
             content: v['content'],
             sendTime:v['sendTime'],
             read:v['read'],
-          }
-          that.sendBox.push(newData2)
+            username:v[''],
+          };
+          var sendId = {
+            accountId: newData2.recipient
+          };
+          that.$axios({
+            method: "post",
+            url: `${that.$baseURI}/api/message/getAccount`,
+            data: sendId
+          }).then(function (res){
+            // console.log(res['data']['username'])
+            newData2.username = res['data']['username']
+            that.sendBox.push(newData2)
+          });
+
         });
       })
     },
-    openReceiveDetail(currentRow){
+    openReceiveDetail(currentRow) {
       var that = this
       this.contentDetail = currentRow.content
       this.openModal = true
-      if (currentRow.read!==true){
+      if (currentRow.read !== true) {
         var data = {
           id: currentRow.id
         }
-        this.$axios({
+        console.log(data.id)
+        that.$axios({
           method: 'post',
-          url: `${this.$baseURI}/api/message/setRead`,
+          url: `${that.$baseURI}/api/message/setRead`,
           data: data,
         }).then(function (response) {
-          response['data'].forEach(v => {
-            var massage = {
-              success: v['success'],
-              message: v['massage']
-            }
-            if (Boolean(massage['success']) === true) {
-              that.$Message.success(massage['message'])
-            } else {
-              that.$Message.error(massage['message'])
-            }
-          });
-        })
+          var massage = {
+            success: response['data']['success'],
+            message: response['data']['massage'],
+          };
+          if (Boolean(massage['success']) !== true) {
+            that.$Message.error(massage['message'])
+          }
+        });
       }
     },
+
     openSendDetail(currentRow){
       this.contentDetail = currentRow.content
       this.openModal = true

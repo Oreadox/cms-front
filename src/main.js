@@ -30,8 +30,16 @@ router.beforeEach((to, from, next) => {
     if (to.meta.title) {
         document.title = to.meta.title
     }
+    ViewUI.LoadingBar.start();
     next()
 });
+router.afterEach(() => {
+    ViewUI.LoadingBar.finish();
+    // ...
+})
 
+/*router.afterEach(function (transition){
+    ViewUI.LoadingBar.finish()
+});*/
 
 // })
