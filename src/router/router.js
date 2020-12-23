@@ -50,7 +50,7 @@ export default new VueRouter({
             path: '/index',
             name: '主页',
             component: index,
-            meta: { title: 'CMS' },
+            meta: { title: 'Home-CMS-会务管理系统' },
         },
         {
             path: '/user/',
@@ -60,17 +60,17 @@ export default new VueRouter({
                 {
                     path: 'home',
                     component: userHome,
-                    meta: { title: 'userHome' },
+                    meta: { title: '用户主页-CMS-会务管理系统' },
                 },
                 {
                     path: 'profile',
                     component: userProfile,
-                    meta: { title: 'userProfile' },
+                    meta: { title: '个人信息-CMS-会务管理系统' },
                 },
                 {
                     path: 'message',
                     component: userMessage,
-                    meta: { title: 'userMessage' },
+                    meta: { title: '个人信箱-CMS-会务管理系统' },
                 },
             ]
         },
@@ -84,22 +84,22 @@ export default new VueRouter({
                 {
                     path: 'create',
                     component: conferenceCreate,
-                    meta: { title: 'conferenceCreate' },
+                    meta: { title: '创建会议-CMS-会务管理系统' },
                 },
                 {
                     path: 'list',
                     component: conferenceList,
-                    meta: { title: 'conferenceList' },
+                    meta: { title: '会议列表-CMS-会务管理系统' },
                 },
                 {
                     path: 'detail/:id',
                     component: conferenceDetail,
-                    meta: { title: 'conferenceDetail' },
+                    meta: { title: '会议详情-CMS-会务管理系统' },
                 },
                 {
                     path: 'participate/:id',
                     component: conferenceParticipate,
-                    meta: { title: 'conferenceParticipate' },
+                    meta: { title: '参加会议-CMS-会务管理系统' },
                 },
             ]
         },
@@ -113,12 +113,12 @@ export default new VueRouter({
                 {
                     path: 'reservation/',
                     component: hotelReservation,
-                    meta: { title: 'hotelReservation' },
+                    meta: { title: '酒店预订-CMS-会务管理系统' },
                 },
                 {
                     path: 'profile',
                     component: hotelProfile,
-                    meta: { title: 'hotelProfile' },
+                    meta: { title: '酒店信息-CMS-会务管理系统' },
                 },
                 // {
                 //     path: 'detail/:id',
@@ -128,7 +128,7 @@ export default new VueRouter({
                 {
                     path: 'message',
                     component: hotelMail,
-                    meta: { title: 'hotelMail' },
+                    meta: { title: '酒店信箱-CMS-会务管理系统' },
                 },
             ]
         },
@@ -146,22 +146,22 @@ export default new VueRouter({
                 {
                     path: 'profile',
                     component: driverProfile,
-                    meta: { title: 'driverProfile' },
+                    meta: { title: '司机-CMS-会务管理系统' },
                 },
                 {
                     path: 'reservation',
                     component: driverReservation,
-                    meta: { title: 'driverReservation' },
+                    meta: { title: '预约-CMS-会务管理系统' },
                 },
                 {
                     path: 'detail/:id',
                     component: driverDetail,
-                    meta: { title: 'driverDetail' },
+                    meta: { title: '详情-CMS-会务管理系统' },
                 },
                 {
                     path: 'message',
                     component: driverMail,
-                    meta: { title: 'driverMail' },
+                    meta: { title: '司机信箱-CMS-会务管理系统' },
                 },
             ]
         },
@@ -175,37 +175,37 @@ export default new VueRouter({
                 {
                     path: 'home',
                     component: adminHome,
-                    meta: { title: 'adminHome' },
+                    meta: { title: '管理员主页-CMS-会务管理系统' },
                 },
                 {
                     path: 'user',
                     component: adminUser,
-                    meta: { title: 'adminUser' },
+                    meta: { title: '用户管理-CMS-会务管理系统' },
                 },
                 {
                     path: 'conference',
                     component: adminConference,
-                    meta: { title: 'adminConference' },
+                    meta: { title: '会议管理-CMS-会务管理系统' },
                 },
                 {
                     path: 'hotel',
                     component: adminHotel,
-                    meta: { title: 'adminHotel' },
+                    meta: { title: '酒店管理-CMS-会务管理系统' },
                 },
                 {
                     path: 'driver',
                     component: adminDriver,
-                    meta: { title: 'adminDriver' },
+                    meta: { title: '司机管理-CMS-会务管理系统' },
                 },
                 {
                     path: 'personalInfo',
                     component: personalInfo,
-                    meta: { title: 'personalInfo' },
+                    meta: { title: '管理员信息-CMS-会务管理系统' },
                 },
                 {
                     path: 'message',
                     component: adminMail,
-                    meta: { title: 'adminMail' },
+                    meta: { title: '信箱-CMS-会务管理系统' },
                 },
             ]
         },
@@ -234,7 +234,7 @@ export default new VueRouter({
         {
             path: '/admin/system',
             component: adminSystem,
-            meta: { title: 'adminSystem' },
+            meta: { title: '高级模式-CMS-会务管理系统' },
         }
     ]
 })
