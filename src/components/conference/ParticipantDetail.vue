@@ -191,10 +191,11 @@ export default {
   },
   props: ['conferenceId'],
   created() {
-    this.loadConferenceInfo();
-    this.loadEnrollmentInfo();
+
   },
   mounted() {
+    this.loadConferenceInfo();
+    this.loadEnrollmentInfo();
     this.loadDriverInfo();
     this.loadHotelInfo();
     if (this.conferenceInfo.statusMessage === '') {
@@ -211,17 +212,12 @@ export default {
         data: {id: that.conferenceId}
       }).then(function (response) {
         let resData = response['data']
-        that.conferenceInfo = {
-          name: resData['name'],
-          startTime: resData['startTime'],
-          endTime: resData['endTime'],
-          detail: resData['detail'],
-          address: resData['address'],
-          enrollTime: new Date(resData['enrollTime']),
-          creatorName: '',
-          creatorPhone: '',
-          creatorEmail: '',
-        }
+        that.conferenceInfo.name = resData['name']
+        that.conferenceInfo.startTime = resData['startTime']
+        that.conferenceInfo.endTime = resData['endTime']
+        that.conferenceInfo.detail = resData['detail']
+        that.conferenceInfo.address = resData['address']
+        that.conferenceInfo.enrollTime = new Date(resData['enrollTime'])
         switch (resData['progress']) {
           case "ENROLLMENT":
             that.currentProgress = 0;
@@ -239,7 +235,7 @@ export default {
             that.currentProgress = 4;
             break;
         }
-        if (Date() < Date(resData['enrollTime'])) {
+        if (Date() < new Date(resData['enrollTime'])) {
           that.conferenceInfo.enrollStatus = 1
         } else {
           that.conferenceInfo.enrollStatus = 0
@@ -267,16 +263,13 @@ export default {
         data: {id: that.conferenceId}
       }).then(function (response) {
         let resData = response['data']
-        that.driverInfo = {
-          statusMessage: '行程信息: ',
-          tripNumber: resData['tripNumber'],
-          arriveTime: new Date(resData['arriveTime'])
-        }
-        that.hotelInfo = {
-          statusMessage: '住宿信息: ',
-          stayStartTime: new Date(resData['stayStart']),
-          stayEndTime: new Date(resData['stayEnd']),
-        }
+        that.driverInfo.statusMessage = '行程信息: '
+        that.driverInfo.tripNumber = resData['tripNumber']
+        that.driverInfo.arriveTime = new Date(resData['arriveTime'])
+        that.hotelInfo.statusMessage= '住宿信息: '
+        that.hotelInfo.stayStartTime= new Date(resData['stayStart'])
+        that.hotelInfo.stayEndTime= new Date(resData['stayEnd'])
+
       })
     },
     // 获取接车信息
