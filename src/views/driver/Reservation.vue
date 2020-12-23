@@ -146,11 +146,11 @@ export default {
     }
   },
   created() {
-    // this.initData()
+    this.initData()
   },
   methods: {
     initData() {
-      var that = this
+      let that = this
       this.$axios({
         method: 'post',
         url: `${this.$baseURI}/api/driver/reservation/unchecked`,
@@ -163,42 +163,42 @@ export default {
             name:v['name'],
             gender:v['gender'],
             telephone:v['telephone'],
-            arriveTime:new Date(v['arriveTime']),
+            arriveTime:v['arriveTime'],
             arriveSite:v['arriveSite'],
-            reserveTime:new Date(v['reserveTime']),
+            reserveTime:v['reserveTime'],
             driverCheck:v['driverCheck'],
             driverId:v['driverId'],
-            pickupTime:new Date(v['pickupTime']),
+            pickupTime:v['pickupTime'],
             pickupSite:v['pickupSite'],
             carNumber:v['carNumber'],
             userCheck:v['userCheck'],
           }
-          that.waitingConfirmConference.append(newData)
+          that.waitingConfirmConference.push(newData)
         });
       })
       this.$axios({
         method: 'post',
         url: `${this.$baseURI}/api/driver/reservation/checked`,
       }).then(function (response) {
-        that.processConference = []
+        that.processingConference = []
         response['data'].forEach(v => {
-          var newData = {
+          let newData = {
             conferenceId:v['conferenceId'],
             userId:v['userId'],
             name:v['name'],
             gender:v['gender'],
             telephone:v['telephone'],
-            arriveTime:new Date(v['arriveTime']),
+            arriveTime:v['arriveTime'],
             arriveSite:v['arriveSite'],
-            reserveTime:new Date(v['reserveTime']),
+            reserveTime:v['reserveTime'],
             driverCheck:v['driverCheck'],
             driverId:v['driverId'],
-            pickupTime:new Date(v['pickupTime']),
+            pickupTime:v['pickupTime'],
             pickupSite:v['pickupSite'],
             carNumber:v['carNumber'],
             userCheck:v['userCheck'],
           }
-          that.processConference.push(newData)
+          that.processingConference.push(newData)
         });
       })
       this.$axios({
@@ -213,12 +213,12 @@ export default {
             name:v['name'],
             gender:v['gender'],
             telephone:v['telephone'],
-            arriveTime:new Date(v['arriveTime']),
+            arriveTime:v['arriveTime'],
             arriveSite:v['arriveSite'],
-            reserveTime:new Date(v['reserveTime']),
+            reserveTime:v['reserveTime'],
             driverCheck:v['driverCheck'],
             driverId:v['driverId'],
-            pickupTime:new Date(v['pickupTime']),
+            pickupTime:v['pickupTime'],
             pickupSite:v['pickupSite'],
             carNumber:v['carNumber'],
             userCheck:v['userCheck'],

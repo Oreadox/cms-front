@@ -47,6 +47,7 @@ export default {
   methods:{
     autoFillAccount(){
       {
+        let that = this;
         var data = {
           accountId:this.sendId.account,
         }
@@ -57,7 +58,7 @@ export default {
               data: data
             }
         ).then(function (response) {
-          this.formItem.senderAccount = response['data']['username']
+          that.formItem.senderAccount = response['data']['username']
         })
       }
     },

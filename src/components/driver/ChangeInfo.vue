@@ -14,11 +14,11 @@
         </RadioGroup>
       </FormItem>
 
-      <FormItem label="联系电话" prop="phone">
+      <FormItem label="联系电话" prop="telephone">
         <Input type="text" v-model="formItem.telephone"/>
       </FormItem>
 
-      <FormItem label="身份证号" prop="idCard">
+      <FormItem label="身份证号" prop="residentIdNumber">
         <Input type="text" v-model="formItem.residentIdNumber"/>
       </FormItem>
 
@@ -37,10 +37,10 @@ export default {
   data() {
     return {
       formItem: {
-        name: '',
-        gender: 'MALE',
-        telephone: '',
-        residentIdNumber: '',
+        name: this.driverData.name,
+        gender: this.driverData.gender,
+        telephone: this.driverData.telephone,
+        residentIdNumber: this.driverData.residentIdNumber,
       },
 
       formValidate: {
