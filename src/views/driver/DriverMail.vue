@@ -3,8 +3,9 @@
 </template>
 <script>
 import CommonMail from "@/components/common/CommonMail";
+
 export default {
-name: "DriverMail",
+  name: "DriverMail",
   components: {CommonMail}
 }
 </script>
