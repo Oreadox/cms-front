@@ -24,7 +24,7 @@
           <Input type="textarea" v-model="formItem.detail" :readonly="true" style="width: 90%"></Input>
         </label>
       </FormItem>
-      <FormItem  style="text-alien: right">
+      <FormItem>
         <Button v-if="progress===1" type="primary" @click="submitSelection">选择此车队</Button>
       </FormItem>
     </Form>
