@@ -31,17 +31,21 @@
         </Collapse>
       </div>
     </Card>
+    <Modal style="padding: 0" width="45"
+           footer-hide
+           :mask-closable="false"
+           v-model="conferenceDetailModal">
+      <ConferenceDetail ref="detail" @gotoReservation="gotoReservation"></ConferenceDetail>
+    </Modal>
   </div>
 </template>
 
 <script>
-// import CollapseTransition from "@/plugins/CollapseTransition"
+import ConferenceDetail from "@/components/hotel/ConferenceDetail";
 
 export default {
   name: "reservation",
-  components: {
-    // 'CollapseTransition': CollapseTransition,
-  },
+  components: {ConferenceDetail},
   data() {
     return {
       columns: [
@@ -60,12 +64,12 @@ export default {
         },
 
         {
-          key: 'startStart',
+          key: 'stayStart',
           title: '住宿开始时间'
         },
 
         {
-          key: 'endTime',
+          key: 'stayEnd',
           title: '住宿结束时间'
         },
 
@@ -86,7 +90,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.show(params.row.id)
+                    this.gotoDetail(params.row.conferenceId, params.row.userId)
                   }
                 }
               }, '查看'),
@@ -94,149 +98,136 @@ export default {
           }
         },
       ],
-      waitingConfirmConference: [{
-        conferenceId:'',
-        userId:'123123',
-        name:'123',
-        gender:'',
-        residentIdNumber:'',
-        telephone:'',
-        startStart:'',
-        startEnd:'',
-        stayNeeds:'',
-        reserveTime:'',
-        hotelCheck:'',
-        checkinTime:'',
-        roomNumber:'',
-        userCheck:'',
-      }],
-      processingConference: [{
-        conferenceId:'',
-        userId:'',
-        name:'',
-        gender:'',
-        residentIdNumber:'',
-        telephone:'',
-        startStart:'',
-        startEnd:'',
-        stayNeeds:'',
-        reserveTime:'',
-        hotelCheck:'',
-        checkinTime:'',
-        roomNumber:'',
-        userCheck:'',
-      }],
-      endedConference: [{
-        hotelId:'',
-        conferenceId:'',
-        userId:'',
-        name:'',
-        gender:'',
-        residentIdNumber:'',
-        telephone:'',
-        startStart:'',
-        startEnd:'',
-        stayNeeds:'',
-        reserveTime:'',
-        hotelCheck:'',
-        checkinTime:'',
-        roomNumber:'',
-        userCheck:'',
-      }],
-      showingPanel: ["waitingConfirm",'ended', 'processing'],
+      waitingConfirmIndex: {},
+      processingIndex: {},
+      endedIndex: {},
+      waitingConfirmConference: [],
+      processingConference: [],
+      endedConference: [],
+      showingPanel: ["waitingConfirm", 'ended', 'processing'],
+      conferenceDetailModal: false,
     }
   },
   created() {
     this.initData()
   },
   methods: {
+    getFormattedDate(dateString) {
+      let date = new Date(dateString)
+      let month = date.getMonth() + 1
+      if (month < 10) {
+        month = "0" + month
+      }
+      return `${date.getFullYear()}-${month}-${date.getDate()}`
+    },
+    getFormattedDateTime(dateString) {
+      let date = new Date(dateString)
+      let month = date.getMonth() + 1
+      if (month < 10) {
+        month = "0" + month
+      }
+      return `${date.getFullYear()}-${month}-${date.getDate()} ` +
+          `${date.getHours()}:${date.getMinutes()}`
+    },
     initData() {
       var that = this
       this.$axios({
         method: 'post',
         url: `${this.$baseURI}/api/hotel/reservation/unchecked`,
       }).then(function (response) {
-        // that.waitingConfirmConference = []
+        that.waitingConfirmConference = []
         response['data'].forEach(v => {
           var newData = {
-            conferenceId:Number(v['conferenceId']),
-            userId:Number(v['userId']),
-            name:v['name'],
-            gender:v['gender'],
-            residentIdNumber:v['residentIdNumber'],
-            telephone:v['telephone'],
-            startStart:new Date(v['startStart']),
-            startEnd:new Date(v['startEnd']),
-            stayNeeds:new Date(v['stayNeeds']),
-            reserveTime:new Date(v['reserveTime']),
-            hotelCheck:v['hotelCheck'],
-            checkinTime:new Date(v['checkinTime']),
-            roomNumber:v['roomNumber'],
-            userCheck:v['userCheck'],
+            conferenceId: v['conferenceId'],
+            userId: v['userId'],
+            name: v['name'],
+            gender: v['gender'],
+            residentIdNumber: v['residentIdNumber'],
+            telephone: v['telephone'],
+            stayStart: that.getFormattedDate(v['stayStart']),
+            stayEnd: that.getFormattedDate(v['stayEnd']),
+            stayNeeds: v['stayNeeds'],
+            reserveTime: that.getFormattedDateTime(v['reserveTime']),
+            hotelCheck: v['hotelCheck'],
+            checkinTime: v['checkinTime'] == null ? '' : that.getFormattedDateTime(v['checkinTime']),
+            roomNumber: v['roomNumber'],
+            userCheck: v['userCheck'],
           }
-          that.waitingConfirmConference.append(newData)
+          that.waitingConfirmConference.push(newData)
         });
       })
       this.$axios({
         method: 'post',
         url: `${this.$baseURI}/api/hotel/reservation/checked`,
       }).then(function (response) {
-        // that.processConference = []
+        that.processingConference = []
         response['data'].forEach(v => {
           var newData = {
-            conferenceId:Number(v['conferenceId']),
-            userId:Number(v['userId']),
-            name:v['name'],
-            gender:v['gender'],
-            residentIdNumber:v['residentIdNumber'],
-            telephone:v['telephone'],
-            startStart:new Date(v['startStart']),
-            startEnd:new Date(v['startEnd']),
-            stayNeeds:new Date(v['stayNeeds']),
-            reserveTime:new Date(v['reserveTime']),
-            hotelCheck:v['hotelCheck'],
-            checkinTime:new Date(v['checkinTime']),
-            roomNumber:v['roomNumber'],
-            userCheck:v['userCheck'],
+            conferenceId: v['conferenceId'],
+            userId: v['userId'],
+            name: v['name'],
+            gender: v['gender'],
+            residentIdNumber: v['residentIdNumber'],
+            telephone: v['telephone'],
+            stayStart: that.getFormattedDate(v['stayStart']),
+            stayEnd: that.getFormattedDate(v['stayEnd']),
+            stayNeeds: v['stayNeeds'],
+            reserveTime: that.getFormattedDateTime(v['reserveTime']),
+            hotelCheck: v['hotelCheck'],
+            checkinTime: v['checkinTime'] == null ? '' : that.getFormattedDateTime(v['checkinTime']),
+            roomNumber: v['roomNumber'],
+            userCheck: v['userCheck'],
           }
-          that.processConference.push(newData)
+          that.processingConference.push(newData)
         });
       })
       this.$axios({
-        method:'post',
-        url:`${this.$baseURI}/api/hotel/reservation/ended`,
+        method: 'post',
+        url: `${this.$baseURI}/api/hotel/reservation/ended`,
       }).then(function (response) {
-        // that.endedConference = []
+        that.endedConference = []
         response['data'].forEach(v => {
           var newData = {
-            hotelId:Number(v['conferenceId']),
-            conferenceId:Number(v['conferenceId']),
-            userId:Number(v['userId']),
-            name:v['name'],
-            gender:v['gender'],
-            residentIdNumber:v['residentIdNumber'],
-            telephone:v['telephone'],
-            startStart:new Date(v['startStart']),
-            startEnd:new Date(v['startEnd']),
-            stayNeeds:new Date(v['stayNeeds']),
-            reserveTime:new Date(v['reserveTime']),
-            hotelCheck:v['hotelCheck'],
-            checkinTime:new Date(v['checkinTime']),
-            roomNumber:v['roomNumber'],
-            userCheck:v['userCheck'],
+            conferenceId: v['conferenceId'],
+            userId: v['userId'],
+            name: v['name'],
+            gender: v['gender'],
+            residentIdNumber: v['residentIdNumber'],
+            telephone: v['telephone'],
+            stayStart: that.getFormattedDate(v['stayStart']),
+            stayEnd: that.getFormattedDate(v['stayEnd']),
+            stayNeeds: v['stayNeeds'],
+            reserveTime: that.getFormattedDateTime(v['reserveTime']),
+            hotelCheck: v['hotelCheck'],
+            checkinTime: v['checkinTime'] == null ? '' : that.getFormattedDateTime(v['checkinTime']),
+            roomNumber: v['roomNumber'],
+            userCheck: v['userCheck'],
           }
           that.endedConference.push(newData)
         });
       })
     },
-    show(id) {
-      /*            this.$Modal.info({
-                    title: 'User Info',
-                    content: `Name：${this.conference[index].name}<br>Age：${this.conference[index].address}<br>Address：${this.conference[index].startTime}`
-                  })*/
-      this.$router.push(`/hotel/detail/${id}`)
+    gotoDetail(conferenceId, userId) {
+      for(let index in this.waitingConfirmConference) {
+        if (this.waitingConfirmConference[index].conferenceId === conferenceId &&
+            this.waitingConfirmConference[index].userId === userId) {
+          this.$refs.detail.setData(this.waitingConfirmConference[index], false)
+          this.conferenceDetailModal = true
+          return;
+        }
+      }
+      let otherConference = this.processingConference.concat(this.endedConference)
+      for(let index in otherConference){
+        if(otherConference[index].conferenceId===conferenceId&&otherConference[index].userId===userId){
+          this.$refs.detail.setData(otherConference[index], true)
+          this.conferenceDetailModal = true
+        }
+      }
     },
-
+    gotoReservation(child) {
+      this.conferenceDetailModal = child;
+      this.initData()
+    },
   }
 }
 </script>
@@ -256,5 +247,9 @@ export default {
 
 >>> .ivu-table-overflowX {
   overflow-x: hidden;
+}
+
+>>> .ivu-modal-body {
+  padding: 0px;
 }
 </style>

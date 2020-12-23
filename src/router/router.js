@@ -16,7 +16,7 @@ const conferenceDetail = () => import('@/views/conference/Detail')
 const conferenceParticipate = () => import('@/views/conference/Participate')
 
 const hotelIndex = () => import('@/views/hotel/Index')
-const hotelDetail = () => import('@/views/hotel/Detail')
+// const hotelDetail = () => import('@/views/hotel/Detail')
 const hotelProfile = () => import('@/views/hotel/Profile')
 const hotelReservation = () => import('@/views/hotel/Reservation')
 const hotelMail = ()=> import('@/views/hotel/HotelMail')
@@ -120,11 +120,11 @@ export default new VueRouter({
                     component: hotelProfile,
                     meta: { title: 'hotelProfile' },
                 },
-                {
-                    path: 'detail/:id',
-                    component: hotelDetail,
-                    meta: { title: 'hotelDetail' },
-                },
+                // {
+                //     path: 'detail/:id',
+                //     component: hotelDetail,
+                //     meta: { title: 'hotelDetail' },
+                // },
                 {
                     path: 'message',
                     component: hotelMail,
