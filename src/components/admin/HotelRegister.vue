@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 0">
-    <h2 class="center">注册</h2>
+    <h2 class="center" style="margin-bottom: 5%">添加酒店</h2>
     <Form hide-required-mark ref="formItem" :model="formItem" :rules="fromValidate" :label-width="80">
       <FormItem label="用户名" prop="username">
         <Input v-model="formItem.username" placeholder="长度为2-16的字符"></Input>
@@ -59,7 +59,8 @@ export default {
               setTimeout(function(){
                 that.$emit('setRegisterModal', false);
                 that.resetForm(name)
-              }, 1500);
+              }, 500);
+              that.$router.go(0)
             } else {
               that.$Message.error(response['data']['message'])
             }

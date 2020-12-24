@@ -31,6 +31,7 @@ export default {
         return callback()
       }
     };
+    // TODO 密码修改
     return {
       formItem: {
         oldPassword:"",
@@ -60,6 +61,7 @@ export default {
       this.$emit('gotoProfile', false);
     },
     submitForm(){
+
       console.log("sd")
 
     },

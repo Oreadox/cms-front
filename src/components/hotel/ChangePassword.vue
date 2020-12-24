@@ -78,6 +78,7 @@ export default {
           }).then(function (response) {
             if (response['data']['success'] === true) {
               that.$Message.success("修改成功");
+              that.$router.go(0) // TODO 关闭弹窗
               that.$emit("gotoProfile", false);
             } else {
               that.$Message.error(response['data']['message']);

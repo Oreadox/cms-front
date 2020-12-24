@@ -52,6 +52,7 @@ export default {
       }
     }
   },
+  // TODO 这里validate无效
   methods:{
     resetForm(name) {
       this.$refs[name].resetFields();
