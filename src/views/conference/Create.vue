@@ -81,8 +81,11 @@ export default {
     submitForm(){
       let that = this
       let canSubmit = 0
-      for (var itemKey in Object.values(that.formItem))
-        if (itemKey){
+      let arrayObject = Object.values(that.formItem)
+      console.log(arrayObject)
+      arrayObject.pop()
+      for (var itemKey in arrayObject)
+        if (arrayObject[itemKey]===""){
           canSubmit++
         }
       if (canSubmit===0) {

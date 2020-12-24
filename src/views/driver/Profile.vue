@@ -103,8 +103,8 @@ export default {
           }
       ).then(function (response) {
         var respData = response["data"]
-        that.driverData.account=respData['account']
-        that.driverData.password=respData['password']
+        that.driverData.account=respData['accountId']
+        // that.driverData.password=respData['password']
         that.driverData.name=respData['name']
         that.driverData.gender=respData['gender']==='MALE'?'男':'女'
         that.driverData.telephone=respData['telephone']
