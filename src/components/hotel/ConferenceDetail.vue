@@ -77,6 +77,7 @@ export default {
     }
     return {
       formItem: {
+        accountId:'',
         conferenceId: '',
         userId: '',
         name: '',
@@ -109,6 +110,7 @@ export default {
   },
   methods: {
     setData(conferenceData, checked) {
+      this.formItem.accountId = conferenceData.accountId
       this.formItem.conferenceId = conferenceData.conferenceId
       this.formItem.userId = conferenceData.userId
       this.formItem.name = conferenceData.name
