@@ -85,7 +85,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.show(params.index)
+                    console.log(params.row)
                   }
                 }
               }, '会议详情'),

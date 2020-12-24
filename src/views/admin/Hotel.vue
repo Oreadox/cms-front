@@ -65,7 +65,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.show(params.index)
+                    console.log(params.row)
                   }
                 }
               }, '酒店详情'),

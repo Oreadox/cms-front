@@ -18,10 +18,13 @@
       <FleetRegister @setRegisterModal=setRegisterModal></FleetRegister>
     </Modal>
     <Modal style="padding: 20px"
+           width="80"
            footer-hide
            :mask-closable="false"
            v-model="driverDetailModal">
-      <DriverDetail @setdriverDetailModal=setDriverDetailModal
+      <DriverDetail @setdriverDetailModal="setDriverDetailModal"
+                    @reloadData="reloadData"
+                    ref="driverDetail"
                     :fleetInfo="showingFleetInfo"></DriverDetail>
     </Modal>
   </div>
@@ -69,7 +72,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.show(params.index)
+                    this.show(params.index)   // TODO: 反正没写
                   }
                 }
               }, '车队详情'),
@@ -111,6 +114,10 @@ export default {
     this.loadFleetData()
   },
   methods: {
+    reloadData(){
+      this.loadFleetData()
+      this.driverDetailModal = false
+    },
     loadFleetData() {
       let that = this
       this.$axios({
@@ -120,17 +127,18 @@ export default {
         that.allFleetData = []
         response['data'].forEach(v => {
           let newData = {
-            fleetId: v['fleetId'],
+            fleetId: v['id'],
             name: v['name'],
             driverAmount: v['driverAmount']
           }
           that.allFleetData.push(newData)
           that.$axios({
             method: 'post',
-            url: `${this.$baseURI}/api/admin/driver/getAll`,
-            data: {fleetId: v['fleetId']}
+            url: `${that.$baseURI}/api/admin/driver/getAll`,
+            data: {fleetId: v['id']}
           }).then(function (response) {
-            that.driverData[v['fleetId']] = []
+            let id = v['id']
+            that.driverData[id] = []
             response['data'].forEach(v => {
               let newDriverData = {
                 accountId: v['accountId'],
@@ -138,7 +146,7 @@ export default {
                 driverId: v['driverId'],
                 name: v['name']
               }
-              that.driverData[v['id']].push(newDriverData)
+              that.driverData[id].push(newDriverData)
             })
           })
         })
@@ -147,7 +155,7 @@ export default {
     },
     showDriverInfo(fleetId) {
       this.showingFleetInfo.fleetId = fleetId
-      this.showingFleetInfo.driverData = this.driverData[fleetId].split(0)
+      this.showingFleetInfo.driverData = this.driverData[fleetId].slice(0)
       this.driverDetailModal = true
     },
     changePrePageNum(num) {
@@ -162,6 +170,9 @@ export default {
     },
     setDriverDetailModal(fromChild){
       this.driverDetailModal = fromChild;
+    },
+    show(id){
+      console.log(id)
     }
   },
   watch: {

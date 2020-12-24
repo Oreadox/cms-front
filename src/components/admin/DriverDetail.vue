@@ -51,22 +51,9 @@ export default {
           title: '操作',
           key: 'operation',
           align: 'center',
+          width: '200',
           render: (h, params) => {
             return h('div', [
-              h('Button', {
-                props: {
-                  type: 'error',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.deleteDriver(params.row.driverId)
-                  }
-                }
-              }, '删除账号'),
               h('Button', {
                 props: {
                   type: 'primary',
@@ -77,7 +64,7 @@ export default {
                 },
                 on: {
                   click: () => {
-
+                    console.log(params.row)
                   }
                 }
               }, '用户详情'),
@@ -105,20 +92,22 @@ export default {
       registerModal: false,
       registerInfo: {
         fleetId: 0,
-      }
+      },
+      loaded: true,
     }
   },
   props: ['fleetInfo'],
   methods: {
-    deleteDriver(driverId) {
-      console.log(driverId)
-    },
     showRegisterModal() {
       this.registerInfo.fleetId = this.fleetInfo.fleetId
       this.registerModal = true
     },
     setRegisterModal(fromChild) {
       this.registerModal = fromChild;
+      let that = this
+      setTimeout(function(){
+        that.$emit("reloadData")
+      }, 300);
     },
   },
   watch: {
