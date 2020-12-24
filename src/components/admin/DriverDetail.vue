@@ -15,15 +15,31 @@
       <DriverRegister @setRegisterModal=setRegisterModal
                       :registerInfo="registerInfo"></DriverRegister>
     </Modal>
+    <Modal
+        footer-hide
+        :mask-closable="false"
+        v-model="changePasswordModal">
+      <ChangeDriverPassword :driver-id="this.changePasswordAccount.account"  @closeChangeModal="closeChangeModal"></ChangeDriverPassword>
+    </Modal>
+    <Modal
+        style="padding: 20px"
+        footer-hide
+        v-model="openWriteMail">
+      <div style="padding: 5%">
+        <WriteMail ref="fillAccount" :send-id="this.sendMailAccount" @closeSendModal="closeSendModal"></WriteMail>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
 import DriverRegister from "@/components/admin/DriverRegister";
+import WriteMail from "@/components/common/WriteMail";
+import ChangeDriverPassword from "@/components/admin/ChangeDriverPassword";
 
 export default {
   name: "DriverDetail",
-  components: {DriverRegister},
+  components: {WriteMail,DriverRegister,ChangeDriverPassword},
   data() {
     return {
       columns: [
@@ -57,7 +73,7 @@ export default {
           key: 'operation',
           align: 'center',
           width: '200',
-          render: (h,) => {
+          render: (h,params) => {
             return h('div', [
               h('Button', {
                 props: {
@@ -69,7 +85,21 @@ export default {
                 },
                 on: {
                   click: () => {
-
+                    this.changePassword(params.row.driverId)
+                  }
+                }
+              }, '修改密码'),
+              h('Button', {
+                props: {
+                  type: 'primary',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    this.sendMail(params.row.accountId)
                   }
                 }
               }, '发信息'),
@@ -85,6 +115,10 @@ export default {
         fleetId: 0,
       },
       loaded: true,
+      openWriteMail: false,
+      sendMailAccount: {account: ''},
+      changePasswordAccount:{account: ''},
+      changePasswordModal: false,
     }
   },
   props: ['fleetInfo'],
@@ -99,6 +133,23 @@ export default {
       setTimeout(function(){
         that.$emit("reloadData")
       }, 300);
+    },
+    sendMail(accountId) {
+      this.sendMailAccount.account = accountId;
+      console.log(this.sendMailAccount.account)
+      this.$refs.fillAccount.autoFillAccount()
+      this.openWriteMail = true
+    },
+    closeSendModal(fromChild) {
+      this.openWriteMail = fromChild
+    },
+    changePassword(userId){
+      this.changePasswordModal = true
+      this.changePasswordAccount.account = userId;
+      console.log(this.changePasswordAccount.account);
+    },
+    closeChangeModal(fromChild){
+      this.changePasswordModal=fromChild
     },
   },
   watch: {
@@ -126,6 +177,7 @@ export default {
           }
         })
       }, 100)
+
     }
   },
 }

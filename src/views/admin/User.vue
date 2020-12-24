@@ -33,15 +33,22 @@
         <WriteMail ref="fillAccount" :send-id="this.sendMailAccount" @closeSendModal="closeSendModal"></WriteMail>
       </div>
     </Modal>
+    <Modal
+        footer-hide
+        :mask-closable="false"
+        v-model="changePasswordModal">
+      <ChangeUserPassword :user-id="this.changePasswordAccount.account"  @closeChangeModal="closeChangeModal"></ChangeUserPassword>
+    </Modal>
   </div>
 </template>
 
 <script>
 import WriteMail from "@/components/common/WriteMail";
+import ChangeUserPassword from "@/components/admin/ChangeUserPassword";
 
 export default {
   name: "User",
-  components: {WriteMail},
+  components: {WriteMail,ChangeUserPassword},
   data() {
     return {
       driveFinish: false,
@@ -103,7 +110,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.show(params.index)
+                    this.changePassword(params.row.userId)
                   }
                 }
               }, '修改密码'),
@@ -140,6 +147,8 @@ export default {
       deleteUserModal: false,
       openWriteMail: false,
       sendMailAccount: {account: ''},
+      changePasswordAccount:{account: ''},
+      changePasswordModal: false,
     }
   },
   created() {
@@ -210,6 +219,14 @@ export default {
     },
     closeSendModal(fromChild) {
       this.openWriteMail = fromChild
+    },
+    changePassword(userId){
+      this.changePasswordModal = true
+      this.changePasswordAccount.account = userId;
+      console.log(this.changePasswordAccount.account);
+    },
+    closeChangeModal(fromChild){
+      this.changePasswordModal=fromChild
     },
   },
   watch: {
