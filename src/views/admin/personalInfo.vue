@@ -46,10 +46,10 @@ export default {
   data() {
     return {
       adminData: {
-        account:'xxx',
-        password:'xxx',
-        name:'xxx',
-        telephone:'12312312411',
+        account:'',
+        password:'●●●●●●●●●●',
+        name:'',
+        telephone:'',
         email:'',
       },
       listItem: {
@@ -100,8 +100,7 @@ export default {
           }
       ).then(function (response) {
         var respData = response["data"]
-        that.adminData.account=respData['account']
-        that.adminData.password=respData['password']
+        that.adminData.account=respData['accountId']
         that.adminData.name=respData['name']
         that.adminData.telephone=respData['telephone']
         that.adminData.email=respData['email']

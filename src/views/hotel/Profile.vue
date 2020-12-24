@@ -45,7 +45,7 @@ export default {
     return {
       hotelData: {
         account: 'xxx',
-        password: '*********',
+        password: '●●●●●●●●●●',
         name: 'xxx',
         phone: 'xxx',
         address: 'xxx',

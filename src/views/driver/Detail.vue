@@ -5,7 +5,7 @@
         <FormItem label="姓名">
           {{ userFormItem.name }}
           <Button style="margin-left: 5%" type="primary"
-                  @click="sendMail(userFormItem.userId)">
+                  @click="sendMail(userFormItem.accountId)">
             <Icon type="ios-mail" size=24 />
           </Button>
         </FormItem>
@@ -66,6 +66,7 @@ export default {
       id: this.$route.params.id,
 
       userFormItem: {
+        accountId:this.$route.query.data.accountId,
         name: this.$route.query.data.name,
         conferenceId: this.$route.query.data.conferenceId,
         userId: this.$route.query.data.userId,
@@ -90,7 +91,7 @@ export default {
         carNumber: this.$route.query.data.carNumber,
       },
       openWriteMail: false,
-      sendMailAccount: {account: '1233'},
+      sendMailAccount: {account: ''},
     }
   },
   mounted() {
@@ -122,8 +123,8 @@ export default {
       })
     },
 
-    sendMail(userId) {
-      this.sendMailAccount.account = userId;
+    sendMail(accountId) {
+      this.sendMailAccount.account = accountId;
       console.log(this.sendMailAccount.account)
       this.$refs.fillAccount.autoFillAccount()
       this.openWriteMail = true
