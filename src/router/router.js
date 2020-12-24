@@ -25,7 +25,7 @@ const driverIndex = () => import('@/views/driver/Index')
 // const driverHome = () => import('@/views/driver/Home')
 const driverProfile = () => import('@/views/driver/Profile')
 const driverReservation = () => import('@/views/driver/Reservation')
-const driverDetail = () => import('@/views/driver/Detail')
+// const driverDetail = () => import('@/views/driver/Detail')
 const driverMail = ()=> import('@/views/driver/DriverMail')
 
 const adminIndex = () => import("@/views/admin/Index")
@@ -153,11 +153,11 @@ export default new VueRouter({
                     component: driverReservation,
                     meta: { title: '预约--会务管理系统' },
                 },
-                {
-                    path: 'detail/:id',
-                    component: driverDetail,
-                    meta: { title: '详情--会务管理系统' },
-                },
+                // {
+                //     path: 'detail/:id',
+                //     component: driverDetail,
+                //     meta: { title: '详情--会务管理系统' },
+                // },
                 {
                     path: 'message',
                     component: driverMail,
