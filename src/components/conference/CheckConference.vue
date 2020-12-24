@@ -30,7 +30,7 @@
       </FormItem>
       <FormItem label="报名截止时间">
         <DatePicker v-model="conferenceInfo.enrollTime" :readonly="true"></DatePicker>
-        <Tag size="large" style="margin-left: 1vw" color="primary" v-if="conferenceInfo.enrollStatus===1">
+        <Tag size="large" style="margin-left: 1vw" color="primary" v-if="conferenceInfo.progress==='ENROLLMENT'">
           进行中
         </Tag>
         <Tag size="large" style="margin-left: 1vw" v-else>
@@ -58,6 +58,7 @@ export default {
         startTime: '',
         endTime: '',
         enrollTime: '',
+        progress: ''
       },
     }
   },
@@ -90,6 +91,7 @@ export default {
           detail: resData['detail'],
           address: resData['address'],
           enrollTime: new Date(resData['enrollTime']),
+          progress: resData['progress'],
           creatorName: '',
           creatorPhone: '',
           creatorEmail: '',

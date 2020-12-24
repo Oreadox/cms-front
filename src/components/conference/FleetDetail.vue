@@ -24,9 +24,9 @@
           <Input type="textarea" v-model="formItem.detail" :readonly="true" style="width: 90%"></Input>
         </label>
       </FormItem>
-      <FormItem>
-        <Button v-if="progress===1" type="primary" @click="submitSelection">选择此车队</Button>
-      </FormItem>
+<!--      <FormItem>
+        <Button v-if="progress<=1" type="primary" @click="submitSelection">选择此车队</Button>
+      </FormItem>-->
     </Form>
   </div>
 </template>
@@ -49,30 +49,13 @@ export default {
   },
   props: [],
   methods: {
-    loadData(data, conferenceId, progress, fleetId){
+    loadData(data, progress){
       this.formItem = data
-      this.conferenceId = conferenceId
       this.progress = progress
-      this.fleetId = fleetId
     },
     arrowBack() {
       this.$emit('setCheckFleet', false);
     },
-    submitSelection(){
-      let that = this
-      this.$axios({
-        method: 'post',
-        url: `${that.$baseURI}/api/conference/chooseFleet`,
-        data: {id: that.conferenceId, fleetId: parseInt(that.fleetId) }
-      }).then(function (response) {
-        if(response['data']['success']===true){
-          that.$Message.success("选择成功")
-          that.arrowBack()
-        } else {
-          that.$Message.error(response['data']['message'])
-        }
-      })
-    }
   }
 }
 </script>

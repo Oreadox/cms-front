@@ -12,7 +12,7 @@
       <Step content="会议进行"></Step>
       <Step content="会议结束"></Step>
     </Steps>
-    <Button type="primary" style="margin: 2vw 1vw 1vw 0" v-if="currentProgress===1" @click="confirmConference">
+    <Button type="primary" style="margin: 2vw 1vw 1vw 0" v-if="currentProgress<=1" @click="confirmConference">
       确认信息
     </Button>
     <Form label-colon :label-width="120" :model="formItem">
@@ -37,13 +37,13 @@
       </FormItem>
       <FormItem label="酒店管理">
         <Select class="input_size" v-model="formItem.hotelId" :value="formItem.hotelId" filterable>
-          <Option v-for="(value, key) in hotelList" :value="key" :key="key">{{ value.name }}</Option>
+          <Option :on-select="selectHotel(conferenceId, formItem.hotelId)" v-for="(value, key) in hotelList" :value="key" :key="key">{{ value.name }} </Option>
         </Select>
         <Button style="margin-left: 1vw" type="primary" @click="checkHotel">详情</Button>
       </FormItem>
       <FormItem label="车队管理">
         <Select class="input_size" v-model="formItem.fleetId" :value="formItem.fleetId" filterable>
-          <Option v-for="(value, key) in fleetList" :value="key" :key="key">{{ value.name }}</Option>
+          <Option :on-select="selectDriver(conferenceId, formItem.fleetId)" v-for="(value, key) in fleetList" :value="key" :key="key">{{ value.name }}</Option>
         </Select>
         <Button style="margin-left: 1vw" type="primary" @click="checkFleet">详情</Button>
       </FormItem>
@@ -55,19 +55,19 @@
            :mask-closable="false"
            v-model="participantModal">
       <Participants style="height:40vw;overflow-y:auto;overflow-x:hidden;" @setCheckParticipants=setCheckParticipants
-                    :participantsInfo="participantsInfo" :conferenceId="conferenceId"></Participants>
+                    :participantsInfo="participantsInfo" :conferenceId="conferenceId" :currentProgress="currentProgress"></Participants>
     </Modal>
     <Modal style="padding: 20px" width="40"
            footer-hide
            :mask-closable="false"
            v-model="hotelModal">
-      <HotelDetail ref="hotel" @setCheckHotel=setCheckHotel></HotelDetail>
+      <HotelDetail ref="hotel"></HotelDetail>
     </Modal>
     <Modal style="padding: 20px" width="40"
            footer-hide
            :mask-closable="false"
            v-model="fleetModal">
-      <FleetDetail ref="fleet" @setCheckFleet=setCheckFleet></FleetDetail>
+      <FleetDetail ref="fleet"></FleetDetail>
     </Modal>
   </div>
 </template>
@@ -266,25 +266,48 @@ export default {
     checkHotel() {
       if (this.formItem.hotelId != null) {
         this.$refs.hotel.loadData(this.hotelList[this.formItem.hotelId]
-            , this.conferenceId, this.currentProgress, this.formItem.hotelId)
+            , this.currentProgress)
         this.hotelModal = true
       }
     },
     checkFleet() {
       if (this.formItem.fleetId != null) {
         this.$refs.fleet.loadData(this.fleetList[this.formItem.fleetId]
-            , this.conferenceId, this.currentProgress, this.formItem.fleetId)
+            , this.currentProgress)
         this.fleetModal = true
       }
     },
+    selectDriver(conferenceId, fleetId){
+      let that = this
+      this.$axios({
+        method: 'post',
+        url: `${that.$baseURI}/api/conference/chooseFleet`,
+        data: {id: conferenceId, fleetId: fleetId }
+      }).then(function (response) {
+        if(response['data']['success']===true){
+          that.$Message.success("选择车队成功")
+        } else {
+          that.$Message.error(response['data']['message'])
+        }
+      })
+
+    },
+    selectHotel(conferenceId, hotelId){
+      let that = this
+      this.$axios({
+        method: 'post',
+        url: `${that.$baseURI}/api/conference/chooseHotel`,
+        data: {id: conferenceId, hotelId: hotelId }
+      }).then(function (response) {
+        if(response['data']['success']===true){
+          that.$Message.success("选择酒店成功")
+        } else {
+          that.$Message.error(response['data']['message'])
+        }
+      })
+    },
     setCheckParticipants(fromChild) {
       this.participantModal = fromChild;
-    },
-    setCheckHotel(fromChild) {
-      this.hotelModal = fromChild;
-    },
-    setCheckFleet(fromChild) {
-      this.fleetModal = fromChild;
     },
   }
 }

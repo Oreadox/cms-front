@@ -1,9 +1,6 @@
 <template>
   <div>
-    <a style="text-indent: 2em;" @click="arrowBack">
-      <Icon type="ios-arrow-back"></Icon>
-      返回</a>
-    <Form :model="formItem" label-colon :label-width="120" style="margin-top: 5%; ">
+    <Form :model="formItem" label-colon :label-width="80" style="margin-top: 5%; ">
       <FormItem label="名称">
         <label>
           <Input type="text" v-model="formItem.name" :readonly="true" style="width: 90%"></Input>
@@ -30,9 +27,9 @@
           <Input type="textarea" v-model="formItem.detail" :readonly="true" style="width: 90%"></Input>
         </label>
       </FormItem>
-      <FormItem>
-        <Button v-if="progress===1" type="primary" @click="submitSelection">选择此酒店</Button>
-      </FormItem>
+<!--      <FormItem>
+        <Button v-if="progress<=1" type="primary" @click="submitSelection">选择此酒店</Button>
+      </FormItem>-->
     </Form>
   </div>
 </template>
@@ -56,30 +53,10 @@ export default {
   },
   props: [],
   methods: {
-    loadData(data, conferenceId, progress, hotelId){
+    loadData(data, progress){
       this.formItem = data
-      this.conferenceId = conferenceId
       this.progress = progress
-      this.hotelId = hotelId
     },
-    arrowBack() {
-      this.$emit('setCheckHotel', false);
-    },
-    submitSelection(){
-      let that = this
-      this.$axios({
-        method: 'post',
-        url: `${that.$baseURI}/api/conference/chooseHotel`,
-        data: {id: that.conferenceId, hotelId: parseInt(that.hotelId) }
-      }).then(function (response) {
-        if(response['data']['success']===true){
-          that.$Message.success("选择成功")
-          that.arrowBack()
-        } else {
-          that.$Message.error(response['data']['message'])
-        }
-      })
-    }
   }
 
 }
