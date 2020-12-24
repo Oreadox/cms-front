@@ -37,13 +37,13 @@
       </FormItem>
       <FormItem label="酒店管理">
         <Select class="input_size" v-model="formItem.hotelId" :value="formItem.hotelId" filterable>
-          <Option :on-select="selectHotel(conferenceId, formItem.hotelId)" v-for="(value, key) in hotelList" :value="key" :key="key">{{ value.name }} </Option>
+          <Option v-for="(value, key) in hotelList" :value="key" :key="key">{{ value.name }}</Option>
         </Select>
         <Button style="margin-left: 1vw" type="primary" @click="checkHotel">详情</Button>
       </FormItem>
       <FormItem label="车队管理">
         <Select class="input_size" v-model="formItem.fleetId" :value="formItem.fleetId" filterable>
-          <Option :on-select="selectDriver(conferenceId, formItem.fleetId)" v-for="(value, key) in fleetList" :value="key" :key="key">{{ value.name }}</Option>
+          <Option v-for="(value, key) in fleetList" :value="key" :key="key">{{ value.name }}</Option>
         </Select>
         <Button style="margin-left: 1vw" type="primary" @click="checkFleet">详情</Button>
       </FormItem>
@@ -55,7 +55,8 @@
            :mask-closable="false"
            v-model="participantModal">
       <Participants style="height:40vw;overflow-y:auto;overflow-x:hidden;" @setCheckParticipants=setCheckParticipants
-                    :participantsInfo="participantsInfo" :conferenceId="conferenceId" :currentProgress="currentProgress"></Participants>
+                    :participantsInfo="participantsInfo" :conferenceId="conferenceId"
+                    :currentProgress="currentProgress"></Participants>
     </Modal>
     <Modal style="padding: 20px" width="40"
            footer-hide
@@ -111,6 +112,7 @@ export default {
   },
   props: ['conferenceId'],
   created() {
+    this.loading = 2
     this.loadConferenceInfo();
     this.loadHotelInfo();
     this.loadDriverInfo();
@@ -159,7 +161,6 @@ export default {
           }
         })
       })
-
     },
     loadHotelInfo() {
       let that = this
@@ -256,7 +257,7 @@ export default {
         url: `${this.$baseURI}/api/conference/confirm`,
         data: {id: that.conferenceId}
       }).then(function (response) {
-        if(response['data']['success']===true){
+        if (response['data']['success'] === true) {
           that.$Message.success("确认成功")
         } else {
           that.$Message.error(response['data']['message'])
@@ -277,14 +278,14 @@ export default {
         this.fleetModal = true
       }
     },
-    selectDriver(conferenceId, fleetId){
+    selectDriver(conferenceId, fleetId) {
       let that = this
       this.$axios({
         method: 'post',
         url: `${that.$baseURI}/api/conference/chooseFleet`,
-        data: {id: conferenceId, fleetId: fleetId }
+        data: {id: conferenceId, fleetId: fleetId}
       }).then(function (response) {
-        if(response['data']['success']===true){
+        if (response['data']['success'] === true) {
           that.$Message.success("选择车队成功")
         } else {
           that.$Message.error(response['data']['message'])
@@ -292,14 +293,14 @@ export default {
       })
 
     },
-    selectHotel(conferenceId, hotelId){
+    selectHotel(conferenceId, hotelId) {
       let that = this
       this.$axios({
         method: 'post',
         url: `${that.$baseURI}/api/conference/chooseHotel`,
-        data: {id: conferenceId, hotelId: hotelId }
+        data: {id: conferenceId, hotelId: hotelId}
       }).then(function (response) {
-        if(response['data']['success']===true){
+        if (response['data']['success'] === true) {
           that.$Message.success("选择酒店成功")
         } else {
           that.$Message.error(response['data']['message'])
@@ -308,6 +309,29 @@ export default {
     },
     setCheckParticipants(fromChild) {
       this.participantModal = fromChild;
+    },
+  },
+  computed: {
+    fleetId() {
+      return this.formItem.fleetId
+    },
+    hotelId() {
+      return this.formItem.hotelId
+    }
+  },
+  watch: {
+    fleetId() {
+      this.loading--
+      if (this.loading < 0) {
+        this.selectDriver(this.conferenceId, this.fleetId)
+      }
+
+    },
+    hotelId() {
+      this.loading--
+      if (this.loading < 0) {
+        this.selectHotel(this.conferenceId, this.hotelId)
+      }
     },
   }
 }
