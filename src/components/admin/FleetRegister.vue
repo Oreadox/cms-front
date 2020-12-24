@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 0">
-    <h2 class="center">注册</h2>
+    <h2 class="center" style="margin-bottom: 5%">添加车队</h2>
     <Form hide-required-mark ref="formItem" :model="formItem" :rules="fromValidate" :label-width="80">
       <FormItem label="车队名" prop="name">
         <Input v-model="formItem.name"></Input>
@@ -49,7 +49,7 @@ export default {
           var data = {
             name: this.formItem.name,
             detail: this.formItem.detail,
-            telephone: String.valueOf(this.formItem.phone)
+            telephone: this.formItem.phone
           }
           this.$axios(
               {
@@ -60,6 +60,7 @@ export default {
           ).then(function (response) {
             if (response['data']['success'] === true) {
               that.$Message.success("注册成功");
+              that.$router.go(0)
               setTimeout(function () {
                 that.$emit('setRegisterModal', false);
                 that.resetForm(name)

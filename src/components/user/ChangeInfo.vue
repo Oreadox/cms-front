@@ -20,6 +20,9 @@
       <FormItem label="电话" prop="phone">
         <Input type="text" v-model="formItem.phone"></Input>
       </FormItem>
+      <FormItem label="工作单位" prop="workUnit">
+        <Input type="text" v-model="formItem.workUnit"></Input>
+      </FormItem>
       <FormItem>
         <Button style="float: right; margin-left: 16px" type="primary" @click="submitForm('formItem')">修改
         </Button>

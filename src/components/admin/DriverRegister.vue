@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 0">
-    <h2 class="center">注册</h2>
+    <h2 class="center" style="margin-bottom: 5%">添加司机</h2>
     <Form hide-required-mark ref="formItem" :model="formItem" :rules="fromValidate" :label-width="80">
       <FormItem label="用户名" prop="username">
         <Input v-model="formItem.username" placeholder="长度为2-16的字符"></Input>
@@ -93,16 +93,17 @@ export default {
           this.$axios(
               {
                 method: 'post',
-                url: `${this.$baseURI}/api/admin/hotel/add`,
+                url: `${this.$baseURI}/api/admin/driver/add`,
                 data: data
               }
           ).then(function (response) {
             if (response['data']['success'] === true) {
               that.$Message.success("注册成功");
-              setTimeout(function () {
+              setTimeout(function(){
                 that.$emit('setRegisterModal', false);
-                that.resetForm(name)
-              }, 1500);
+                that.resetForm(name);
+              }, 100);
+              that.$router.go(0)
             } else {
               that.$Message.error(response['data']['message'])
             }

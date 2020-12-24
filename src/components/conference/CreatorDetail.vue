@@ -15,6 +15,9 @@
     <Button type="primary" style="margin: 2vw 1vw 1vw 0" v-if="currentProgress===1" @click="confirmConference">
       确认信息
     </Button>
+    <Button type="primary" style="margin: 2vw 1vw 1vw 0" v-if="currentProgress===0" @click="quickStartNextStep">
+      确认信息
+    </Button>
     <Form label-colon :label-width="120" :model="formItem">
       <Divider/>
       <FormItem label="会议名">
@@ -48,6 +51,20 @@
         <Button style="margin-left: 1vw" type="primary" @click="checkFleet">详情</Button>
       </FormItem>
     </Form>
+    <Modal style="padding: 20px" width="40"
+           footer-hide
+           :mask-closable="false"
+           v-model="quickStart">
+      <div>
+        <h3 style="text-align: center">您要立即确认会议信息吗？</h3>
+        <hr style="margin: 5px"/>
+        <p style="text-indent: 2em; margin-bottom: 5px">
+          确认后将进入会议下一阶段，信息<b>不能</b>再更改，您确定立即开启下一阶段会议吗？</p>
+        <Button long class="button"  @click="quickConfirmConference">
+          确认提前进入下一阶段
+        </Button>
+      </div>
+    </Modal>
     <Modal style="padding: 20px;"
            footer-hide
            width="85"
@@ -55,19 +72,20 @@
            :mask-closable="false"
            v-model="participantModal">
       <Participants style="height:40vw;overflow-y:auto;overflow-x:hidden;" @setCheckParticipants=setCheckParticipants
-                    :participantsInfo="participantsInfo" :conferenceId="conferenceId"></Participants>
+                    :participantsInfo="participantsInfo" :conferenceId="conferenceId"
+                    :currentProgress="currentProgress"></Participants>
     </Modal>
     <Modal style="padding: 20px" width="40"
            footer-hide
            :mask-closable="false"
            v-model="hotelModal">
-      <HotelDetail ref="hotel" @setCheckHotel=setCheckHotel></HotelDetail>
+      <HotelDetail ref="hotel"></HotelDetail>
     </Modal>
     <Modal style="padding: 20px" width="40"
            footer-hide
            :mask-closable="false"
            v-model="fleetModal">
-      <FleetDetail ref="fleet" @setCheckFleet=setCheckFleet></FleetDetail>
+      <FleetDetail ref="fleet"></FleetDetail>
     </Modal>
   </div>
 </template>
@@ -83,6 +101,7 @@ export default {
   data() {
     return {
       currentProgress: 0,
+      quickStart:false,
       formItem: {},
       hotelList: {
         0: {
@@ -111,6 +130,7 @@ export default {
   },
   props: ['conferenceId'],
   created() {
+    this.loading = 2
     this.loadConferenceInfo();
     this.loadHotelInfo();
     this.loadDriverInfo();
@@ -159,7 +179,6 @@ export default {
           }
         })
       })
-
     },
     loadHotelInfo() {
       let that = this
@@ -253,38 +272,103 @@ export default {
       let that = this
       this.$axios({
         method: 'post',
-        url: `${this.$baseURI}/api/conference/confirm`,
+        url: `${that.$baseURI}/api/conference/confirm`,
         data: {id: that.conferenceId}
       }).then(function (response) {
-        if(response['data']['success']===true){
+        if (response['data']['success'] === true) {
           that.$Message.success("确认成功")
         } else {
           that.$Message.error(response['data']['message'])
         }
       })
     },
+    quickStartNextStep(){
+      this.quickStart = true
+    },
+    quickConfirmConference(){
+      let that = this
+      this.$axios({
+        method: 'post',
+        url: `${that.$baseURI}/api/conference/terminateEnrollment`,
+        data: {id: that.conferenceId}
+      }).then(function (response) {
+        if(response['data']['success']===true){
+          that.$Message.success("确认成功")
+          that.$router.go(0)
+        } else {
+          that.$Message.error(response['data']['message'])
+        }
+      })
+
+    },
     checkHotel() {
       if (this.formItem.hotelId != null) {
         this.$refs.hotel.loadData(this.hotelList[this.formItem.hotelId]
-            , this.conferenceId, this.currentProgress, this.formItem.hotelId)
+            , this.currentProgress)
         this.hotelModal = true
       }
     },
     checkFleet() {
       if (this.formItem.fleetId != null) {
         this.$refs.fleet.loadData(this.fleetList[this.formItem.fleetId]
-            , this.conferenceId, this.currentProgress, this.formItem.fleetId)
+            , this.currentProgress)
         this.fleetModal = true
       }
+    },
+    selectDriver(conferenceId, fleetId) {
+      let that = this
+      this.$axios({
+        method: 'post',
+        url: `${that.$baseURI}/api/conference/chooseFleet`,
+        data: {id: conferenceId, fleetId: fleetId}
+      }).then(function (response) {
+        if (response['data']['success'] === true) {
+          that.$Message.success("选择车队成功")
+        } else {
+          that.$Message.error(response['data']['message'])
+        }
+      })
+
+    },
+    selectHotel(conferenceId, hotelId) {
+      let that = this
+      this.$axios({
+        method: 'post',
+        url: `${that.$baseURI}/api/conference/chooseHotel`,
+        data: {id: conferenceId, hotelId: hotelId}
+      }).then(function (response) {
+        if (response['data']['success'] === true) {
+          that.$Message.success("选择酒店成功")
+        } else {
+          that.$Message.error(response['data']['message'])
+        }
+      })
     },
     setCheckParticipants(fromChild) {
       this.participantModal = fromChild;
     },
-    setCheckHotel(fromChild) {
-      this.hotelModal = fromChild;
+  },
+  computed: {
+    fleetId() {
+      return this.formItem.fleetId
     },
-    setCheckFleet(fromChild) {
-      this.fleetModal = fromChild;
+    hotelId() {
+      return this.formItem.hotelId
+    }
+  },
+  watch: {
+    fleetId() {
+      this.loading--
+      if (this.loading < 0) {
+        this.selectDriver(this.conferenceId, this.fleetId)
+      }
+
+    },
+    hotelId() {
+      this.loading--
+      if (this.loading < 0) {
+        this.selectHotel(this.conferenceId, this.hotelId)
+      }
     },
   }
 }

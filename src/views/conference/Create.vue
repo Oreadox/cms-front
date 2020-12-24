@@ -29,7 +29,7 @@
         </transition>
       </div>
       <FormItem>
-        <Button style=" margin-left:15% ">取消</Button>
+        <Button style=" margin-left:15% " to="/conference/list">取消</Button>
         <Button style=" margin-left:15% " type="primary"  @click="submitForm">创建</Button>
       </FormItem>
     </Form>
@@ -58,8 +58,8 @@ export default {
       },
       ControlEndTime: {
         disabledDate: (time)=>{
-          if (this.formItem.endTime==='')
-            return time.getTime()>Date.now()
+          if (this.formItem.startTime==='')
+            return time.getTime()<Date.now()
           else
             return time.getTime()<Date.now()||time.getTime()<new Date(this.formItem.startTime).getTime()
         }
@@ -67,9 +67,9 @@ export default {
       ControlEnrollTime:{
         disabledDate: (time) => {
           if (this.formItem.startTime==='')
-            return time.getTime()>Date.now()
+            return time.getTime()<Date.now()
           else
-            return time.getTime()>new Date(this.formItem.startTime).getTime()-86400000
+            return time.getTime()>new Date(this.formItem.startTime).getTime()-8.64e7||time.getTime()<Date.now()-8.64e7
         }
       }
     }

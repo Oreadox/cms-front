@@ -75,6 +75,20 @@ export default {
                   }
                 }
               }, '删除会议'),
+              h('Button', {
+                props: {
+                  type: 'primary',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    console.log(params.row)
+                  }
+                }
+              }, '会议详情'),
             ]);
           }
         },

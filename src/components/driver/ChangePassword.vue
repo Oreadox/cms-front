@@ -60,7 +60,29 @@ export default {
       this.$emit('gotoProfile', false);
     },
     submitForm(){
-      console.log("sd")
+      var that = this
+      that.$refs[name].validate((valid) => {
+        if (valid) {
+          let data = {
+            oldPassword: that.formItem.oldPassword,
+            newPassword: that.formItem.password
+          }
+          that.$axios({
+            method: 'post',
+            url: `${that.$baseURI}/api/driver/password/modify`,
+            data: data
+          }).then(function (response) {
+            if (response['data']['success'] === true) {
+              that.$Message.success("修改成功");
+              that.$router.go(0)
+            } else {
+              that.$Message.error(response['data']['message']);
+            }
+          })
+        }
+      })
+
+
 
     },
   }

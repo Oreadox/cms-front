@@ -70,8 +70,8 @@ export default {
       enterJoinNumber: false,
       columns: [
         {
-          key: 'id',
-          title: '会议编号'
+          key: 'number',
+          title: '会议号'
         },
         {
           key: 'name',
@@ -147,6 +147,7 @@ export default {
     getInfo(v) {
       let newData = {
         id: v['id'],
+        number : v['number'],
         name: v['name'],
         address: v['address'],
       }

@@ -24,7 +24,6 @@
 <script>
 export default {
   name: "ChangePassword",
-  props: ["userData"],
   data() {
     const validatePassCheck = (rule, value, callback) => {
       if (value !== this.formItem.password) {
@@ -66,7 +65,7 @@ export default {
     },
     submitForm(name) {
       let that = this
-      this.$refs[name].validate((valid) => {
+      that.$refs[name].validate((valid) => {
         if (valid) {
           let data = {
             oldPassword: that.formItem.oldPassword,
@@ -74,12 +73,12 @@ export default {
           }
           that.$axios({
             method: 'post',
-            url: `${this.$baseURI}/api/user/password/modify`,
+            url: `${that.$baseURI}/api/user/password/modify`,
             data: data
           }).then(function (response) {
             if (response['data']['success'] === true) {
               that.$Message.success("修改成功");
-              that.$emit("gotoProfile", false);
+              that.$router.go(0)
             } else if (response['data']['oldPasswordCorrect'] === false) {
               that.$Message.error("原密码错误");
             } else {

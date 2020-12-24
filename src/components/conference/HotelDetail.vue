@@ -1,9 +1,6 @@
 <template>
   <div>
-    <a style="text-indent: 2em;" @click="arrowBack">
-      <Icon type="ios-arrow-back"></Icon>
-      返回</a>
-    <Form :model="formItem" label-colon :label-width="120" style="margin-top: 5%; ">
+    <Form :model="formItem" label-colon :label-width="80" style="margin-top: 5%; ">
       <FormItem label="名称">
         <label>
           <Input type="text" v-model="formItem.name" :readonly="true" style="width: 90%"></Input>
@@ -17,7 +14,6 @@
       <FormItem label="联系方式">
         <label>
           <Input type="text"  v-model="formItem.phone" :readonly="true"  style="width: 60%"></Input>
-          <Button style="margin-left: 1vw" type="primary" @click="$router.push('/conference/list')"><Icon size="24" type="ios-mail" /></Button>
         </label>
       </FormItem>
       <FormItem label="地址">
@@ -61,9 +57,6 @@ export default {
       this.conferenceId = conferenceId
       this.progress = progress
       this.hotelId = hotelId
-    },
-    arrowBack() {
-      this.$emit('setCheckHotel', false);
     },
     submitSelection(){
       let that = this

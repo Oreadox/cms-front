@@ -25,8 +25,19 @@
         该描述点啥还得看项目经理啊
       </div>
     </Poptip>
-
-    <div style="float: right" >
+    <div style="float: right; margin-right: 5%" v-if="this.$store.state.token!==''">
+      <Dropdown>
+        <a style="font-size: 20px">
+          <Icon type="ios-person" size="24"/>
+          {{ this.$store.state.username }}
+        </a>
+        <DropdownMenu  slot="list">
+          <DropdownItem name="exit">
+            <a @click="LogOut">退出登录</a></DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+    </div>
+    <div style="float: right" v-else>
     <MenuItem name="login">
       <Button type="primary" size="large" v-on:click=showLogin>登录</Button>
     </MenuItem>
@@ -49,7 +60,14 @@ export default {
     },
     showRegister() {
       this.$emit('setRegisterModal', true);
+    },
+    LogOut(){
+      console.log("name")
+      window.localStorage.clear()
+      this.$Message.success('退出成功')
+      this.$router.go(0)
     }
+
   }
 }
 </script>
@@ -65,6 +83,16 @@ export default {
   height: auto;
   max-width: 100%;
   max-height: 100%;
+}
+
+a{
+  color: black;
+}
+a:link{
+  color: #2d8cf0;
+}
+a:hover{
+  color: #5cadff;
 }
 </style>
 

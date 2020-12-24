@@ -18,10 +18,13 @@
       <FleetRegister @setRegisterModal=setRegisterModal></FleetRegister>
     </Modal>
     <Modal style="padding: 20px"
+           width="80"
            footer-hide
            :mask-closable="false"
            v-model="driverDetailModal">
-      <DriverDetail @setdriverDetailModal=setDriverDetailModal
+      <DriverDetail @setdriverDetailModal="setDriverDetailModal"
+                    @reloadData="reloadData"
+                    ref="driverDetail"
                     :fleetInfo="showingFleetInfo"></DriverDetail>
     </Modal>
   </div>
@@ -52,27 +55,14 @@ export default {
           key: 'driverAmount',
           align: 'center',
         },
+
         {
           title: '操作',
           key: 'operation',
           align: 'center',
-          width: 300,
+          width: 150,
           render: (h, params) => {
             return h('div', [
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.show(params.index)
-                  }
-                }
-              }, '车队详情'),
               h('Button', {
                 props: {
                   type: 'primary',
@@ -111,6 +101,10 @@ export default {
     this.loadFleetData()
   },
   methods: {
+    reloadData(){
+      this.loadFleetData()
+      this.driverDetailModal = false
+    },
     loadFleetData() {
       let that = this
       this.$axios({
@@ -120,25 +114,27 @@ export default {
         that.allFleetData = []
         response['data'].forEach(v => {
           let newData = {
-            fleetId: v['fleetId'],
+            fleetId: v['id'],
             name: v['name'],
             driverAmount: v['driverAmount']
           }
           that.allFleetData.push(newData)
           that.$axios({
             method: 'post',
-            url: `${this.$baseURI}/api/admin/driver/getAll`,
-            data: {fleetId: v['fleetId']}
+            url: `${that.$baseURI}/api/admin/driver/getAll`,
+            data: {fleetId: v['id']}
           }).then(function (response) {
-            that.driverData[v['fleetId']] = []
+            let id = v['id']
+            that.driverData[id] = []
             response['data'].forEach(v => {
               let newDriverData = {
                 accountId: v['accountId'],
                 username: v['username'],
                 driverId: v['driverId'],
-                name: v['name']
+                name: v['name'],
+                telephone: v['telephone']
               }
-              that.driverData[v['id']].push(newDriverData)
+              that.driverData[id].push(newDriverData)
             })
           })
         })
@@ -147,7 +143,7 @@ export default {
     },
     showDriverInfo(fleetId) {
       this.showingFleetInfo.fleetId = fleetId
-      this.showingFleetInfo.driverData = this.driverData[fleetId].split(0)
+      this.showingFleetInfo.driverData = this.driverData[fleetId].slice(0)
       this.driverDetailModal = true
     },
     changePrePageNum(num) {
@@ -162,8 +158,7 @@ export default {
     },
     setDriverDetailModal(fromChild){
       this.driverDetailModal = fromChild;
-    }
-  },
+    },},
   watch: {
     keyword() {
       //函数节流

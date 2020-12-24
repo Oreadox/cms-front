@@ -1,9 +1,6 @@
 <template>
   <div>
-    <a style="text-indent: 2em;" @click="arrowBack">
-      <Icon type="ios-arrow-back"></Icon>
-      返回</a>
-    <Form :model="formItem" label-colon :label-width="120" style="margin-top: 5%; ">
+    <Form :model="formItem" label-colon :label-width="80" style="margin-top: 5%; ">
       <FormItem label="车队名">
         <label>
           <Input type="text" v-model="formItem.name" :readonly="true" style="width: 90%"></Input>
@@ -54,9 +51,6 @@ export default {
       this.conferenceId = conferenceId
       this.progress = progress
       this.fleetId = fleetId
-    },
-    arrowBack() {
-      this.$emit('setCheckFleet', false);
     },
     submitSelection(){
       let that = this

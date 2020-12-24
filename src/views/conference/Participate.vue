@@ -1,5 +1,6 @@
 <template>
   <div>
+    <p style="text-align: center; font-size: 2em; margin-bottom:5% ">填写参加会议信息</p>
     <Form :label-width="120" hide-required-mark ref="formItem" :model="formItem" :rules="fromValidate">
       <FormItem label="会议号">
         <Input type="text" v-model="formItem.conferenceId" class="input_size" disabled></Input>
@@ -85,7 +86,7 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           let data = {
-            id: that.formItem.conferenceId,
+            number: that.formItem.conferenceId,
             tripNumber: that.formItem.tripNumber,
             arriveTime: that.formItem.arriveTime.getTime(),
             arriveSite: that.formItem.arriveSite,
