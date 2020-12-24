@@ -194,6 +194,9 @@ export default {
       }).then(function (response) {
         if (response['data']['success'] === true) {
           that.$Message.success("删除成功");
+          setTimeout(()=>{
+            that.$router.go(0)
+          },500)
         } else {
           that.$Message.error(response['data']['message'])
         }

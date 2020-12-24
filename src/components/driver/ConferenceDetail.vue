@@ -25,15 +25,15 @@
     </Card>
     <Card class="card_size" dis-hover title="订单信息" style="width: 100%">
       <div v-if="checked===false">
-        <Form hide-required-mark :label-width="120" :rules="fromValidate" ref="formItem" :model="formItem">
+        <Form hide-required-mark ref="formItem" :model="formItem" :rules="fromValidate" :label-width="80">
           <FormItem label="接车时间" prop="pickupTime">
             <DatePicker v-model="formItem.pickupTime" type="datetime" :options="pickerControl"></DatePicker>
           </FormItem>
           <FormItem label="接车地点" prop="pickupSite">
-            <Input v-model="formItem.pickupSite"></Input>
+            <Input type="text" v-model="formItem.pickupSite"></Input>
           </FormItem>
           <FormItem label="车牌号" prop="carNumber">
-            <Input v-model="formItem.carNumber" style="width: 80px"></Input>
+            <Input v-model="formItem.carNumber" style="width: 120px"></Input>
           </FormItem>
           <FormItem>
             <Button type="primary" style="margin-right: 10%" @click="checkOrder('formItem')">确认订单</Button>
@@ -49,7 +49,7 @@
             <Input v-model="formItem.pickupSite" disabled></Input>
           </FormItem>
           <FormItem label="车牌号" prop="carNumber" >
-            <Input v-model="formItem.carNumber" style="width: 80px" disabled></Input>
+            <Input v-model="formItem.carNumber" style="width: 120px" disabled></Input>
           </FormItem>
         </Form>
       </div>
@@ -64,7 +64,6 @@
     </Modal>
   </div>
 </template>
-
 <script>
 import WriteMail from "@/components/common/WriteMail";
 
@@ -73,8 +72,8 @@ export default {
   components: {WriteMail},
   data() {
     const compareTime = (time) => {
-      return time.getTime() < new Date(this.formItem.stayStart).getTime() - 2.592e8 ||
-          time.getTime() > new Date(this.formItem.stayStart).getTime() + 2.592e8
+      return time.getTime() < new Date(this.formItem.arriveTime).getTime() - 2.592e8 ||
+          time.getTime() > new Date(this.formItem.arriveTime).getTime() + 2.592e8
     }
     return {
       formItem: {
@@ -101,12 +100,11 @@ export default {
         }
       },
       fromValidate: {
-
         pickupTime: [
-          {required: true, type: 'date', message: '接车时间不能为空', trigger: 'change'},
+          {required: true, type: 'date', message: '接车时间不能为空', trigger: 'blur'},
         ],
         pickupSite: [
-          {required: true, type: 'date', message: '接车地点不能为空', trigger: 'change'},
+          {required: true,  message: '接车地点不能为空', trigger: 'blur'},
         ],
         carNumber: [
           {required: true, message: '车牌号不能为空', trigger: 'blur'},
@@ -129,7 +127,7 @@ export default {
       this.formItem.reserveTime = new Date(conferenceData.reserveTime)
       this.formItem.driverCheck = conferenceData.driverCheck
       this.formItem.driverId = conferenceData.driverId
-      this.formItem.pickupTime = new Date(conferenceData.pickupTime)
+      this.formItem.pickupTime = new Date(conferenceData.arriveTime)
       this.formItem.pickupSite = conferenceData.pickupSite
       this.formItem.carNumber = conferenceData.carNumber
       this.checked = checked
@@ -138,21 +136,26 @@ export default {
       var that = this
       this.$refs[name].validate((valid) => {
         if (valid) {
-          let data = {
+          console.log(that.formItem)
+          var data = {
             conferenceId: that.formItem.conferenceId,
             userId: that.formItem.userId,
-            pickupTime: that.formItem.checkinTime.getTime(),
+            pickupTime: that.formItem.pickupTime.getTime(),
             pickupSite: that.formItem.pickupSite,
             carNumber: that.formItem.carNumber
           }
-          this.$axios({
+          console.log('3')
+          that.$axios({
             method: 'post',
-            url: `${this.$baseURI}/api/driver/reservation/check`,
+            url: `${that.$baseURI}/api/driver/reservation/check`,
             data: data
           }).then(function (response) {
             if (response['data']['success'] === true) {
               that.$Message.success("确认成功");
-              this.$emit('gotoReservation', false);
+              // that.$emit('gotoReservation', false);
+              setTimeout(()=>{
+                that.$router.go(0)
+              },300)
             } else {
               that.$Message.error(response['data']['message'])
             }

@@ -98,10 +98,10 @@ export default {
       let that = this
       console.log("name")
       window.localStorage.clear()
+      that.$Message.success('退出成功')
       setTimeout(function(){
-        that.$Message.success('退出成功')
-        that.$router.replace('/index')
-      }, 300);
+        that.$router.go(0)
+      }, 500);
     }
   }
 }

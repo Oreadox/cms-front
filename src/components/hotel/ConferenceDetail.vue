@@ -141,7 +141,10 @@ export default {
           }).then(function (response) {
             if (response['data']['success'] === true) {
               that.$Message.success("确认成功");
-              this.$emit('gotoReservation', false);
+              // this.$emit('gotoReservation', false);
+              setTimeout(()=>{
+                that.$router.go(0)
+              },300)
             } else {
               that.$Message.error(response['data']['message'])
             }

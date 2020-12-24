@@ -66,7 +66,7 @@
         <WriteMail ref="fillAccount" :send-id="sendMailAccount" @closeSendModal="closeSendModal"></WriteMail>
         </div>
       </Modal>
-      <Card dis-hover class="card_size" :title="driverInfo.statusMessage">
+      <Card dis-hover class="card_size" :title="'行程信息：'+driverInfo.statusMessage">
         <Form label-colon :label-width="120">
           <FormItem label="我的车次/航班">
             <Input type="text" v-model="driverInfo.tripNumber" :readonly="true"></Input>
@@ -76,7 +76,7 @@
           </FormItem>
           <div v-if="driverInfo.status>=1">
             <FormItem label="接车司机" :label-width="120">
-              <Input type="text" v-model="driverInfo.driverName" :readonly="true" style="width: 80px"></Input>
+              <Input type="text" v-model="driverInfo.driverName" :readonly="true" style="width: 120px"></Input>
               <Poptip trigger="hover">
                 <Tag size="large" style="margin-left: 1vw" color="primary">详情</Tag>
                 <div slot="content" style="overflow: hidden">
@@ -94,20 +94,19 @@
                 <Input type="text" v-model="driverInfo.pickupSite" :readonly="true"></Input>
               </FormItem>
               <FormItem label="车牌号" :label-width="120">
-                <Input type="text" v-model="driverInfo.carNumber" :readonly="true" style="width: 80px"></Input>
+                <Input type="text" v-model="driverInfo.carNumber" :readonly="true" style="width: 120px"></Input>
               </FormItem>
             </Form>
             <FormItem v-if="driverInfo.status===1">
-              <Button type="primary" @click="confirmDriver">确认信息</Button>
+              <Button type="primary" @click="confirmDriver">确认接车</Button>
             </FormItem>
           </div>
         </Form>
       </Card>
       <br>
-      <Card dis-hover class="card_size" :title="hotelInfo.statusMessage">
+      <Card dis-hover class="card_size" :title="'住宿信息:'+ hotelInfo.statusMessage">
         <Form label-colon :label-width="120">
           <FormItem label="住宿时间" inline>
-            // TODO 限制时间
             <DatePicker v-model="hotelInfo.stayStartTime" :readonly="true"></DatePicker>
             <br>至<br>
             <DatePicker v-model="hotelInfo.stayEndTime" :readonly="true"></DatePicker>
@@ -133,7 +132,7 @@
               <Input type="text" v-model="hotelInfo.roomNumber" :readonly="true" style="width: 50px"></Input>
             </FormItem>
             <FormItem v-if="hotelInfo.status===1">
-              <Button type="primary" @click="confirmHotel">确认</Button>
+              <Button type="primary" @click="confirmHotel">确认入住</Button>
             </FormItem>
           </div>
         </Form>
@@ -199,9 +198,6 @@ export default {
     this.loadEnrollmentInfo();
     this.loadDriverInfo();
     this.loadHotelInfo();
-    if (this.conferenceInfo.statusMessage === '') {
-      this.conferenceInfo.statusMessage = '准备参会'
-    }
   },
   methods: {
     loadConferenceInfo() {
@@ -236,7 +232,7 @@ export default {
             that.currentProgress = 4;
             break;
         }
-        if (Date() < new Date(resData['enrollTime'])) {
+        if (that.conferenceInfo.enrollStatus === 'ENROLLMENT') {
           that.conferenceInfo.enrollStatus = 1
         } else {
           that.conferenceInfo.enrollStatus = 0
@@ -252,6 +248,7 @@ export default {
           that.conferenceInfo.creatorPhone = resData2['telephone']
           that.conferenceInfo.creatorEmail = resData2['email']
           that.sendMailAccount.account = resData2['accountId']
+          that.conferenceInfo.enrollStatus = resData2['progress']
         })
       })
     },
@@ -264,15 +261,14 @@ export default {
         data: {id: that.conferenceId}
       }).then(function (response) {
         let resData = response['data']
-        that.driverInfo.statusMessage = '行程信息: '
         that.driverInfo.tripNumber = resData['tripNumber']
         that.driverInfo.arriveTime = new Date(resData['arriveTime'])
-        that.hotelInfo.statusMessage= '住宿信息: '
+
         that.hotelInfo.stayStartTime= new Date(resData['stayStart'])
         that.hotelInfo.stayEndTime= new Date(resData['stayEnd'])
-
       })
     },
+
     // 获取接车信息
     loadDriverInfo() {
       let that = this
@@ -283,14 +279,8 @@ export default {
       }).then(function (response) {
         let resData = response['data']
         if (resData['driverCheck'] === true) {
-          if (resData['userCheck'] === true) {
-            that.driverInfo.status = 2
-            that.driverInfo.statusMessage += '用户已确认'
-          } else {
-            that.driverInfo.status = 1
-            that.driverInfo.statusMessage += '待用户确认'
-            that.conferenceInfo.statusMessage += '待确认接车信息 '
-          }
+          that.driverInfo.status = 1
+          that.driverInfo.statusMessage = '司机已确认'
           that.driverInfo.pickupTime = resData['pickupTime']
           that.driverInfo.arriveTime = resData['reserveTime']
           that.driverInfo.pickupSite = resData['pickupSite']
@@ -308,8 +298,7 @@ export default {
           })
         } else {
           that.driverInfo.status = 0
-          that.driverInfo.statusMessage += '待司机接单'
-          that.conferenceInfo.statusMessage += '待司机接单 '
+          that.driverInfo.statusMessage = '待司机接单'
         }
       })
     },
@@ -322,15 +311,10 @@ export default {
         data: {id: that.conferenceId}
       }).then(function (response) {
         let resData = response['data']
-        if (resData['hotelCheck'] === true||resData['hotelCheck'] === false) {
-          if (resData['userCheck'] === true) {
-            that.hotelInfo.status = 2
-            that.hotelInfo.statusMessage += '用户已确认'
-          } else {
-            that.hotelInfo.status = 1
-            that.hotelInfo.statusMessage += '待用户确认'
-            that.conferenceInfo.statusMessage += '待确认酒店信息 '
-          }
+        if (resData['hotelCheck'] === true) {
+          that.hotelInfo.status = 1
+          that.hotelInfo.statusMessage = '酒店已确认'
+
           that.hotelInfo.checkinTime = new Date(resData['checkinTime'])
           that.hotelInfo.roomNumber = (resData['roomNumber'])===null?'':resData['roomNumber']
           // 获取酒店信息
@@ -347,8 +331,7 @@ export default {
           })
         } else {
           that.hotelInfo.status = 0
-          that.hotelInfo.statusMessage += '待酒店接单'
-          that.conferenceInfo.statusMessage += '待酒店接单 '
+          that.hotelInfo.statusMessage = '待酒店接单'
         }
       })
     },
@@ -361,6 +344,9 @@ export default {
       }).then(function (response) {
         if(response['data']['success']===true){
           that.$Message.success('确认成功')
+          setTimeout(()=>{
+            that.$router.go(0)
+          },500)
         } else {
           that.$Message.error(response['data']['message'])
         }
@@ -375,6 +361,9 @@ export default {
       }).then(function (response) {
         if(response['data']['success']===true){
           that.$Message.success('确认成功')
+          setTimeout(()=>{
+            that.$router.go(0)
+          },500)
         } else {
           that.$Message.error(response['data']['message'])
         }

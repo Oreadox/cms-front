@@ -56,6 +56,9 @@ export default new VueRouter({
             path: '/user/',
             redirect: '/user/home',
             component: userIndex,
+            meta: {
+                login:true
+            },
             children: [
                 {
                     path: 'home',
@@ -80,6 +83,9 @@ export default new VueRouter({
             path: '/conference/',
             redirect: '/conference/list',
             component: conferenceIndex,
+            meta: {
+                login:true
+            },
             children: [
                 {
                     path: 'create',
@@ -109,6 +115,9 @@ export default new VueRouter({
             path: '/hotel/',
             redirect: '/hotel/reservation',
             component: hotelIndex,
+            meta: {
+                login:true
+            },
             children: [
                 {
                     path: 'reservation/',
@@ -138,6 +147,9 @@ export default new VueRouter({
             path: '/driver/',
             redirect: '/driver/reservation',
             component: driverIndex,
+            meta: {
+                login:true
+            },
             children: [
                 // {
                 //     path: 'home',
@@ -171,6 +183,9 @@ export default new VueRouter({
             path: '/admin/',
             redirect: '/admin/home',
             component: adminIndex,
+            meta: {
+                login:true
+            },
             children:[
                 {
                     path: 'home',
@@ -234,7 +249,9 @@ export default new VueRouter({
         {
             path: '/admin/system',
             component: adminSystem,
-            meta: { title: '高级模式--会务管理系统' },
+            meta:   { title: '高级模式--会务管理系统',
+                    login:true
+                    },
         }
     ]
 })

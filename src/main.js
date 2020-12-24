@@ -31,6 +31,15 @@ router.beforeEach((to, from, next) => {
         document.title = to.meta.title
     }
     ViewUI.LoadingBar.start();
+    if(to.meta.login)
+        if (window.localStorage.getItem('token')){
+            next()
+        }else {
+            next({
+                path: '/index',
+                query: {redirect: to.fullPath}
+            })
+        }
     next()
 });
 router.afterEach(() => {

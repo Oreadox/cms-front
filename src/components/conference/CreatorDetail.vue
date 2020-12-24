@@ -37,22 +37,44 @@
         至
         <DatePicker v-model="formItem.endTime" :readonly="true"></DatePicker>
       </FormItem>
+      <FormItem label="报名截止时间">
+        <DatePicker v-model="formItem.enrollTime" :readonly="true"></DatePicker>
+      </FormItem>
       <FormItem label="报名人数">
         <InputNumber v-model="formItem.applicants" :readonly="true"></InputNumber>
         <Button style="margin-left: 1vw" type="primary" @click="participantModal=true">详情</Button>
       </FormItem>
-      <FormItem label="酒店管理">
-        <Select class="input_size" v-model="formItem.hotelId" :value="formItem.hotelId" filterable>
-          <Option v-for="(value, key) in hotelList" :value="key" :key="key">{{ value.name }}</Option>
-        </Select>
-        <Button style="margin-left: 1vw" type="primary" @click="checkHotel">详情</Button>
-      </FormItem>
-      <FormItem label="车队管理">
-        <Select class="input_size" v-model="formItem.fleetId" :value="formItem.fleetId" filterable>
-          <Option v-for="(value, key) in fleetList" :value="key" :key="key">{{ value.name }}</Option>
-        </Select>
-        <Button style="margin-left: 1vw" type="primary" @click="checkFleet">详情</Button>
-      </FormItem>
+
+      <div v-if="formItem.progress==='ENROLLMENT'">
+        <FormItem label="酒店管理">
+          <Select class="input_size" v-model="formItem.hotelId" :value="formItem.hotelId" filterable>
+            <Option v-for="(value, key) in hotelList" :value="key" :key="key">{{ value.name }}</Option>
+          </Select>
+          <Button style="margin-left: 1vw" type="primary" @click="checkHotel">详情</Button>
+        </FormItem>
+        <FormItem label="车队管理">
+          <Select class="input_size" v-model="formItem.fleetId" :value="formItem.fleetId" filterable>
+            <Option v-for="(value, key) in fleetList" :value="key" :key="key">{{ value.name }}</Option>
+          </Select>
+          <Button style="margin-left: 1vw" type="primary" @click="checkFleet">详情</Button>
+        </FormItem>
+      </div>
+
+      <div v-else>
+        <FormItem label="酒店管理">
+          <Select disabled  class="input_size" v-model="formItem.hotelId" :value="formItem.hotelId" filterable>
+            <Option v-for="(value, key) in hotelList" :value="key" :key="key">{{ value.name }}</Option>
+          </Select>
+          <Button style="margin-left: 1vw" type="primary" @click="checkHotel">详情</Button>
+        </FormItem>
+        <FormItem label="车队管理">
+          <Select disabled class="input_size" v-model="formItem.fleetId" :value="formItem.fleetId" filterable>
+            <Option v-for="(value, key) in fleetList" :value="key" :key="key">{{ value.name }}</Option>
+          </Select>
+          <Button style="margin-left: 1vw" type="primary" @click="checkFleet">详情</Button>
+        </FormItem>
+      </div>
+      
     </Form>
     <Modal style="padding: 20px" width="30"
            footer-hide
@@ -98,7 +120,6 @@
 import Participants from "@/components/conference/Participants";
 import HotelDetail from "@/components/conference/HotelDetail";
 import FleetDetail from "@/components/conference/FleetDetail";
-
 export default {
   name: "CreatorDetail",
   components: {Participants, HotelDetail, FleetDetail},
@@ -160,10 +181,12 @@ export default {
             detail: resData['detail'],
             startTime: new Date(resData['startTime']),
             endTime: new Date(resData['endTime']),
+            enrollTime: new Date(resData['enrollTime']),
             address: resData['address'],
             hotelId: resData['hotelId'] != null ? resData['hotelId'].toString() : null,
             fleetId: resData['fleetId'] != null ? resData['fleetId'].toString() : null,
-            applicants: response['data']['amount']
+            applicants: response['data']['amount'],
+            progress: resData['progress']
           }
           switch (resData['progress']) {
             case "ENROLLMENT":
@@ -245,11 +268,7 @@ export default {
             data: {id: that.conferenceId, userId: newData.id}
           }).then(function (response) {
             if (response['data']['hotelCheck'] === true) {
-              if (response['data']['userCheck'] === true) {
-                newData.hotelProgress = 2
-              } else {
                 newData.hotelProgress = 1
-              }
             } else {
               newData.hotelProgress = 0
             }
@@ -260,11 +279,7 @@ export default {
             data: {id: that.conferenceId, userId: newData.id}
           }).then(function (response) {
             if (response['data']['driverCheck'] === true) {
-              if (response['data']['userCheck'] === true) {
-                newData.driverProgress = 2
-              } else {
                 newData.driverProgress = 1
-              }
             } else {
               newData.driverProgress = 0
             }
@@ -282,6 +297,9 @@ export default {
       }).then(function (response) {
         if (response['data']['success'] === true) {
           that.$Message.success("确认成功")
+          setTimeout(()=>{
+            that.$router.go(0)
+          },300)
         } else {
           that.$Message.error(response['data']['message'])
         }

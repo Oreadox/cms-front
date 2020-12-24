@@ -2,8 +2,8 @@
   <div>
 
     <Form :label-width="120" hide-required-mark ref="formItem" :model="formItem" :rules="fromValidate">
-      <FormItem>
-        <p style="text-align: center; font-size: 2em; margin-bottom:5% ">填写参加会议信息</p>
+      <FormItem label="">
+        <p style="font-size: 2em; margin-left: 8% ">填写参加会议信息</p>
       </FormItem>
       <FormItem label="会议号">
         <Input type="text" v-model="formItem.conferenceId" class="input_size" disabled></Input>
@@ -11,16 +11,16 @@
       <FormItem label="航班号/车次" prop="tripNumber">
         <Input type="text" v-model="formItem.tripNumber" class="input_size"></Input>
       </FormItem>
-      <FormItem label="到达时间" prop="arriveTime">
-        <DatePicker type="datetime" v-model="formItem.arriveTime"></DatePicker>
+      <FormItem  label="到达时间" prop="arriveTime">
+        <DatePicker :options="ControlArriveTime" type="datetime" v-model="formItem.arriveTime"></DatePicker>
       </FormItem>
       <FormItem label="到达地点" prop="arriveSite">
         <Input type="text" v-model="formItem.arriveSite" class="input_size"></Input>
       </FormItem>
       <FormItem label="住宿时间" prop="stayTime">
-        <DatePicker v-model="formItem.stayStart"></DatePicker>
+        <DatePicker :options="ControlStayTime" v-model="formItem.stayStart"></DatePicker>
         至
-        <DatePicker v-model="formItem.stayEnd"></DatePicker>
+        <DatePicker :options="ControlEndTime" v-model="formItem.stayEnd"></DatePicker>
       </FormItem>
       <FormItem label="住宿要求">
         <Input type="textarea" v-model="formItem.stayNeeds" class="input_size"></Input>
@@ -29,6 +29,7 @@
         <Input type="textarea" v-model="formItem.remark" class="input_size"></Input>
       </FormItem>
       <!--      <div style="height: 60px" v-if="ifUseInviteCode">-->
+<!--      TODO 后端加接口再说-->
       <FormItem label="邀请码 ">
         <Input type="text" v-model="formItem.inviteCode" style="width: 150px"/>
       </FormItem>
@@ -53,6 +54,24 @@ export default {
       }
     }
     return {
+      ControlArriveTime: {
+        disabledDate: (time)=>{
+          return time && time.getTime() < Date.now()-8.64e7
+        }
+      },
+      ControlStayTime:{
+        disabledDate: (time) => {
+            return time.getTime()<Date.now()
+        }
+      },
+      ControlEndTime: {
+        disabledDate: (time)=>{
+          if (this.formItem.stayEnd==='')
+            return time.getTime()<Date.now()
+          else
+            return time.getTime()<Date.now()||time.getTime()<new Date(this.formItem.stayStart).getTime()
+        }
+      },
       formItem: {
         conferenceId: '',
         tripNumber: '',
