@@ -62,7 +62,7 @@ export default {
         name: '',
         birthday: '',
         gender: '',
-        password: '●●●●●●●●●●',
+        password: '●●●●●●●●●●●●●●',
         account: '',
         email: '',
         phone: '',

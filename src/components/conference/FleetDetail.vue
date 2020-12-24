@@ -1,9 +1,6 @@
 <template>
   <div>
-    <a style="text-indent: 2em;" @click="arrowBack">
-      <Icon type="ios-arrow-back"></Icon>
-      返回</a>
-    <Form :model="formItem" label-colon :label-width="120" style="margin-top: 5%; ">
+    <Form :model="formItem" label-colon :label-width="80" style="margin-top: 5%; ">
       <FormItem label="车队名">
         <label>
           <Input type="text" v-model="formItem.name" :readonly="true" style="width: 90%"></Input>
@@ -24,9 +21,9 @@
           <Input type="textarea" v-model="formItem.detail" :readonly="true" style="width: 90%"></Input>
         </label>
       </FormItem>
-<!--      <FormItem>
-        <Button v-if="progress<=1" type="primary" @click="submitSelection">选择此车队</Button>
-      </FormItem>-->
+      <FormItem>
+        <Button v-if="progress===1" type="primary" @click="submitSelection">选择此车队</Button>
+      </FormItem>
     </Form>
   </div>
 </template>
@@ -49,13 +46,27 @@ export default {
   },
   props: [],
   methods: {
-    loadData(data, progress){
+    loadData(data, conferenceId, progress, fleetId){
       this.formItem = data
+      this.conferenceId = conferenceId
       this.progress = progress
+      this.fleetId = fleetId
     },
-    arrowBack() {
-      this.$emit('setCheckFleet', false);
-    },
+    submitSelection(){
+      let that = this
+      this.$axios({
+        method: 'post',
+        url: `${that.$baseURI}/api/conference/chooseFleet`,
+        data: {id: that.conferenceId, fleetId: parseInt(that.fleetId) }
+      }).then(function (response) {
+        if(response['data']['success']===true){
+          that.$Message.success("选择成功")
+          that.arrowBack()
+        } else {
+          that.$Message.error(response['data']['message'])
+        }
+      })
+    }
   }
 }
 </script>

@@ -14,7 +14,6 @@
       <FormItem label="联系方式">
         <label>
           <Input type="text"  v-model="formItem.phone" :readonly="true"  style="width: 60%"></Input>
-          <Button style="margin-left: 1vw" type="primary" @click="$router.push('/conference/list')"><Icon size="24" type="ios-mail" /></Button>
         </label>
       </FormItem>
       <FormItem label="地址">
@@ -27,9 +26,9 @@
           <Input type="textarea" v-model="formItem.detail" :readonly="true" style="width: 90%"></Input>
         </label>
       </FormItem>
-<!--      <FormItem>
-        <Button v-if="progress<=1" type="primary" @click="submitSelection">选择此酒店</Button>
-      </FormItem>-->
+      <FormItem>
+        <Button v-if="progress===1" type="primary" @click="submitSelection">选择此酒店</Button>
+      </FormItem>
     </Form>
   </div>
 </template>
@@ -53,10 +52,27 @@ export default {
   },
   props: [],
   methods: {
-    loadData(data, progress){
+    loadData(data, conferenceId, progress, hotelId){
       this.formItem = data
+      this.conferenceId = conferenceId
       this.progress = progress
+      this.hotelId = hotelId
     },
+    submitSelection(){
+      let that = this
+      this.$axios({
+        method: 'post',
+        url: `${that.$baseURI}/api/conference/chooseHotel`,
+        data: {id: that.conferenceId, hotelId: parseInt(that.hotelId) }
+      }).then(function (response) {
+        if(response['data']['success']===true){
+          that.$Message.success("选择成功")
+          that.arrowBack()
+        } else {
+          that.$Message.error(response['data']['message'])
+        }
+      })
+    }
   }
 
 }

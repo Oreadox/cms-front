@@ -55,27 +55,14 @@ export default {
           key: 'driverAmount',
           align: 'center',
         },
+
         {
           title: '操作',
           key: 'operation',
           align: 'center',
-          width: 300,
+          width: 150,
           render: (h, params) => {
             return h('div', [
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.show(params.index)   // TODO: 反正没写
-                  }
-                }
-              }, '车队详情'),
               h('Button', {
                 props: {
                   type: 'primary',
@@ -144,7 +131,8 @@ export default {
                 accountId: v['accountId'],
                 username: v['username'],
                 driverId: v['driverId'],
-                name: v['name']
+                name: v['name'],
+                telephone: v['telephone']
               }
               that.driverData[id].push(newDriverData)
             })
@@ -170,11 +158,7 @@ export default {
     },
     setDriverDetailModal(fromChild){
       this.driverDetailModal = fromChild;
-    },
-    show(id){
-      console.log(id)
-    }
-  },
+    },},
   watch: {
     keyword() {
       //函数节流

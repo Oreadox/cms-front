@@ -4,7 +4,7 @@
       <img src="http://tvax4.sinaimg.cn/large/007YSV3xgy1gl45wx0lx7j30a00a0mxd.jpg"
            style="pointer-events: none;float: left;" class="control-layout">
       <!--    src 请放本地，本次仅供测试使用，最终图标待定-->
-      <MenuItem name="home">
+      <MenuItem name="home" to="/index">
         <Icon type="ios-people"/>
         欢迎使用CMS
       </MenuItem>
@@ -44,8 +44,6 @@
             <DropdownItem name="exit">
               <a @click="LogOut">退出登录</a></DropdownItem>
           </DropdownMenu>
-
-
         </Dropdown>
       </div>
     </Menu>

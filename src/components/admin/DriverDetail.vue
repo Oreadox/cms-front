@@ -48,26 +48,17 @@ export default {
           align: 'center',
         },
         {
+          title: '电话号码',
+          key: 'telephone',
+          align: 'center',
+        },
+        {
           title: '操作',
           key: 'operation',
           align: 'center',
           width: '200',
-          render: (h, params) => {
+          render: (h,) => {
             return h('div', [
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    console.log(params.row)
-                  }
-                }
-              }, '用户详情'),
               h('Button', {
                 props: {
                   type: 'primary',

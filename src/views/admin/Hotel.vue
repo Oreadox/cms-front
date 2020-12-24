@@ -65,6 +65,11 @@ export default {
           align: 'center',
         },
         {
+          title: '电话号码',
+          key: 'telephone',
+          align: 'center',
+        },
+        {
           title: '操作',
           key: 'operation',
           align: 'center',
@@ -133,7 +138,8 @@ export default {
             hotelId: v['hotelId'],
             name: v['name'],
             hotelUsername: v['username'],
-            accountId: v['accountId']
+            accountId: v['accountId'],
+            telephone: v['telephone']
           }
           that.allHotelData.push(newData)
         })

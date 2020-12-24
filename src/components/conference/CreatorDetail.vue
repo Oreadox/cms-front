@@ -12,7 +12,10 @@
       <Step content="会议进行"></Step>
       <Step content="会议结束"></Step>
     </Steps>
-    <Button type="primary" style="margin: 2vw 1vw 1vw 0" v-if="currentProgress<=1" @click="confirmConference">
+    <Button type="primary" style="margin: 2vw 1vw 1vw 0" v-if="currentProgress===1" @click="confirmConference">
+      确认信息
+    </Button>
+    <Button type="primary" style="margin: 2vw 1vw 1vw 0" v-if="currentProgress===0" @click="quickStartNextStep">
       确认信息
     </Button>
     <Form label-colon :label-width="120" :model="formItem">
@@ -48,6 +51,20 @@
         <Button style="margin-left: 1vw" type="primary" @click="checkFleet">详情</Button>
       </FormItem>
     </Form>
+    <Modal style="padding: 20px" width="40"
+           footer-hide
+           :mask-closable="false"
+           v-model="quickStart">
+      <div>
+        <h3 style="text-align: center">您要立即确认会议信息吗？</h3>
+        <hr style="margin: 5px"/>
+        <p style="text-indent: 2em; margin-bottom: 5px">
+          确认后将进入会议下一阶段，信息<b>不能</b>再更改，您确定立即开启下一阶段会议吗？</p>
+        <Button long class="button"  @click="quickConfirmConference">
+          确认提前进入下一阶段
+        </Button>
+      </div>
+    </Modal>
     <Modal style="padding: 20px;"
            footer-hide
            width="85"
@@ -84,6 +101,7 @@ export default {
   data() {
     return {
       currentProgress: 0,
+      quickStart:false,
       formItem: {},
       hotelList: {
         0: {
@@ -254,7 +272,7 @@ export default {
       let that = this
       this.$axios({
         method: 'post',
-        url: `${this.$baseURI}/api/conference/confirm`,
+        url: `${that.$baseURI}/api/conference/confirm`,
         data: {id: that.conferenceId}
       }).then(function (response) {
         if (response['data']['success'] === true) {
@@ -263,6 +281,25 @@ export default {
           that.$Message.error(response['data']['message'])
         }
       })
+    },
+    quickStartNextStep(){
+      this.quickStart = true
+    },
+    quickConfirmConference(){
+      let that = this
+      this.$axios({
+        method: 'post',
+        url: `${that.$baseURI}/api/conference/terminateEnrollment`,
+        data: {id: that.conferenceId}
+      }).then(function (response) {
+        if(response['data']['success']===true){
+          that.$Message.success("确认成功")
+          that.$router.go(0)
+        } else {
+          that.$Message.error(response['data']['message'])
+        }
+      })
+
     },
     checkHotel() {
       if (this.formItem.hotelId != null) {
