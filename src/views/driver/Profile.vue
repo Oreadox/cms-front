@@ -47,7 +47,7 @@ export default {
     return {
       driverData: {
         account:'xxx',
-        password:'xxx',
+        password:'●●●●●●●●●●',
         name:'xxx',
         gender:'女',
         telephone:'12312312411',

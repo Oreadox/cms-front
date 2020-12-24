@@ -17,14 +17,30 @@
            v-model="registerModal">
       <HotelRegister @setRegisterModal=setRegisterModal></HotelRegister>
     </Modal>
+    <Modal
+        style="padding: 20px"
+        footer-hide
+        v-model="openWriteMail">
+      <div style="padding: 5%">
+        <WriteMail ref="fillAccount" :send-id="this.sendMailAccount" @closeSendModal="closeSendModal"></WriteMail>
+      </div>
+    </Modal>
+    <Modal
+        footer-hide
+        :mask-closable="false"
+        v-model="changePasswordModal">
+      <ChangeHotelPassword :hotel-id="this.changePasswordAccount.account"  @closeChangeModal="closeChangeModal"></ChangeHotelPassword>
+    </Modal>
   </div>
 </template>
 
 <script>
 import HotelRegister from "@/components/admin/HotelRegister";
+import WriteMail from "@/components/common/WriteMail";
+import ChangeHotelPassword from "@/components/admin/ChangeHotelPassword";
 export default {
   name: "Hotel",
-  components: {HotelRegister},
+  components: {HotelRegister,WriteMail,ChangeHotelPassword},
   data() {
     return {
       columns: [
@@ -65,10 +81,10 @@ export default {
                 },
                 on: {
                   click: () => {
-                    console.log(params.row)
+                    this.changePassword(params.row.hotelId)
                   }
                 }
-              }, '酒店详情'),
+              }, '修改密码'),
               h('Button', {
                 props: {
                   type: 'primary',
@@ -79,7 +95,7 @@ export default {
                 },
                 on: {
                   click: () => {
-
+                    this.sendMail(params.row.accountId)
                   }
                 }
               }, '发信息'),
@@ -94,7 +110,11 @@ export default {
       allHotelDataBackup: [],     // 搜索时用来备份原结果
       keyword: '',
       searching: false,
-      registerModal: false
+      registerModal: false,
+      openWriteMail: false,
+      sendMailAccount: {account: ''},
+      changePasswordAccount:{account: ''},
+      changePasswordModal: false,
     }
   },
   created() {
@@ -129,6 +149,23 @@ export default {
     },
     setRegisterModal(fromChild) {
       this.registerModal = fromChild;
+    },
+    changePassword(hotelId){
+      this.changePasswordModal = true
+      this.changePasswordAccount.account = hotelId;
+      console.log(this.changePasswordAccount.account);
+    },
+    closeChangeModal(fromChild){
+      this.changePasswordModal=fromChild
+    },
+    sendMail(accountId) {
+      this.sendMailAccount.account = accountId;
+      console.log(this.sendMailAccount.account)
+      this.$refs.fillAccount.autoFillAccount()
+      this.openWriteMail = true
+    },
+    closeSendModal(fromChild) {
+      this.openWriteMail = fromChild
     },
   },
   watch: {

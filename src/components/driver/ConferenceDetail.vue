@@ -12,16 +12,11 @@
         <FormItem label="联系方式">
           <Input v-model="formItem.telephone" style="width: 80%" disabled></Input>
         </FormItem>
-        <FormItem label="身份证号">
-          <Input v-model="formItem.residentIdNumber" style="width: 80%" disabled></Input>
+        <FormItem label="到达时间">
+          <DatePicker v-model="formItem.arriveTime" disabled></DatePicker>
         </FormItem>
-        <FormItem label="住宿时间">
-          <DatePicker v-model="formItem.stayStart" disabled></DatePicker>
-          至
-          <DatePicker v-model="formItem.stayEnd" disabled></DatePicker>
-        </FormItem>
-        <FormItem label="住宿要求">
-          <Input v-model="formItem.stayNeeds" type="textarea" style="width: 80%" disabled></Input>
+        <FormItem label="到达地点">
+          <Input v-model="formItem.arriveSite" style="width: 80%" disabled></Input>
         </FormItem>
         <FormItem label="预约时间">
           <DatePicker v-model="formItem.reserveTime" type="datetime" disabled></DatePicker>
@@ -31,11 +26,14 @@
     <Card class="card_size" dis-hover title="订单信息" style="width: 100%">
       <div v-if="checked===false">
         <Form hide-required-mark :label-width="120" :rules="fromValidate" ref="formItem" :model="formItem">
-          <FormItem label="入住时间" prop="checkinTime">
-            <DatePicker v-model="formItem.checkinTime" type="datetime" :options="pickerControl" ></DatePicker>
+          <FormItem label="接车时间" prop="pickupTime">
+            <DatePicker v-model="formItem.pickupTime" type="datetime" :options="pickerControl"></DatePicker>
           </FormItem>
-          <FormItem label="房间号" prop="roomNumber">
-            <Input v-model="formItem.roomNumber" style="width: 80px"></Input>
+          <FormItem label="接车地点" prop="pickupSite">
+            <Input v-model="formItem.pickupSite"></Input>
+          </FormItem>
+          <FormItem label="车牌号" prop="carNumber">
+            <Input v-model="formItem.carNumber" style="width: 80px"></Input>
           </FormItem>
           <FormItem>
             <Button type="primary" style="margin-right: 10%" @click="checkOrder('formItem')">确认订单</Button>
@@ -44,11 +42,14 @@
       </div>
       <div v-else>
         <Form hide-required-mark :label-width="120">
-          <FormItem label="入住时间">
-            <DatePicker v-model="formItem.checkinTime" type="datetime" disabled></DatePicker>
+          <FormItem label="接车时间" prop="pickupTime">
+            <DatePicker v-model="formItem.pickupTime" type="datetime" :options="pickerControl" disabled></DatePicker>
           </FormItem>
-          <FormItem label="房间号">
-            <Input v-model="formItem.roomNumber" style="width: 80px" disabled></Input>
+          <FormItem label="接车地点" prop="pickupSite">
+            <Input v-model="formItem.pickupSite" disabled></Input>
+          </FormItem>
+          <FormItem label="车牌号" prop="carNumber" >
+            <Input v-model="formItem.carNumber" style="width: 80px" disabled></Input>
           </FormItem>
         </Form>
       </div>
@@ -78,17 +79,20 @@ export default {
     return {
       formItem: {
         accountId:'',
+        name: '',
         conferenceId: '',
         userId: '',
-        name: '',
-        residentIdNumber: '',
+        gender: '',
         telephone: '',
-        stayStart: '',
-        stayEnd: '',
-        stayNeeds: '',
+        arriveTime: '',
+        arriveSite: '',
         reserveTime: '',
-        checkinTime: '',
-        roomNumber: '',
+        driverCheck: '',
+        driverId: '',
+        pickupTime: '',
+        pickupSite: '',
+        carNumber: '',
+        userCheck: '',
       },
       checked: false,
       pickerControl: {
@@ -97,11 +101,15 @@ export default {
         }
       },
       fromValidate: {
-        checkinTime: [
-          {required: true, type: 'date', message: '入住时间不能为空', trigger: 'change'},
+
+        pickupTime: [
+          {required: true, type: 'date', message: '接车时间不能为空', trigger: 'change'},
         ],
-        roomNumber: [
-          {required: true, message: '房间号不能为空', trigger: 'blur'},
+        pickupSite: [
+          {required: true, type: 'date', message: '接车地点不能为空', trigger: 'change'},
+        ],
+        carNumber: [
+          {required: true, message: '车牌号不能为空', trigger: 'blur'},
         ],
       },
       openWriteMail: false,
@@ -111,17 +119,19 @@ export default {
   methods: {
     setData(conferenceData, checked) {
       this.formItem.accountId = conferenceData.accountId
+      this.formItem.name = conferenceData.name
       this.formItem.conferenceId = conferenceData.conferenceId
       this.formItem.userId = conferenceData.userId
-      this.formItem.name = conferenceData.name
-      this.formItem.residentIdNumber = conferenceData.residentIdNumber
+      this.formItem.gender = conferenceData.gender
       this.formItem.telephone = conferenceData.telephone
-      this.formItem.stayStart = new Date(conferenceData.stayStart)
-      this.formItem.stayEnd = new Date(conferenceData.stayEnd)
-      this.formItem.stayNeeds = conferenceData.stayNeeds
+      this.formItem.arriveTime = new Date(conferenceData.arriveTime)
+      this.formItem.arriveSite = conferenceData.arriveSite
       this.formItem.reserveTime = new Date(conferenceData.reserveTime)
-      this.formItem.checkinTime = conferenceData.checkinTime === '' ? '' : new Date(conferenceData.checkinTime)
-      this.formItem.roomNumber = conferenceData.roomNumber
+      this.formItem.driverCheck = conferenceData.driverCheck
+      this.formItem.driverId = conferenceData.driverId
+      this.formItem.pickupTime = new Date(conferenceData.pickupTime)
+      this.formItem.pickupSite = conferenceData.pickupSite
+      this.formItem.carNumber = conferenceData.carNumber
       this.checked = checked
     },
     checkOrder(name) {
@@ -131,12 +141,13 @@ export default {
           let data = {
             conferenceId: that.formItem.conferenceId,
             userId: that.formItem.userId,
-            checkinTime: that.formItem.checkinTime.getTime(),
-            roomNumber: that.formItem.roomNumber
+            pickupTime: that.formItem.checkinTime.getTime(),
+            pickupSite: that.formItem.pickupSite,
+            carNumber: that.formItem.carNumber
           }
           this.$axios({
             method: 'post',
-            url: `${this.$baseURI}/api/hotel/reservation/check`,
+            url: `${this.$baseURI}/api/driver/reservation/check`,
             data: data
           }).then(function (response) {
             if (response['data']['success'] === true) {

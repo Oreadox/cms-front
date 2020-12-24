@@ -31,16 +31,23 @@
         </Collapse>
       </div>
     </Card>
+    <Modal style="padding: 0" width="45"
+           footer-hide
+           :mask-closable="false"
+           v-model="conferenceDetailModal">
+      <ConferenceDetail ref="detail" @gotoReservation="gotoReservation"></ConferenceDetail>
+    </Modal>
   </div>
 </template>
 
 <script>
 // import CollapseTransition from "@/plugins/CollapseTransition"
+import ConferenceDetail from "@/components/driver/ConferenceDetail";
 
 export default {
   name: "reservation",
   components: {
-    // 'CollapseTransition': CollapseTransition,
+    ConferenceDetail
   },
   data() {
     return {
@@ -86,7 +93,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.show(params.row.userId, params.row)
+                    this.gotoDetail(params.row.conferenceId, params.row.userId)
                   }
                 }
               }, '查看'),
@@ -94,61 +101,38 @@ export default {
           }
         },
       ],
-      waitingConfirmConference: [{
-        conferenceId:'',
-        userId:'',
-        name:'',
-        gender:'',
-        telephone:'',
-        arriveTime:'',
-        arriveSite:'',
-        reserveTime:'',
-        driverCheck:'',
-        driverId:'',
-        pickupTime:'',
-        pickupSite:'',
-        carNumber:'',
-        userCheck:'',
-      }],
-      processingConference: [{
-        conferenceId:'',
-        userId:'',
-        name:'',
-        gender:'',
-        telephone:'',
-        arriveTime:'',
-        arriveSite:'',
-        reserveTime:'',
-        driverCheck:'',
-        driverId:'',
-        pickupTime:'',
-        pickupSite:'',
-        carNumber:'',
-        userCheck:'',
-      }],
-      endedConference: [{
-        conferenceId:'',
-        userId:'',
-        name:'',
-        gender:'',
-        telephone:'',
-        arriveTime:'',
-        arriveSite:'',
-        reserveTime:'',
-        driverCheck:'',
-        driverId:'',
-        pickupTime:'',
-        pickupSite:'',
-        carNumber:'',
-        userCheck:'',
-      }],
+
+      waitingConfirmIndex: {},
+      processingIndex: {},
+      endedIndex: {},
+      waitingConfirmConference: [],
+      processingConference: [],
+      endedConference: [],
       showingPanel: ["waitingConfirm",'ended', 'processing'],
+      conferenceDetailModal: false,
     }
   },
   created() {
     this.initData()
   },
   methods: {
+    getFormattedDate(dateString) {
+      let date = new Date(dateString)
+      let month = date.getMonth() + 1
+      if (month < 10) {
+        month = "0" + month
+      }
+      return `${date.getFullYear()}-${month}-${date.getDate()}`
+    },
+    getFormattedDateTime(dateString) {
+      let date = new Date(dateString)
+      let month = date.getMonth() + 1
+      if (month < 10) {
+        month = "0" + month
+      }
+      return `${date.getFullYear()}-${month}-${date.getDate()} ` +
+          `${date.getHours()}:${date.getMinutes()}`
+    },
     initData() {
       let that = this
       this.$axios({
@@ -158,17 +142,18 @@ export default {
         that.waitingConfirmConference = []
         response['data'].forEach(v => {
           var newData = {
+            accountId:v['accountId'],
             conferenceId:v['conferenceId'],
             userId:v['userId'],
             name:v['name'],
             gender:v['gender'],
             telephone:v['telephone'],
-            arriveTime:v['arriveTime'],
+            arriveTime:that.getFormattedDateTime(v['arriveTime']),
             arriveSite:v['arriveSite'],
-            reserveTime:v['reserveTime'],
+            reserveTime: that.getFormattedDateTime(v['reserveTime']),
             driverCheck:v['driverCheck'],
             driverId:v['driverId'],
-            pickupTime:v['pickupTime'],
+            pickupTime:that.getFormattedDateTime(v['pickupTime']),
             pickupSite:v['pickupSite'],
             carNumber:v['carNumber'],
             userCheck:v['userCheck'],
@@ -183,21 +168,23 @@ export default {
         that.processingConference = []
         response['data'].forEach(v => {
           let newData = {
+            accountId:v['accountId'],
             conferenceId:v['conferenceId'],
             userId:v['userId'],
             name:v['name'],
             gender:v['gender'],
             telephone:v['telephone'],
-            arriveTime:v['arriveTime'],
+            arriveTime:that.getFormattedDateTime(v['arriveTime']),
             arriveSite:v['arriveSite'],
-            reserveTime:v['reserveTime'],
+            reserveTime: that.getFormattedDateTime(v['reserveTime']),
             driverCheck:v['driverCheck'],
             driverId:v['driverId'],
-            pickupTime:v['pickupTime'],
+            pickupTime:that.getFormattedDateTime(v['pickupTime']),
             pickupSite:v['pickupSite'],
             carNumber:v['carNumber'],
             userCheck:v['userCheck'],
           }
+          console.log(newData.userId)
           that.processingConference.push(newData)
         });
       })
@@ -208,17 +195,18 @@ export default {
         that.endedConference = []
         response['data'].forEach(v => {
           var newData = {
+            accountId:v['accountId'],
             conferenceId:v['conferenceId'],
             userId:v['userId'],
             name:v['name'],
             gender:v['gender'],
             telephone:v['telephone'],
-            arriveTime:v['arriveTime'],
+            arriveTime:that.getFormattedDateTime(v['arriveTime']),
             arriveSite:v['arriveSite'],
-            reserveTime:v['reserveTime'],
+            reserveTime: that.getFormattedDateTime(v['reserveTime']),
             driverCheck:v['driverCheck'],
             driverId:v['driverId'],
-            pickupTime:v['pickupTime'],
+            pickupTime:that.getFormattedDateTime(v['pickupTime']),
             pickupSite:v['pickupSite'],
             carNumber:v['carNumber'],
             userCheck:v['userCheck'],
@@ -227,12 +215,26 @@ export default {
         });
       })
     },
-    show(userId, data) {
-      /*            this.$Modal.info({
-                    title: 'User Info',
-                    content: `Name：${this.conference[index].name}<br>Age：${this.conference[index].address}<br>Address：${this.conference[index].startTime}`
-                  })*/
-      this.$router.push({path:`/driver/detail/${userId}`, query: {data}})
+    gotoDetail(conferenceId, userId) {
+      for(let index in this.waitingConfirmConference) {
+        if (this.waitingConfirmConference[index].conferenceId === conferenceId &&
+            this.waitingConfirmConference[index].userId === userId) {
+          this.$refs.detail.setData(this.waitingConfirmConference[index], false)
+          this.conferenceDetailModal = true
+          return;
+        }
+      }
+      let otherConference = this.processingConference.concat(this.endedConference)
+      for(let index in otherConference){
+        if(otherConference[index].conferenceId===conferenceId&&otherConference[index].userId===userId){
+          this.$refs.detail.setData(otherConference[index], true)
+          this.conferenceDetailModal = true
+        }
+      }
+    },
+    gotoReservation(child) {
+      this.conferenceDetailModal = child;
+      this.initData()
     },
 
   }

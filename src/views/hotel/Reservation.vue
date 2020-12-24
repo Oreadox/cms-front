@@ -138,6 +138,7 @@ export default {
         that.waitingConfirmConference = []
         response['data'].forEach(v => {
           var newData = {
+            accountId: v['accountId'],
             conferenceId: v['conferenceId'],
             userId: v['userId'],
             name: v['name'],
@@ -163,6 +164,7 @@ export default {
         that.processingConference = []
         response['data'].forEach(v => {
           var newData = {
+            accountId: v['accountId'],
             conferenceId: v['conferenceId'],
             userId: v['userId'],
             name: v['name'],
@@ -188,6 +190,7 @@ export default {
         that.endedConference = []
         response['data'].forEach(v => {
           var newData = {
+            accountId: v['accountId'],
             conferenceId: v['conferenceId'],
             userId: v['userId'],
             name: v['name'],

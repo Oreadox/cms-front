@@ -25,12 +25,23 @@
         </Button>
       </div>
     </Modal>
+    <Modal
+        style="padding: 20px"
+        footer-hide
+        v-model="openWriteMail">
+      <div style="padding: 5%">
+        <WriteMail ref="fillAccount" :send-id="this.sendMailAccount" @closeSendModal="closeSendModal"></WriteMail>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
+import WriteMail from "@/components/common/WriteMail";
+
 export default {
   name: "User",
+  components: {WriteMail},
   data() {
     return {
       driveFinish: false,
@@ -53,7 +64,12 @@ export default {
         },
         {
           title: '用户账号',
-          key: 'account',
+          key: 'accountId',
+          align: 'center',
+        },
+        {
+          title: '电话号码',
+          key: 'telephone',
           align: 'center',
         },
         {
@@ -90,7 +106,7 @@ export default {
                     this.show(params.index)
                   }
                 }
-              }, '用户详情'),
+              }, '修改密码'),
               h('Button', {
                 props: {
                   type: 'primary',
@@ -101,7 +117,7 @@ export default {
                 },
                 on: {
                   click: () => {
-
+                    this.sendMail(params.row.accountId)
                   }
                 }
               }, '发信息'),
@@ -122,7 +138,8 @@ export default {
         usernameCheck: ''
       },
       deleteUserModal: false,
-
+      openWriteMail: false,
+      sendMailAccount: {account: ''},
     }
   },
   created() {
@@ -138,10 +155,11 @@ export default {
         that.allUserData = []
         response['data'].forEach(v => {
           let newData = {
-            account: v['accountId'],
+            accountId: v['accountId'],
             username: v['username'],
             userId: v['userId'],
-            name: v['name']
+            name: v['name'],
+            telephone: v['telephone']
           }
           that.allUserData.push(newData)
         })
@@ -183,7 +201,16 @@ export default {
     },
     showNextPage(index) {
       this.currentUserData = this.allUserData.slice(this.prePageNum * (index - 1), this.prePageNum * index + 1)
-    }
+    },
+    sendMail(accountId) {
+      this.sendMailAccount.account = accountId;
+      console.log(this.sendMailAccount.account)
+      this.$refs.fillAccount.autoFillAccount()
+      this.openWriteMail = true
+    },
+    closeSendModal(fromChild) {
+      this.openWriteMail = fromChild
+    },
   },
   watch: {
     keyword() {
