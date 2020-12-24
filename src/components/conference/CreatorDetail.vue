@@ -15,11 +15,14 @@
     <Button type="primary" style="margin: 2vw 1vw 1vw 0" v-if="currentProgress===1" @click="confirmConference">
       确认信息
     </Button>
-    <Button type="primary" style="margin: 2vw 1vw 1vw 0" v-if="currentProgress===0" @click="quickStartNextStep">
-      确认信息
+    <Button style="margin: 2vw 1vw 1vw 0" v-if="currentProgress===0" @click="quickStartNextStep">
+      提前结束报名
     </Button>
     <Form label-colon :label-width="120" :model="formItem">
       <Divider/>
+      <FormItem label="会议号">
+        <Input type="text" v-model="formItem.number" :readonly="true" style="width: 150px"></Input>
+      </FormItem>
       <FormItem label="会议名">
         <Input type="text" v-model="formItem.name" :readonly="true" style="width: 150px"></Input>
       </FormItem>
@@ -51,17 +54,18 @@
         <Button style="margin-left: 1vw" type="primary" @click="checkFleet">详情</Button>
       </FormItem>
     </Form>
-    <Modal style="padding: 20px" width="40"
+    <Modal style="padding: 20px" width="30"
            footer-hide
            :mask-closable="false"
            v-model="quickStart">
       <div>
-        <h3 style="text-align: center">您要立即确认会议信息吗？</h3>
+        <h3 style="text-align: center">您要提前结束报名吗？</h3>
         <hr style="margin: 5px"/>
         <p style="text-indent: 2em; margin-bottom: 5px">
-          确认后将进入会议下一阶段，信息<b>不能</b>再更改，您确定立即开启下一阶段会议吗？</p>
+          确认后将进入会议下一阶段，未参会者将<b>无法</b>参加该会议
+        </p>
         <Button long class="button"  @click="quickConfirmConference">
-          确认提前进入下一阶段
+          确认提前结束报名
         </Button>
       </div>
     </Modal>
@@ -151,6 +155,7 @@ export default {
           data: {id: that.conferenceId}
         }).then(function (response) {
           that.formItem = {
+            number:resData['number'],
             name: resData['name'],
             detail: resData['detail'],
             startTime: new Date(resData['startTime']),

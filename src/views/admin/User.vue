@@ -184,9 +184,12 @@ export default {
           url: `${this.$baseURI}/api/admin/user/remove`,
           data: {userId: that.deletedUserValue.id}
         }).then(function (response) {
-          if (response['data']['result'] === true) {
+          if (response['data']['success'] === true) {
             that.$Message.success("删除成功");
             that.deleteUserModal = false
+            setTimeout(()=>{
+              that.$router.go(0)
+            },500)
           } else {
             that.$Message.error(response['data']['message'])
           }

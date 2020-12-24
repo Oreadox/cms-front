@@ -58,7 +58,7 @@ export default {
           title: '操作',
           key: 'operation',
           align: 'center',
-          width: 300,
+          width: 180,
           render: (h, params) => {
             return h('div', [
               h('Button', {
@@ -75,20 +75,6 @@ export default {
                   }
                 }
               }, '删除会议'),
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    console.log(params.row)
-                  }
-                }
-              }, '会议详情'),
             ]);
           }
         },
@@ -144,9 +130,12 @@ export default {
           url: `${this.$baseURI}/api/admin/conference/remove`,
           data: {conferenceId: that.deletedConferenceValue.id}
         }).then(function (response) {
-          if (response['data']['result'] === true) {
+          if (response['data']['success'] === true) {
             that.$Message.success("删除成功");
-            that.deleteConferenceModal = false
+            setTimeout(()=>{
+              that.$router.go(0)
+            },500)
+
           } else {
             that.$Message.error(response['data']['message'])
           }

@@ -74,7 +74,7 @@
           <FormItem label="我的到达时间" :label-width="120">
             <DatePicker type="datetime" v-model="driverInfo.arriveTime" :readonly="true"></DatePicker>
           </FormItem>
-          <div >
+          <div v-if="driverInfo.status>=1">
             <FormItem label="接车司机" :label-width="120">
               <Input type="text" v-model="driverInfo.driverName" :readonly="true" style="width: 80px"></Input>
               <Poptip trigger="hover">
@@ -107,11 +107,12 @@
       <Card dis-hover class="card_size" :title="hotelInfo.statusMessage">
         <Form label-colon :label-width="120">
           <FormItem label="住宿时间" inline>
+            // TODO 限制时间
             <DatePicker v-model="hotelInfo.stayStartTime" :readonly="true"></DatePicker>
             <br>至<br>
             <DatePicker v-model="hotelInfo.stayEndTime" :readonly="true"></DatePicker>
           </FormItem>
-          <div >
+          <div v-if="hotelInfo.status>=1">
             <FormItem label="住宿酒店" :label-width="120">
               <Input type="text" v-model="hotelInfo.hotelName" :readonly="true" style="width: 75%"></Input>
               <Poptip trigger="hover">
