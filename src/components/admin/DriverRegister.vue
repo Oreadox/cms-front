@@ -52,16 +52,16 @@ export default {
           this.$axios(
               {
                 method: 'post',
-                url: `${this.$baseURI}/api/admin/hotel/add`,
+                url: `${this.$baseURI}/api/admin/driver/add`,
                 data: data
               }
           ).then(function (response) {
             if (response['data']['success'] === true) {
               that.$Message.success("注册成功");
-              setTimeout(function () {
+              setTimeout(function(){
                 that.$emit('setRegisterModal', false);
-                that.resetForm(name)
-              }, 1500);
+                that.resetForm(name);
+              }, 100);
             } else {
               that.$Message.error(response['data']['message'])
             }
