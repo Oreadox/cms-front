@@ -60,14 +60,10 @@ export default {
           align: 'center',
         },
         {
-          title: '账户编号',
-          key: 'accountId',
-          align: 'center',
-        },
-        {
           title: '电话号码',
           key: 'telephone',
           align: 'center',
+          width: 125
         },
         {
           title: '操作',
@@ -184,7 +180,7 @@ export default {
       //删除文字  清零
       if (this.keyword === '') {
         that.allHotelData = that.allHotelDataBackup.slice(0)
-        that.showNextPage(1)
+        that.showPage(1)
         that.searching = false
         return
       }
@@ -199,7 +195,7 @@ export default {
             that.allHotelData.push(v)
           }
         })
-        that.showNextPage(1)
+        that.showPage(1)
       }, 100)
     }
   },

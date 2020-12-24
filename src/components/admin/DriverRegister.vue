@@ -6,7 +6,7 @@
         <Input v-model="formItem.username" placeholder="长度为2-16的字符"></Input>
       </FormItem>
       <FormItem label="密码" prop="password">
-        <Input password v-model="formItem.password" placeholder="长度为8-32, 需包含字母和数字"></Input>
+        <Input password type="password" v-model="formItem.password" placeholder="长度为8-32, 需包含字母和数字"></Input>
       </FormItem>
       <FormItem label="姓名" prop="name">
         <Input style="width: 100px"  v-model="formItem.name"></Input>
@@ -17,7 +17,7 @@
           <Radio label="FEMALE">女</Radio>
         </RadioGroup>
       </FormItem>
-      <FormItem label="详情" prop="residentIdNumber">
+      <FormItem label="身份证号" prop="residentIdNumber">
         <Input  v-model="formItem.residentIdNumber" ></Input>
       </FormItem>
       <FormItem label="电话" prop="telephone">
@@ -102,8 +102,7 @@ export default {
               setTimeout(function(){
                 that.$emit('setRegisterModal', false);
                 that.resetForm(name);
-              }, 100);
-              that.$router.go(0)
+              }, 300);
             } else {
               that.$Message.error(response['data']['message'])
             }

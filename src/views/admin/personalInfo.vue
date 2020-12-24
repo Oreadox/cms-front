@@ -75,7 +75,6 @@ export default {
 
   methods: {
     gotoProfile(child) {
-
       this.modelInfo.changeModal = child
       this.passwordModel.changePasswordModal = child
     },

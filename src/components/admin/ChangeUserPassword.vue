@@ -64,7 +64,7 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           let data = {
-            hotelId: that.userId,
+            userId: that.userId,
             password: that.formItem.password
           }
           that.$axios({

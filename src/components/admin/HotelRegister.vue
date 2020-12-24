@@ -6,7 +6,7 @@
         <Input v-model="formItem.username" placeholder="长度为2-16的字符"></Input>
       </FormItem>
       <FormItem label="密码" prop="password">
-        <Input password v-model="formItem.password" placeholder="长度为8-32, 需包含字母和数字"></Input>
+        <Input password type="password"  v-model="formItem.password" placeholder="长度为8-32, 需包含字母和数字"></Input>
       </FormItem>
       <FormItem label="酒店名" prop="name">
         <Input style="width: 100px"  v-model="formItem.name"></Input>
@@ -97,7 +97,6 @@ export default {
                 that.$emit('setRegisterModal', false);
                 that.resetForm(name)
               }, 500);
-              that.$router.go(0)
             } else {
               that.$Message.error(response['data']['message'])
             }

@@ -95,10 +95,13 @@ export default {
       // console.log("123")
     },
     LogOut(){
+      let that = this
       console.log("name")
       window.localStorage.clear()
-      this.$Message.success('退出成功')
-      this.$router.replace('/index')
+      setTimeout(function(){
+        that.$Message.success('退出成功')
+        that.$router.replace('/index')
+      }, 300);
     }
   }
 }

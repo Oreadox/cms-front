@@ -12,7 +12,7 @@
         <Input type="password" password v-model="formItem.passwordCheck" placeholder="重复上述的密码"></Input>
       </FormItem>
       <FormItem>
-        <Button style="float: right; margin-left: 16px" type="primary" @click="submitForm()">修改
+        <Button style="float: right; margin-left: 16px" type="primary" @click="submitForm('formItem')">修改
         </Button>
         <Button type="text" style="float: right; " @click="function (){resetForm('formItem');cancelButton()}">取消</Button>
       </FormItem>
@@ -31,7 +31,6 @@ export default {
         return callback()
       }
     };
-    // TODO 密码修改
     return {
       formItem: {
         oldPassword:"",
@@ -60,9 +59,30 @@ export default {
     cancelButton(){
       this.$emit('gotoProfile', false);
     },
-    submitForm(){
-
-      console.log("sd")
+    submitForm(name) {
+      let that = this
+      that.$refs[name].validate((valid) => {
+        if (valid) {
+          let data = {
+            oldPassword: that.formItem.oldPassword,
+            newPassword: that.formItem.password
+          }
+          that.$axios({
+            method: 'post',
+            url: `${that.$baseURI}/api/admin/password/modify`,
+            data: data
+          }).then(function (response) {
+            if (response['data']['success'] === true) {
+              that.$Message.success("修改成功");
+              that.$emit("gotoProfile", false);
+            } else if (response['data']['oldPasswordCorrect'] === false) {
+              that.$Message.error("原密码错误");
+            } else {
+              that.$Message.error(response['data']['message']);
+            }
+          })
+        }
+      })
 
     },
   }

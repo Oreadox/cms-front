@@ -59,20 +59,16 @@ export default {
           align: 'center',
         },
         {
-          title: '账户编号',
-          key: 'accountId',
-          align: 'center',
-        },
-        {
           title: '电话号码',
           key: 'telephone',
           align: 'center',
+          width: '125',
         },
         {
           title: '操作',
           key: 'operation',
           align: 'center',
-          width: '200',
+          width: '180',
           render: (h,params) => {
             return h('div', [
               h('Button', {

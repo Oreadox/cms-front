@@ -78,7 +78,7 @@ export default {
           }).then(function (response) {
             if (response['data']['success'] === true) {
               that.$Message.success("修改成功");
-              that.$router.go(0)
+              that.$emit("gotoProfile", false);
             } else if (response['data']['oldPasswordCorrect'] === false) {
               that.$Message.error("原密码错误");
             } else {

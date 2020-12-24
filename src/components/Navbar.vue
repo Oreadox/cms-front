@@ -62,10 +62,14 @@ export default {
       this.$emit('setRegisterModal', true);
     },
     LogOut(){
-      console.log("name")
+      let that = this
       window.localStorage.clear()
-      this.$Message.success('退出成功')
-      this.$router.go(0)
+      setTimeout(function(){
+        that.$Message.success('退出成功')
+        that.$router.go(0)
+      }, 300);
+
+
     }
 
   }

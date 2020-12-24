@@ -70,20 +70,16 @@ export default {
           align: 'center',
         },
         {
-          title: '用户账号',
-          key: 'accountId',
-          align: 'center',
-        },
-        {
           title: '电话号码',
           key: 'telephone',
           align: 'center',
+          width: 125
         },
         {
           title: '操作',
           key: 'operation',
           align: 'center',
-          width: 300,
+          width: 260,
           render: (h, params) => {
             return h('div', [
               h('Button', {
@@ -201,7 +197,6 @@ export default {
       console.log(index)
     },
     remove(index) {
-      // TODO: 添加删除反馈
       this.data.splice(index, 1);
     },
     changePrePageNum(num) {

@@ -55,7 +55,12 @@ export default {
           key: 'driverAmount',
           align: 'center',
         },
-
+        {
+          title: '联系方式',
+          key: 'telephone',
+          align: 'center',
+          width: 125
+        },
         {
           title: '操作',
           key: 'operation',
@@ -116,7 +121,9 @@ export default {
           let newData = {
             fleetId: v['id'],
             name: v['name'],
-            driverAmount: v['driverAmount']
+            driverAmount: v['driverAmount'],
+            telephone:v['telephone']
+
           }
           that.allFleetData.push(newData)
           that.$axios({
@@ -169,7 +176,7 @@ export default {
       //删除文字  清零
       if (this.keyword === '') {
         that.allFleetData = that.allFleetDataBackup.slice(0)
-        that.showNextPage(1)
+        that.showPage(1)
         that.searching = false
         return
       }
@@ -184,7 +191,7 @@ export default {
             that.allFleetData.push(v)
           }
         })
-        that.showNextPage(1)
+        that.showPage(1)
       }, 100)
     }
   },

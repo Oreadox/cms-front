@@ -60,11 +60,10 @@ export default {
           ).then(function (response) {
             if (response['data']['success'] === true) {
               that.$Message.success("注册成功");
-              that.$router.go(0)
               setTimeout(function () {
                 that.$emit('setRegisterModal', false);
                 that.resetForm(name)
-              }, 1500);
+              }, 300);
             } else {
               that.$Message.error(response['data']['message'])
             }

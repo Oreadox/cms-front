@@ -79,8 +79,8 @@ export default {
             if (response['data']['success'] === true) {
               that.$Message.success("修改成功");
               setTimeout(() => {
-                that.$router.go(0)
-              }, 500)
+                that.$emit("gotoProfile", false);
+              }, 200)
             } else {
               that.$Message.error(response['data']['message']);
             }

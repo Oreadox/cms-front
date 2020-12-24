@@ -74,7 +74,7 @@ export default {
           }).then(function (response) {
             if (response['data']['success'] === true) {
               that.$Message.success("修改成功");
-              that.$router.go(0)
+              that.$emit("closeChangeModal", false);
             } else {
               that.$Message.error(response['data']['message']);
             }
