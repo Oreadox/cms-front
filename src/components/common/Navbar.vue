@@ -22,8 +22,16 @@
           联系管理员
         </MenuItem>
         <div slot="content">
-          电话:{{ adminInfo.telephone }}<br>
-          邮箱:{{ adminInfo.email }}
+          <List class="List" style="margin-top: 5%; text-align: center" header="" footer="">
+            <ListItem v-for="(value, key) in listItem.adminInfo" :key="key" :value="value"
+                      v-model=adminData[value]>
+              <a>
+                {{ value }}：
+                {{ adminData[key] }}
+              </a>
+                <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
+            </ListItem>
+          </List>
         </div>
       </Poptip>
       <div style="float: right; margin-right: 5%">
@@ -51,38 +59,42 @@ export default {
       userInfo: {
         username: this.$store.state.username,
       },
-      adminInfo: {
+      adminData: {
         id: '',
         accountId: '',
         name: '',
         telephone: '',
         email: ''
+      },
+      listItem:{
+        adminInfo: {
+          telephone: '手机号',
+          email: '电子邮箱'
+        },
       }
     }
   },
   created: function () {
     let _this=this;
     window.add_data=_this.add_data;
+    this.initData()
   },
   methods: {
     initData() {
+
       var that = this
       this.$axios({
         method: 'post',
-        url: `${this.$baseURI}/api/admin/profile`,
+        url: `${this.$baseURI}/api/admin/getAll`,
       }).then(function (response) {
-        that.adminInfo = []
-        response['data'].forEach(v => {
-          var newData = {
-            id: v['id'],
-            accountId: v['accountId'],
-            name: v['name'],
-            telephone: v['telephone'],
-            email: v['email']
-          }
-          that.adminInfo.append(newData)
-        });
+        var respData = response["data"]
+        that.adminData.id=respData['telephone']
+        that.adminData.account=respData['accountId']
+        that.adminData.name=respData['name']
+        that.adminData.telephone=respData['telephone']
+        that.adminData.email=respData["email"]
       })
+      // console.log("123")
     },
     LogOut(){
       console.log("name")
