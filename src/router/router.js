@@ -36,7 +36,7 @@ const adminConference = () => import('@/views/admin/Conference')
 const adminHotel = () => import('@/views/admin/Hotel')
 const adminDriver = () => import('@/views/admin/Driver')
 const adminSystem = () => import('@/views/admin/System')
-const personalInfo = () => import('@/views/admin/Supervise')
+const personalInfo = () => import('@/views/admin/personalInfo')
 const adminMail = () => import('@/views/admin/Mail')
 
 

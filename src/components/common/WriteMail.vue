@@ -47,7 +47,6 @@ export default {
   methods:{
     autoFillAccount(){
       {
-        let that = this
         var data = {
           accountId:that.sendId.account,
         }
