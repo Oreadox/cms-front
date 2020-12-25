@@ -1,22 +1,13 @@
 <template>
   <header style="position: fixed; top: 0; width: 100%; z-index: 1000">
     <Menu mode="horizontal" active-name="1">
-      <img src="http://tvax4.sinaimg.cn/large/007YSV3xgy1gl45wx0lx7j30a00a0mxd.jpg"
+      <img src="https://cms-1304051571.cos.ap-nanjing.myqcloud.com/navbar.png"
            style="pointer-events: none;float: left;" class="control-layout">
       <!--    src 请放本地，本次仅供测试使用，最终图标待定-->
       <MenuItem name="home" to="/index">
         <Icon type="ios-people"/>
         欢迎使用CMS
       </MenuItem>
-
-      <Poptip trigger="hover" class="control-layout">
-        <MenuItem name="introduction">
-          产品介绍
-        </MenuItem>
-        <div slot="content">
-          该描述点啥就该找项目经理了
-        </div>
-      </Poptip>
       <Poptip trigger="hover" class="control-layout">
         <MenuItem name="designTeam">
           联系管理员

@@ -67,9 +67,7 @@
       </Row>
 
     </div>
-    <Footer style="height:200px;width: 100%">
-      <h1 style="text-align: center">设计团队</h1>
-      <p></p>
+    <Footer style="height:300px;width: 100%">
     </Footer>
   </div>
 
