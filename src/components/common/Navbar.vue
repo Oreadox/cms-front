@@ -100,7 +100,7 @@ export default {
       window.localStorage.clear()
       that.$Message.success('退出成功')
       setTimeout(function(){
-        that.$router.go(0)
+        that.$router.push('/index')
       }, 500);
     }
   }

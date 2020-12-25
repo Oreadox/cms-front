@@ -64,10 +64,10 @@ export default {
     LogOut(){
       let that = this
       window.localStorage.clear()
+      that.$Message.success('退出成功')
       setTimeout(function(){
-        that.$Message.success('退出成功')
-        that.$router.go(0)
-      }, 300);
+        that.$router.push('/index')
+      }, 500);
 
 
     }
