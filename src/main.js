@@ -8,7 +8,7 @@ import App from "@/App";
 
 
 Vue.prototype.$axios = axios
-Vue.prototype.$baseURI = "http://rap2api.taobao.org/app/mock/272096"
+Vue.prototype.$baseURI = "http://localhost:8081"
 Vue.use(ViewUI)
 
 
@@ -25,4 +25,30 @@ new Vue({
     store,
     render: h => h(App),
 }).$mount('#app')
+
+router.beforeEach((to, from, next) => {
+    if (to.meta.title) {
+        document.title = to.meta.title
+    }
+    ViewUI.LoadingBar.start();
+    if(to.meta.login)
+        if (window.localStorage.getItem('token')){
+            next()
+        }else {
+            next({
+                path: '/index',
+                query: {redirect: to.fullPath}
+            })
+        }
+    next()
+});
+router.afterEach(() => {
+    ViewUI.LoadingBar.finish();
+    // ...
+})
+
+/*router.afterEach(function (transition){
+    ViewUI.LoadingBar.finish()
+});*/
+
 // })

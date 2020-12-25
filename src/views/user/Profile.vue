@@ -8,7 +8,7 @@
               <a>
                 头像
                 <!--              <Icon style="float: right" type="ios-arrow-forward"/>-->
-              </a>v
+              </a>
             </ListItem>
             <ListItem class="ListItem" v-for="(value, key) in listItem.personalData" :key="key" :value="value"
                       v-model=userData[value]>
@@ -35,7 +35,7 @@
           footer-hide
           :mask-closable="false"
           v-model="modelInfo.changeModal">
-        <ChangeInfo :userData="userData"
+        <ChangeInfo ref="setDefault" :userData="userData"
                     @gotoProfile="gotoProfile"></ChangeInfo>
       </Modal>
       <Modal
@@ -43,7 +43,7 @@
           :mask-closable="false"
           v-model="passwordModel.changeModal">
         <ChangePassword :userData="userData"
-                    @gotoProfile="gotoProfile"></ChangePassword>
+                        @gotoProfile="gotoProfile"></ChangePassword>
       </Modal>
     </div>
   </Card>
@@ -59,15 +59,15 @@ export default {
   data() {
     return {
       userData: {
-        name: 'xxx',
-        birthday: '2000-01-01',
-        gender: 'xxx',
-        password: '●●●●●●●●●●●●',
-        account: 'xxx',
-        email: 'xxx',
-        phone: 'xxx',
+        name: '',
+        birthday: '',
+        gender: '',
+        password: '●●●●●●●●●●●●●●',
+        account: '',
+        email: '',
+        phone: '',
         idCard: '',
-        workUnit: 'xxx',
+        workUnit: '',
       },
       listItem: {
         personalData: {
@@ -101,15 +101,16 @@ export default {
     gotoProfile(child) {
       this.modelInfo.changeModal = child;
       this.passwordModel.changeModal = child
+      this.getProfile()
     },
     gotoChange(title, type) {
+      this.$refs.setDefault.setDataDefault()
       if (type === 'account') {
         return
       }
-      console.log(type!=="password")
-      if(type!=="password"){
+      if (type !== "password") {
         this.modelInfo.changeModal = true
-      }else {
+      } else {
         this.passwordModel.changeModal = true
       }
 
@@ -122,17 +123,24 @@ export default {
             url: `${this.$baseURI}/api/user/profile`,
           }
       ).then(function (response) {
-        var respData = response["data"]
+        let respData = response["data"]
         that.userData.name = respData['name']
-        that.userData.birthday = new Date(respData['birthday'])
-        that.userData.gender = respData['gender']
+        that.userData.birthday = (function () {
+          var formatDate = new Date(respData['birthday'])
+          var opt =
+              formatDate.getFullYear().toString() + '-' +
+              (formatDate.getMonth() + 1).toString() + '-' +
+              formatDate.getDate().toString()
+          return opt
+        })()
+        that.userData.gender = respData['gender'] === 'MALE' ? '男' : '女'
         that.userData.account = respData['accountId']
         that.userData.email = respData['email']
         that.userData.phone = respData['telephone']
         that.userData.idCard = respData['residentIdNumber']
         that.userData.workUnit = respData['workplace']
       })
-    }
+    },
   },
 
 }

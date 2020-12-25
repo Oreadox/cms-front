@@ -31,41 +31,45 @@
         </Collapse>
       </div>
     </Card>
+    <Modal style="padding: 0" width="45"
+           footer-hide
+           :mask-closable="false"
+           v-model="conferenceDetailModal">
+      <ConferenceDetail ref="detail" @gotoReservation="gotoReservation"></ConferenceDetail>
+    </Modal>
   </div>
 </template>
 
 <script>
-// import CollapseTransition from "@/plugins/CollapseTransition"
+import ConferenceDetail from "@/components/hotel/ConferenceDetail";
 
 export default {
   name: "reservation",
-  components: {
-    // 'CollapseTransition': CollapseTransition,
-  },
+  components: {ConferenceDetail},
   data() {
     return {
       columns: [
         {
-          key: 'id',
+          key: 'userId',
           title: '用户编号'
         },
         {
-          key: 'sendReservationTime',
+          key: 'reserveTime',
           title: '发送预约时间'
         },
 
         {
-          key: 'customerName',
+          key: 'name',
           title: '顾客姓名'
         },
 
         {
-          key: 'startTime',
+          key: 'stayStart',
           title: '住宿开始时间'
         },
 
         {
-          key: 'endTime',
+          key: 'stayEnd',
           title: '住宿结束时间'
         },
 
@@ -86,7 +90,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.show(params.row.id)
+                    this.gotoDetail(params.row.conferenceId, params.row.userId)
                   }
                 }
               }, '查看'),
@@ -94,34 +98,37 @@ export default {
           }
         },
       ],
-      waitingConfirmConference: [{
-        id:1,
-        sendReservationTime:'2020-12-15',
-        customerName:"one",
-        startTime:"2020-12-16",
-        endTime:"2020-12-18",
-      }],
-      processingConference: [{
-        id:2,
-        sendReservationTime:'2020-12-15',
-        customerName:"two",
-        startTime:"2020-12-16",
-        endTime:"2020-12-18",
-      }],
-      endedConference: [{
-        id:3,
-        sendReservationTime:'2020-12-15',
-        customerName:"three",
-        startTime:"2020-12-16",
-        endTime:"2020-12-18",
-      }],
-      showingPanel: ["waitingConfirm",'ended', 'processing'],
+      waitingConfirmIndex: {},
+      processingIndex: {},
+      endedIndex: {},
+      waitingConfirmConference: [],
+      processingConference: [],
+      endedConference: [],
+      showingPanel: ["waitingConfirm", 'ended', 'processing'],
+      conferenceDetailModal: false,
     }
   },
   created() {
     this.initData()
   },
   methods: {
+    getFormattedDate(dateString) {
+      let date = new Date(dateString)
+      let month = date.getMonth() + 1
+      if (month < 10) {
+        month = "0" + month
+      }
+      return `${date.getFullYear()}-${month}-${date.getDate()}`
+    },
+    getFormattedDateTime(dateString) {
+      let date = new Date(dateString)
+      let month = date.getMonth() + 1
+      if (month < 10) {
+        month = "0" + month
+      }
+      return `${date.getFullYear()}-${month}-${date.getDate()} ` +
+          `${date.getHours()}:${date.getMinutes()}`
+    },
     initData() {
       var that = this
       this.$axios({
@@ -131,56 +138,99 @@ export default {
         that.waitingConfirmConference = []
         response['data'].forEach(v => {
           var newData = {
-            id:Number(v['id']),
-            sendReservationTime:new Date(v['sendReservationTime']),
-            customerName:v['customerName'],
-            startTime:new Date(v['startTime']),
-            endTime:new Date(v['endTime']),
+            accountId: v['accountId'],
+            conferenceId: v['conferenceId'],
+            userId: v['userId'],
+            name: v['name'],
+            gender: v['gender'],
+            residentIdNumber: v['residentIdNumber'],
+            telephone: v['telephone'],
+            stayStart: that.getFormattedDate(v['stayStart']),
+            stayEnd: that.getFormattedDate(v['stayEnd']),
+            stayNeeds: v['stayNeeds'],
+            reserveTime: that.getFormattedDateTime(v['reserveTime']),
+            hotelCheck: v['hotelCheck'],
+            checkinTime: v['checkinTime'] == null ? '' : that.getFormattedDateTime(v['checkinTime']),
+            roomNumber: v['roomNumber'],
+            userCheck: v['userCheck'],
           }
-          that.waitingConfirmConference.append(newData)
+          that.waitingConfirmConference.push(newData)
         });
       })
       this.$axios({
         method: 'post',
         url: `${this.$baseURI}/api/hotel/reservation/checked`,
       }).then(function (response) {
-        that.processConference = []
+        that.processingConference = []
         response['data'].forEach(v => {
           var newData = {
-            id:Number(v['id']),
-            sendReservationTime:new Date(v['sendReservationTime']),
-            customerName:v['customerName'],
-            startTime:new Date(v['startTime']),
-            endTime:new Date(v['endTime']),
+            accountId: v['accountId'],
+            conferenceId: v['conferenceId'],
+            userId: v['userId'],
+            name: v['name'],
+            gender: v['gender'],
+            residentIdNumber: v['residentIdNumber'],
+            telephone: v['telephone'],
+            stayStart: that.getFormattedDate(v['stayStart']),
+            stayEnd: that.getFormattedDate(v['stayEnd']),
+            stayNeeds: v['stayNeeds'],
+            reserveTime: that.getFormattedDateTime(v['reserveTime']),
+            hotelCheck: v['hotelCheck'],
+            checkinTime: v['checkinTime'] == null ? '' : that.getFormattedDateTime(v['checkinTime']),
+            roomNumber: v['roomNumber'],
+            userCheck: v['userCheck'],
           }
-          that.processConference.push(newData)
+          that.processingConference.push(newData)
         });
       })
       this.$axios({
-        method:'post',
-        url:`${this.$baseURI}/api/hotel/reservation/ended`,
+        method: 'post',
+        url: `${this.$baseURI}/api/hotel/reservation/ended`,
       }).then(function (response) {
         that.endedConference = []
         response['data'].forEach(v => {
           var newData = {
-            id:Number(v['id']),
-            sendReservationTime:new Date(v['sendReservationTime']),
-            customerName:v['customerName'],
-            startTime:new Date(v['startTime']),
-            endTime:new Date(v['endTime']),
+            accountId: v['accountId'],
+            conferenceId: v['conferenceId'],
+            userId: v['userId'],
+            name: v['name'],
+            gender: v['gender'],
+            residentIdNumber: v['residentIdNumber'],
+            telephone: v['telephone'],
+            stayStart: that.getFormattedDate(v['stayStart']),
+            stayEnd: that.getFormattedDate(v['stayEnd']),
+            stayNeeds: v['stayNeeds'],
+            reserveTime: that.getFormattedDateTime(v['reserveTime']),
+            hotelCheck: v['hotelCheck'],
+            checkinTime: v['checkinTime'] == null ? '' : that.getFormattedDateTime(v['checkinTime']),
+            roomNumber: v['roomNumber'],
+            userCheck: v['userCheck'],
           }
           that.endedConference.push(newData)
         });
       })
     },
-    show(id) {
-      /*            this.$Modal.info({
-                    title: 'User Info',
-                    content: `Name：${this.conference[index].name}<br>Age：${this.conference[index].address}<br>Address：${this.conference[index].startTime}`
-                  })*/
-      this.$router.push(`/hotel/detail/${id}`)
+    gotoDetail(conferenceId, userId) {
+      for(let index in this.waitingConfirmConference) {
+        if (this.waitingConfirmConference[index].conferenceId === conferenceId &&
+            this.waitingConfirmConference[index].userId === userId) {
+          this.$refs.detail.setData(this.waitingConfirmConference[index], false)
+          this.conferenceDetailModal = true
+          return;
+        }
+      }
+      let otherConference = this.processingConference.concat(this.endedConference)
+      for(let index in otherConference){
+        if(otherConference[index].conferenceId===conferenceId&&otherConference[index].userId===userId){
+          this.$refs.detail.setData(otherConference[index], true)
+          this.conferenceDetailModal = true
+        }
+      }
     },
-
+    gotoReservation(child) {
+      this.conferenceDetailModal = child;
+      this.initData()
+    },
   }
 }
 </script>
@@ -200,5 +250,9 @@ export default {
 
 >>> .ivu-table-overflowX {
   overflow-x: hidden;
+}
+
+>>> .ivu-modal-body {
+  padding: 0px;
 }
 </style>

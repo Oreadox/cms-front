@@ -21,7 +21,7 @@
         </RadioGroup>
       </FormItem>
       <FormItem label="生日" prop="birthday">
-        <DatePicker type="date" v-model="formItem.birthday"></DatePicker>
+        <DatePicker type="date" v-model="formItem.birthday" :options="pickerControl"></DatePicker>
       </FormItem>
       <FormItem label="邮箱" prop="email">
         <Input v-model="formItem.email"></Input>
@@ -87,6 +87,11 @@ export default {
         workUnit: '',
         phone: ''
       },
+      pickerControl:{
+        disabledDate(time){
+          return time.getTime() > Date.now() - 8.64e6;
+        }
+      },
       fromValidate: {
         username: [
           {required: true, message: '用户名不能为空', trigger: 'blur'},
@@ -140,7 +145,7 @@ export default {
             password: this.formItem.password,
             name: this.formItem.name,
             gender: this.formItem.gender,
-            birthday: this.formItem.birthday.toDateString(),
+            birthday: this.formItem.birthday.getTime(),
             residentIdNumber: this.formItem.idCard,
             email: this.formItem.email,
             telephone: this.formItem.phone,

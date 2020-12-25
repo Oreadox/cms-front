@@ -2,9 +2,6 @@
   <div>
     <Form hide-required-mark style="margin-top: 5%" :rules="fromValidate" ref="formItem" :model="formItem">
       <h2 style="text-align: center">修改密码</h2>
-      <FormItem show-message label="原密码" prop="oldPassword">
-        <Input type="password" password v-model="formItem.oldPassword" placeholder="输入原密码"></Input>
-      </FormItem>
       <FormItem label="新密码" prop="password">
         <Input type="password" password v-model="formItem.password" placeholder="长度为8-32, 需包含字母和数字"></Input>
       </FormItem>
@@ -33,16 +30,12 @@ export default {
       }
     };
     return {
+
       formItem: {
-        oldPassword: "",
         password: "",
         passwordCheck: "",
-
       },
       fromValidate: {
-        oldPassword: [
-          {required: true, message: '原密码不能为空', trigger: 'blur'},
-        ],
         password: [
           {required: true, message: '密码不能为空', trigger: 'blur'},
           {type: 'string', min: 8, message: '密码至少需8位', trigger: 'blur'},
@@ -56,6 +49,9 @@ export default {
       }
     }
   },
+
+  props:['hotelId'],
+
   methods: {
     resetForm(name) {
       this.$refs[name].resetFields();
@@ -68,20 +64,17 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           let data = {
-            oldPassword: that.formItem.oldPassword,
-            newPassword: that.formItem.password
+            hotelId: that.hotelId,
+            password: that.formItem.password
           }
           that.$axios({
             method: 'post',
-            url: `${that.$baseURI}/api/hotel/password/modify`,
+            url: `${that.$baseURI}/api/admin/hotel/password/modify`,
             data: data
           }).then(function (response) {
             if (response['data']['success'] === true) {
               that.$Message.success("修改成功");
-              setTimeout(()=>{
-                that.$emit("gotoProfile", false);
-              }, 200)
-              //
+              that.$emit("closeChangeModal", false);
             } else {
               that.$Message.error(response['data']['message']);
             }

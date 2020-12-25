@@ -85,7 +85,7 @@ export default {
               that.$store.commit("setUsername", respData['username'])
               that.$store.commit("setAccountId", respData['account_id'])
               that.$store.commit("setRole", respData['role'].toLowerCase())
-              that.$router.push(`/${that.selected}/home`)
+              that.$router.push(`/${that.selected}`)
             } else {
               that.$Message.error(respData['message'])
             }

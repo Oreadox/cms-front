@@ -2,7 +2,7 @@
   <div>
     <Sider :style="{background: '#fff', position: 'fixed', height: '100vh', left: 0, overflow: 'auto'}" width="15vw">
       <Menu :active-name="activeItem" width="15vw">
-        <MenuItem name="conference" to="/hotel/reservation">
+        <MenuItem name="reservation" to="/hotel/reservation">
           <Icon type="ios-paper"></Icon>
           <span>订单管理</span>
         </MenuItem>
@@ -23,7 +23,7 @@ export default {
   name: "HotelSidebar",
   data() {
     return {
-      activeItem: "home"
+      activeItem: "reservation"
     }
   },
   created() {
@@ -32,10 +32,10 @@ export default {
   methods: {
     switchItem() {
       var path = this.$route.path
-      if (path === '/hotel/profile') {
+      if (path === '/hotel/reservation') {
+        this.activeItem = 'reservation'
+      } else if (path === '/hotel/profile') {
         this.activeItem = 'profile'
-      } else if (path.startsWith('/conference')) {
-        this.activeItem = 'conference'
       } else if (path === '/hotel/message') {
         this.activeItem = 'message'
       }

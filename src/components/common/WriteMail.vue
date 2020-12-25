@@ -46,29 +46,43 @@ export default {
   },
   methods:{
     autoFillAccount(){
-      this.formItem.senderAccount = this.sendId.account
+      {
+        let that = this
+        var data = {
+          accountId:that.sendId.account,
+        }
+        this.$axios(
+            {
+              method: 'post',
+              url: `${that.$baseURI}/api/message/getAccount`,
+              data: data
+            }
+        ).then(function (response) {
+          that.formItem.senderAccount = response['data']['username']
+        })
+      }
     },
     clickForCheck(){
       this.openModal = true
     },
     sendMessage(){
       {
-        var that = this
+        let that = this
         var data = {
-          account:that.formItem.senderAccount,
+          username:that.formItem.senderAccount,
           content:that.formItem.content,
         }
-        this.$axios(
+        that.$axios(
             {
               method: 'post',
-              url: `${this.$baseURI}/api/message/sendByAccountId`,
+              url: `${that.$baseURI}/api/message/sendByUsername`,
               data: data
             }
         ).then(function (response) {
           if (response['data']['success'] === true) {
-            that.$Message.success("修改成功");
-            this.openModal = false
-            this.$emit('closeSendModal',false)
+            that.$Message.success("发送成功");
+            that.openModal = false
+            that.$emit('closeSendModal',false)
           } else {
             that.$Message.error(response['data']['message']);
           }

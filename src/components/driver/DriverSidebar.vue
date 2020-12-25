@@ -2,7 +2,7 @@
   <div>
     <Sider :style="{background: '#fff', position: 'fixed', height: '100vh', left: 0, overflow: 'auto'}" width="15vw">
       <Menu :active-name="activeItem" width="15vw">
-        <MenuItem name="conference" to="/driver/reservation">
+        <MenuItem name="reservation" to="/driver/reservation">
           <Icon type="ios-paper"></Icon>
           <span>订单管理</span>
         </MenuItem>
@@ -20,10 +20,10 @@
 </template>
 <script>
 export default {
-  name: "DriverSiderbar",
+  name: "DriverSidebar",
   data() {
     return {
-      activeItem: "home"
+      activeItem: "reservation"
     }
   },
   created() {
@@ -32,10 +32,10 @@ export default {
   methods: {
     switchItem() {
       var path = this.$route.path
-      if (path === '/driver/profile') {
-        this.activeItem = 'profile'
-      } else if (path==='/driver/reservation') {
+      if (path === '/driver/reservation') {
         this.activeItem = 'reservation'
+      } else if (path==='/driver/profile') {
+        this.activeItem = 'profile'
       } else if (path === '/driver/message') {
         this.activeItem = 'message'
       }

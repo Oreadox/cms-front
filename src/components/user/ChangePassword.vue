@@ -3,7 +3,7 @@
     <Form hide-required-mark style="margin-top: 5%" :rules="fromValidate" ref="formItem" :model="formItem">
       <h2 style="text-align: center">修改密码</h2>
       <FormItem show-message label="原密码" prop="oldPassword">
-        <Input v-model="formItem.oldPassword" placeholder="输入原密码"></Input>
+        <Input type="password" v-model="formItem.oldPassword" placeholder="输入原密码"></Input>
       </FormItem>
       <FormItem label="新密码" prop="password">
         <Input type="password" password v-model="formItem.password" placeholder="长度为8-32, 需包含字母和数字"></Input>
@@ -24,7 +24,6 @@
 <script>
 export default {
   name: "ChangePassword",
-  props: ["userData"],
   data() {
     const validatePassCheck = (rule, value, callback) => {
       if (value !== this.formItem.password) {
@@ -66,7 +65,7 @@ export default {
     },
     submitForm(name) {
       let that = this
-      this.$refs[name].validate((valid) => {
+      that.$refs[name].validate((valid) => {
         if (valid) {
           let data = {
             oldPassword: that.formItem.oldPassword,
@@ -74,11 +73,12 @@ export default {
           }
           that.$axios({
             method: 'post',
-            url: `${this.$baseURI}/api/user/password/modify`,
+            url: `${that.$baseURI}/api/user/password/modify`,
             data: data
           }).then(function (response) {
             if (response['data']['success'] === true) {
               that.$Message.success("修改成功");
+              that.$emit("gotoProfile", false);
             } else if (response['data']['oldPasswordCorrect'] === false) {
               that.$Message.error("原密码错误");
             } else {

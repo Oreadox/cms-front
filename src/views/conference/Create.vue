@@ -2,7 +2,7 @@
   <div>
     <Form label-colon :label-width="120">
       <FormItem label="会议名">
-        <Input type="text" style="width: 150px"></Input>
+        <Input type="text" v-model="formItem.name" style="width: 150px"></Input>
       </FormItem>
       <FormItem label="会议简介">
         <Input type="textarea" v-model="formItem.introduction" class="input_size"></Input>
@@ -11,12 +11,12 @@
         <Input type="textarea" v-model="formItem.address" class="input_size"></Input>
       </FormItem>
       <FormItem label="会议时间">
-        <DatePicker v-model="formItem.startTime"></DatePicker>
+        <DatePicker :options="ControlStartTime" v-model="formItem.startTime"></DatePicker>
         至
-        <DatePicker v-model="formItem.endTime"></DatePicker>
+        <DatePicker :options="ControlEndTime" v-model="formItem.endTime"></DatePicker>
       </FormItem>
-      <FormItem label="报名截止时间">
-        <DatePicker v-model="formItem.enrollTime"></DatePicker>
+      <FormItem  label="报名截止时间">
+        <DatePicker :options="ControlEnrollTime" v-model="formItem.enrollTime"></DatePicker>
       </FormItem>
       <FormItem label="使用邀请码">
         <i-switch v-model="useInviteCode"/>
@@ -29,7 +29,7 @@
         </transition>
       </div>
       <FormItem>
-        <Button style=" margin-left:15% ">取消</Button>
+        <Button style=" margin-left:15% " to="/conference/list">取消</Button>
         <Button style=" margin-left:15% " type="primary"  @click="submitForm">创建</Button>
       </FormItem>
     </Form>
@@ -43,48 +43,80 @@ export default {
     return {
       useInviteCode: false,
       formItem: {
-        name: 'xxx',
-        introduction: '...',
-        address: 'xxx',
-        startTime: '2020-10-11',
-        endTime: '2020-12-11',
-        enrollTime: '2020-11-11',
-        inviteCode: '111123',
+        name: '',
+        introduction: '',
+        address: '',
+        startTime: '',
+        endTime: '',
+        enrollTime: '',
+        inviteCode: '',
       },
+      ControlStartTime: {
+        disabledDate: (time)=>{
+          return time && time.getTime() < Date.now()
+        }
+      },
+      ControlEndTime: {
+        disabledDate: (time)=>{
+          if (this.formItem.startTime==='')
+            return time.getTime()<Date.now()
+          else
+            return time.getTime()<Date.now()||time.getTime()<new Date(this.formItem.startTime).getTime()
+        }
+      },
+      ControlEnrollTime:{
+        disabledDate: (time) => {
+          if (this.formItem.startTime==='')
+            return time.getTime()<Date.now()
+          else
+            return time.getTime()>new Date(this.formItem.startTime).getTime()-8.64e7||time.getTime()<Date.now()-8.64e7
+        }
+      }
     }
   },
   methods: {
     changeSwitch() {
       this.useInviteCode = !this.useInviteCode;
     },
-
     submitForm(){
-      var that = this
-      var data = {
-        name: this.formItem.name,
-        detail: this.formItem.introduction,
-        address: this.formItem.address,
-        startTime: this.formItem.startTime.toDateString(),
-        endTime: this.formItem.endTime.toDateString(),
-        enrollTime: this.formItem.enrollTime.toDateString(),
-        inviteCode: this.useInviteCode?this.formItem.inviteCode:null
-      }
-      this.$axios(
-          {
-            method: 'post',
-            url: `${this.$baseURI}/api/user/conference/create`,
-            data: data
-          }
-      ).then(function (response) {
-        if (response['data']['success'] === true) {
-          that.$Message.success("创建成功");
-          setTimeout(function(){
-            that.$router.push("/conference/list")
-          }, 1500);
-        } else {
-          that.$Message.error(response['data']['message']);
+      let that = this
+      let canSubmit = 0
+      let arrayObject = Object.values(that.formItem)
+      console.log(arrayObject)
+      arrayObject.pop()
+      for (var itemKey in arrayObject)
+        if (arrayObject[itemKey]===""){
+          canSubmit++
         }
-      })
+      if (canSubmit===0) {
+        var data = {
+          name: that.formItem.name,
+          detail: that.formItem.introduction,
+          address: that.formItem.address,
+          startTime: that.formItem.startTime.getTime(),
+          endTime: that.formItem.endTime.getTime(),
+          enrollTime: that.formItem.enrollTime.getTime(),
+          inviteCode: that.useInviteCode ? this.formItem.inviteCode : null
+        }
+        this.$axios(
+            {
+              method: 'post',
+              url: `${that.$baseURI}/api/user/conference/create`,
+              data: data
+            }
+        ).then(function (response) {
+          if (response['data']['success'] === true) {
+            that.$Message.success("创建成功");
+            setTimeout(function () {
+              that.$router.push("/conference/list")
+            }, 1500);
+          } else {
+            that.$Message.error(response['data']['message']);
+          }
+        })
+      }else {
+        that.$Message.error("请把内容填充完毕！");
+      }
 
     }
   }

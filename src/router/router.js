@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
 Vue.use(VueRouter)
 
 const index = () => import('@/views/Index')
@@ -17,15 +16,17 @@ const conferenceDetail = () => import('@/views/conference/Detail')
 const conferenceParticipate = () => import('@/views/conference/Participate')
 
 const hotelIndex = () => import('@/views/hotel/Index')
-const hotelDetail = () => import('@/views/hotel/Detail')
+// const hotelDetail = () => import('@/views/hotel/Detail')
 const hotelProfile = () => import('@/views/hotel/Profile')
 const hotelReservation = () => import('@/views/hotel/Reservation')
+const hotelMail = ()=> import('@/views/hotel/HotelMail')
 
 const driverIndex = () => import('@/views/driver/Index')
 // const driverHome = () => import('@/views/driver/Home')
 const driverProfile = () => import('@/views/driver/Profile')
 const driverReservation = () => import('@/views/driver/Reservation')
-const driverDetail = () => import('@/views/driver/Detail')
+// const driverDetail = () => import('@/views/driver/Detail')
+const driverMail = ()=> import('@/views/driver/DriverMail')
 
 const adminIndex = () => import("@/views/admin/Index")
 const adminHome = () => import('@/views/admin/Home')
@@ -35,7 +36,7 @@ const adminConference = () => import('@/views/admin/Conference')
 const adminHotel = () => import('@/views/admin/Hotel')
 const adminDriver = () => import('@/views/admin/Driver')
 const adminSystem = () => import('@/views/admin/System')
-const personalInfo = () => import('@/views/admin/Supervise')
+const personalInfo = () => import('@/views/admin/personalInfo')
 const adminMail = () => import('@/views/admin/Mail')
 
 
@@ -43,29 +44,36 @@ export default new VueRouter({
     routes: [
         {
             path: '/',
-            redirect: '/index'
+            redirect: '/index',
         },
         {
             path: '/index',
             name: '主页',
-            component: index
+            component: index,
+            meta: { title: 'Home--会务管理系统' },
         },
         {
             path: '/user/',
             redirect: '/user/home',
             component: userIndex,
+            meta: {
+                login:true
+            },
             children: [
                 {
                     path: 'home',
-                    component: userHome
+                    component: userHome,
+                    meta: { title: '用户主页--会务管理系统' },
                 },
                 {
                     path: 'profile',
-                    component: userProfile
+                    component: userProfile,
+                    meta: { title: '个人信息--会务管理系统' },
                 },
                 {
                     path: 'message',
-                    component: userMessage
+                    component: userMessage,
+                    meta: { title: '个人信箱--会务管理系统' },
                 },
             ]
         },
@@ -75,22 +83,29 @@ export default new VueRouter({
             path: '/conference/',
             redirect: '/conference/list',
             component: conferenceIndex,
+            meta: {
+                login:true
+            },
             children: [
                 {
                     path: 'create',
-                    component: conferenceCreate
+                    component: conferenceCreate,
+                    meta: { title: '创建会议--会务管理系统' },
                 },
                 {
                     path: 'list',
-                    component: conferenceList
+                    component: conferenceList,
+                    meta: { title: '会议列表--会务管理系统' },
                 },
                 {
                     path: 'detail/:id',
-                    component: conferenceDetail
+                    component: conferenceDetail,
+                    meta: { title: '会议详情--会务管理系统' },
                 },
                 {
                     path: 'participate/:id',
-                    component: conferenceParticipate
+                    component: conferenceParticipate,
+                    meta: { title: '参加会议--会务管理系统' },
                 },
             ]
         },
@@ -100,18 +115,29 @@ export default new VueRouter({
             path: '/hotel/',
             redirect: '/hotel/reservation',
             component: hotelIndex,
+            meta: {
+                login:true
+            },
             children: [
                 {
                     path: 'reservation/',
-                    component: hotelReservation
+                    component: hotelReservation,
+                    meta: { title: '酒店预订--会务管理系统' },
                 },
                 {
                     path: 'profile',
-                    component: hotelProfile
+                    component: hotelProfile,
+                    meta: { title: '酒店信息--会务管理系统' },
                 },
+                // {
+                //     path: 'detail/:id',
+                //     component: hotelDetail,
+                //     meta: { title: 'hotelDetail' },
+                // },
                 {
-                    path: 'detail/:id',
-                    component: hotelDetail
+                    path: 'message',
+                    component: hotelMail,
+                    meta: { title: '酒店信箱--会务管理系统' },
                 },
             ]
         },
@@ -121,6 +147,9 @@ export default new VueRouter({
             path: '/driver/',
             redirect: '/driver/reservation',
             component: driverIndex,
+            meta: {
+                login:true
+            },
             children: [
                 // {
                 //     path: 'home',
@@ -128,15 +157,23 @@ export default new VueRouter({
                 // },
                 {
                     path: 'profile',
-                    component: driverProfile
+                    component: driverProfile,
+                    meta: { title: '司机--会务管理系统' },
                 },
                 {
                     path: 'reservation',
-                    component: driverReservation
+                    component: driverReservation,
+                    meta: { title: '预约--会务管理系统' },
                 },
+                // {
+                //     path: 'detail/:id',
+                //     component: driverDetail,
+                //     meta: { title: '详情--会务管理系统' },
+                // },
                 {
-                    path: 'detail/:id',
-                    component: driverDetail
+                    path: 'message',
+                    component: driverMail,
+                    meta: { title: '司机信箱--会务管理系统' },
                 },
             ]
         },
@@ -146,34 +183,44 @@ export default new VueRouter({
             path: '/admin/',
             redirect: '/admin/home',
             component: adminIndex,
+            meta: {
+                login:true
+            },
             children:[
                 {
                     path: 'home',
                     component: adminHome,
+                    meta: { title: '管理员主页--会务管理系统' },
                 },
                 {
                     path: 'user',
                     component: adminUser,
+                    meta: { title: '用户管理--会务管理系统' },
                 },
                 {
                     path: 'conference',
-                    component: adminConference
+                    component: adminConference,
+                    meta: { title: '会议管理--会务管理系统' },
                 },
                 {
                     path: 'hotel',
-                    component: adminHotel
+                    component: adminHotel,
+                    meta: { title: '酒店管理--会务管理系统' },
                 },
                 {
                     path: 'driver',
-                    component: adminDriver
+                    component: adminDriver,
+                    meta: { title: '司机管理--会务管理系统' },
                 },
                 {
                     path: 'personalInfo',
-                    component: personalInfo
+                    component: personalInfo,
+                    meta: { title: '管理员信息--会务管理系统' },
                 },
                 {
                     path: 'message',
-                    component: adminMail
+                    component: adminMail,
+                    meta: { title: '信箱--会务管理系统' },
                 },
             ]
         },
@@ -201,7 +248,10 @@ export default new VueRouter({
         },*/
         {
             path: '/admin/system',
-            component: adminSystem
+            component: adminSystem,
+            meta:   { title: '高级模式--会务管理系统',
+                    login:true
+                    },
         }
     ]
 })

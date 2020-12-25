@@ -12,13 +12,16 @@
         </RadioGroup>
       </FormItem>
       <FormItem label="生日" prop="birthday">
-        <DatePicker type="date" v-model="formItem.birthday"></DatePicker>
+        <DatePicker :options="ControlTime" type="date" v-model="formItem.birthday"></DatePicker>
       </FormItem>
       <FormItem label="邮箱" prop="email">
         <Input type="email" v-model="formItem.email"></Input>
       </FormItem>
       <FormItem label="电话" prop="phone">
         <Input type="text" v-model="formItem.phone"></Input>
+      </FormItem>
+      <FormItem label="工作单位" prop="workUnit">
+        <Input type="text" v-model="formItem.workUnit"></Input>
       </FormItem>
       <FormItem>
         <Button style="float: right; margin-left: 16px" type="primary" @click="submitForm('formItem')">修改
@@ -36,13 +39,18 @@ export default {
   data() {
     return {
       formItem: {
-        name: this.userData.name,
-        gender: this.userData.gender,
-        birthday: this.userData.birthday,
-        email: this.userData.email,
-        phone: this.userData.phone,
-        idCard: this.userData.idCard,
-        workUnit: this.userData.workUnit,
+        name: '',
+        gender: '',
+        birthday: '',
+        email: '',
+        phone: '',
+        idCard: '',
+        workUnit: ''
+      },
+      ControlTime: {
+        disabledDate: (time)=>{
+          return time && time.getTime() > Date.now()
+        }
       },
       formValidate: {
         name: [
@@ -68,6 +76,25 @@ export default {
   },
   props: ['userData'],
   methods: {
+    setDataDefault() {
+      this.formItem.name = this.userData.name
+      this.formItem.gender = this.userData.gender
+      this.formItem.birthday = this.userData.birthday
+      this.formItem.email = this.userData.email
+      this.formItem.phone = this.userData.phone
+      this.formItem.idCard = this.userData.idCard
+      this.formItem.workUnit = this.userData.workUnit
+      switch (this.userData.gender) {
+        case "男": {
+          this.formItem.gender = "MALE"
+          break
+        }
+        case "女": {
+          this.formItem.gender = "FEMALE"
+          break
+        }
+      }
+    },
     resetForm(name) {
       this.$refs[name].resetFields();
     },
@@ -81,7 +108,7 @@ export default {
           let data = {
             name: this.formItem.name,
             gender: this.formItem.gender,
-            birthday: this.formItem.birthday.toDateString(),
+            birthday: this.formItem.birthday.getTime(),
             residentIdNumber: this.formItem.idCard,
             email: this.formItem.email,
             telephone: this.formItem.phone,
@@ -93,7 +120,8 @@ export default {
             data: data
           }).then(function (response) {
             if (response['data']['success'] === true) {
-              that.$Message.success("修改成功");
+                that.$Message.success("修改成功");
+                that.$emit('gotoProfile', false);
             } else {
               that.$Message.error(response['data']['message']);
             }

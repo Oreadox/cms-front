@@ -2,20 +2,19 @@
   <div>
     <Form hide-required-mark style="margin-top: 5%" :rules="fromValidate" ref="formItem" :model="formItem">
       <h2 style="text-align: center">修改密码</h2>
-      <FormItem show-message label="原密码" prop="oldPassword">
+      <FormItem show-message label="原密码">
         <Input type="password" password v-model="formItem.oldPassword" placeholder="输入原密码"></Input>
       </FormItem>
-      <FormItem label="新密码" prop="password">
+      <FormItem label="新密码" prop="password" >
         <Input type="password" password v-model="formItem.password" placeholder="长度为8-32, 需包含字母和数字"></Input>
       </FormItem>
-      <FormItem label="确认密码" prop="passwordCheck">
+      <FormItem label="确认密码" prop="passwordCheck" >
         <Input type="password" password v-model="formItem.passwordCheck" placeholder="重复上述的密码"></Input>
       </FormItem>
       <FormItem>
         <Button style="float: right; margin-left: 16px" type="primary" @click="submitForm('formItem')">修改
         </Button>
-        <Button type="text" style="float: right; " @click="function (){resetForm('formItem');cancelButton()}">取消
-        </Button>
+        <Button type="text" style="float: right; " @click="function (){resetForm('formItem');cancelButton()}">取消</Button>
       </FormItem>
     </Form>
   </div>
@@ -34,15 +33,12 @@ export default {
     };
     return {
       formItem: {
-        oldPassword: "",
-        password: "",
-        passwordCheck: "",
+        oldPassword:"",
+        password:"",
+        passwordCheck:"",
 
       },
-      fromValidate: {
-        oldPassword: [
-          {required: true, message: '原密码不能为空', trigger: 'blur'},
-        ],
+      fromValidate:{
         password: [
           {required: true, message: '密码不能为空', trigger: 'blur'},
           {type: 'string', min: 8, message: '密码至少需8位', trigger: 'blur'},
@@ -56,16 +52,16 @@ export default {
       }
     }
   },
-  methods: {
+  methods:{
     resetForm(name) {
       this.$refs[name].resetFields();
     },
-    cancelButton() {
+    cancelButton(){
       this.$emit('gotoProfile', false);
     },
     submitForm(name) {
-      var that = this
-      this.$refs[name].validate((valid) => {
+      let that = this
+      that.$refs[name].validate((valid) => {
         if (valid) {
           let data = {
             oldPassword: that.formItem.oldPassword,
@@ -73,15 +69,14 @@ export default {
           }
           that.$axios({
             method: 'post',
-            url: `${that.$baseURI}/api/hotel/password/modify`,
+            url: `${that.$baseURI}/api/admin/password/modify`,
             data: data
           }).then(function (response) {
             if (response['data']['success'] === true) {
               that.$Message.success("修改成功");
-              setTimeout(()=>{
-                that.$emit("gotoProfile", false);
-              }, 200)
-              //
+              that.$emit("gotoProfile", false);
+            } else if (response['data']['oldPasswordCorrect'] === false) {
+              that.$Message.error("原密码错误");
             } else {
               that.$Message.error(response['data']['message']);
             }

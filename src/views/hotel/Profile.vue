@@ -21,14 +21,14 @@
     <Modal
         footer-hide
         :mask-closable="false"
-        v-model="modelInfo.changeModal">
-      <ChangeInfo :hotelData="hotelData"
+        v-model="changeInfoModal">
+      <ChangeInfo :hotelData="hotelData" ref="changeInfo"
                   @gotoProfile="gotoProfile"></ChangeInfo>
     </Modal>
     <Modal
         footer-hide
         :mask-closable="false"
-        v-model="passwordModel.changePasswordModal">
+        v-model="changePasswordModal">
       <ChangePassword :hotelData="hotelData"
                       @gotoProfile="gotoProfile"></ChangePassword>
     </Modal>
@@ -45,9 +45,9 @@ export default {
     return {
       hotelData: {
         account: 'xxx',
-        password: 'xxxx',
+        password: '●●●●●●●●●●',
         name: 'xxx',
-        celephone: 'xxx',
+        phone: 'xxx',
         address: 'xxx',
         detail: 'xxx'
       },
@@ -56,17 +56,13 @@ export default {
           account: '酒店账号',
           password: '密码',
           name: '酒店名',
-          celephone: '联系电话',
+          phone: '联系电话',
           address: '酒店地址',
           detail: '酒店简介'
         },
       },
-      modelInfo: {
-        changeModal: false,
-      },
-      passwordModel: {
-        changePasswordModal: false,
-      }
+      changeInfoModal: false,
+      changePasswordModal: false,
     }
   },
   created() {
@@ -74,21 +70,19 @@ export default {
   },
   methods: {
     gotoProfile(child) {
-      this.modelInfo.changeModal = child
-      this.passwordModel.changePasswordModal = child
+      this.changeInfoModal = child
+      this.changePasswordModal = child
     },
     gotoChange(title, type) {
       if (type === 'account') {
         return
       }
       if (type === 'password') {
-        console.log(`123123`)
-        this.passwordModel.changePasswordModal = true
+        this.changePasswordModal = true
       } else {
-        console.log(`12`)
-        this.modelInfo.changeModal = true
+        this.$refs.changeInfo.setForm(this.hotelData)
+        this.changeInfoModal = true
       }
-
     },
     getProfile() {
       var that = this
@@ -99,10 +93,9 @@ export default {
           }
       ).then(function (response) {
         var respData = response["data"]
-        that.hotelData.account = respData['account']
-        that.hotelData.password = respData['password']
+        that.hotelData.account = respData['accountId']
         that.hotelData.name = respData['name']
-        that.hotelData.celephone = respData['celephone']
+        that.hotelData.phone = respData['telephone']
         that.hotelData.address = respData['address']
         that.hotelData.detail = respData['detail']
       })

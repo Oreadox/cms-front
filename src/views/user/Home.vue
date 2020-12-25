@@ -54,7 +54,7 @@
       return {
         enterJoinNumber: false,
         userInfo: {
-          username: 'xxx',
+          username: this.$store.state.username,
 
         }
       }
