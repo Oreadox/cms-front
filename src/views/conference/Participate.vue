@@ -11,7 +11,7 @@
       <FormItem label="航班号/车次" prop="tripNumber">
         <Input type="text" v-model="formItem.tripNumber" class="input_size"></Input>
       </FormItem>
-      <FormItem  label="到达时间" prop="arriveTime">
+      <FormItem label="到达时间" prop="arriveTime">
         <DatePicker :options="ControlArriveTime" type="datetime" v-model="formItem.arriveTime"></DatePicker>
       </FormItem>
       <FormItem label="到达地点" prop="arriveSite">
@@ -28,12 +28,11 @@
       <FormItem label="备注">
         <Input type="textarea" v-model="formItem.remark" class="input_size"></Input>
       </FormItem>
-      <!--      <div style="height: 60px" v-if="ifUseInviteCode">-->
-<!--      TODO 后端加接口再说-->
-      <FormItem label="邀请码 ">
-        <Input type="text" v-model="formItem.inviteCode" style="width: 150px"/>
-      </FormItem>
-      <!--      </div>-->
+      <div style="height: 60px" v-if="useInviteCode">
+        <FormItem label="邀请码" prop="inviteCode">
+          <Input type="text" v-model="formItem.inviteCode" style="width: 150px"/>
+        </FormItem>
+      </div>
       <FormItem>
         <Button type="primary" style="margin-right: 10%" @click="submitForm('formItem')">参加</Button>
         <Button style="margin-right: 10%" @click="gotoList">取消</Button>
@@ -53,23 +52,33 @@ export default {
         callback();
       }
     }
+    const validateInviteCode = (rule, value, callback) => {
+      if (!this.useInviteCode){
+        callback();
+      } else {
+        if(this.formItem.inviteCode===''){
+          callback(new Error("邀请码不能为空"))
+        }
+        callback();
+      }
+    }
     return {
       ControlArriveTime: {
-        disabledDate: (time)=>{
-          return time && time.getTime() < Date.now()-8.64e7
+        disabledDate: (time) => {
+          return time && time.getTime() < Date.now() - 8.64e7
         }
       },
-      ControlStayTime:{
+      ControlStayTime: {
         disabledDate: (time) => {
-            return time.getTime()<Date.now()
+          return time.getTime() < Date.now()
         }
       },
       ControlEndTime: {
-        disabledDate: (time)=>{
-          if (this.formItem.stayEnd==='')
-            return time.getTime()<Date.now()
+        disabledDate: (time) => {
+          if (this.formItem.stayEnd === '')
+            return time.getTime() < Date.now()
           else
-            return time.getTime()<Date.now()||time.getTime()<new Date(this.formItem.stayStart).getTime()
+            return time.getTime() < Date.now() || time.getTime() < new Date(this.formItem.stayStart).getTime()
         }
       },
       formItem: {
@@ -95,14 +104,29 @@ export default {
         ],
         stayTime: [
           {validator: validateStayTime, trigger: 'blur'}
+        ],
+        inviteCode: [
+          {validator: validateInviteCode, trigger: 'blur'}
         ]
-      }
+      },
+      useInviteCode: false
     }
   },
   created() {
     this.formItem.conferenceId = this.$route.params.id
+    this.checkUseInviteCode()
   },
   methods: {
+    checkUseInviteCode() {
+      let that = this
+      this.$axios({
+        method: 'post',
+        url: `${that.$baseURI}/api/user/conference/checkInviteCodeNeeded`,
+        data: {number: this.formItem.conferenceId,}
+      }).then(function (response) {
+        that.useInviteCode = response['data']['result']
+      })
+    },
     submitForm(name) {
       let that = this
       this.$refs[name].validate((valid) => {
@@ -123,12 +147,12 @@ export default {
             url: `${that.$baseURI}/api/user/conference/participate`,
             data: data
           }).then(function (response) {
-            if(response['data']['success']===true){
+            if (response['data']['success'] === true) {
               that.$Message.success("加入成功");
-              setTimeout(function(){
+              setTimeout(function () {
                 that.$router.push('/conference/list')
               }, 1500);
-            } else if(response['data']['inviteCodeCorrect']===false){
+            } else if (response['data']['inviteCodeCorrect'] === false) {
               that.$Message.error('邀请码错误')
             } else {
               that.$Message.error(response['data']['message'])
@@ -137,7 +161,7 @@ export default {
         }
       })
     },
-    gotoList(){
+    gotoList() {
       this.$router.push('/conference/list')
     }
   }

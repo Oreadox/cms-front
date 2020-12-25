@@ -1,8 +1,8 @@
 <template>
   <div class="layout">
     <Navbar ></Navbar>
-    <HotelSidebar></HotelSidebar>
-    <Content >
+    <HotelSidebar style="position: absolute"></HotelSidebar>
+    <Content style="margin-top: 60px; width: 100%; overflow-x: hidden">
       <RouterView :style="{padding: '24px', margin: 'auto auto auto 15vw'}"></RouterView>
     </Content>
   </div>

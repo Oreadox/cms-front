@@ -1,52 +1,52 @@
 <template>
-  <div>
-  <Menu mode="horizontal" active-name="1">
-    <img src="http://tvax4.sinaimg.cn/large/007YSV3xgy1gl45wx0lx7j30a00a0mxd.jpg"
-         style="pointer-events: none;float: left;" class="control-layout">
-<!--    src 请放本地，本次仅供测试使用，最终图标待定-->
-    <MenuItem name="home">
-      <Icon type="ios-people" />
-      欢迎使用CMS
-    </MenuItem>
+  <div style="position: fixed; top: 0; width: 100%; z-index: 1000">
+    <Menu mode="horizontal" active-name="1">
+      <img src="http://tvax4.sinaimg.cn/large/007YSV3xgy1gl45wx0lx7j30a00a0mxd.jpg"
+           style="pointer-events: none;float: left;" class="control-layout">
+      <!--    src 请放本地，本次仅供测试使用，最终图标待定-->
+      <MenuItem name="home">
+        <Icon type="ios-people"/>
+        欢迎使用CMS
+      </MenuItem>
 
-    <Poptip  trigger="hover" class="control-layout" >
-      <MenuItem name="introduction">
-        产品介绍
-      </MenuItem>
-      <div slot="content">
-        该描述点啥就该找项目经理了
+      <Poptip trigger="hover" class="control-layout">
+        <MenuItem name="introduction">
+          产品介绍
+        </MenuItem>
+        <div slot="content">
+          该描述点啥就该找项目经理了
+        </div>
+      </Poptip>
+      <Poptip trigger="hover" class="control-layout">
+        <MenuItem name="designTeam">
+          设计团队
+        </MenuItem>
+        <div slot="content">
+          该描述点啥还得看项目经理啊
+        </div>
+      </Poptip>
+      <div style="float: right; margin-right: 5%" v-if="this.$store.state.token!==''">
+        <Dropdown>
+          <a style="font-size: 20px">
+            <Icon type="ios-person" size="24"/>
+            {{ this.$store.state.username }}
+          </a>
+          <DropdownMenu slot="list">
+            <DropdownItem name="exit">
+              <a @click="LogOut">退出登录</a></DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
       </div>
-    </Poptip>
-    <Poptip trigger="hover" class="control-layout">
-      <MenuItem name="designTeam">
-        设计团队
-      </MenuItem>
-      <div slot="content">
-        该描述点啥还得看项目经理啊
+      <div style="float: right" v-else>
+        <MenuItem name="login">
+          <Button type="primary" size="large" v-on:click=showLogin>登录</Button>
+        </MenuItem>
+        <MenuItem name="register">
+          <Button size="large" v-on:click=showRegister>注册</Button>
+        </MenuItem>
       </div>
-    </Poptip>
-    <div style="float: right; margin-right: 5%" v-if="this.$store.state.token!==''">
-      <Dropdown>
-        <a style="font-size: 20px">
-          <Icon type="ios-person" size="24"/>
-          {{ this.$store.state.username }}
-        </a>
-        <DropdownMenu  slot="list">
-          <DropdownItem name="exit">
-            <a @click="LogOut">退出登录</a></DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
-    </div>
-    <div style="float: right" v-else>
-    <MenuItem name="login">
-      <Button type="primary" size="large" v-on:click=showLogin>登录</Button>
-    </MenuItem>
-    <MenuItem name="register">
-      <Button  size="large" v-on:click=showRegister>注册</Button>
-    </MenuItem>
-    </div>
-  </Menu>
-</div>
+    </Menu>
+  </div>
 </template>
 <script>
 export default {
@@ -61,13 +61,14 @@ export default {
     showRegister() {
       this.$emit('setRegisterModal', true);
     },
-    LogOut(){
+    LogOut() {
       let that = this
       window.localStorage.clear()
-      setTimeout(function(){
-        that.$Message.success('退出成功')
+      that.$Message.success('退出成功')
+      setTimeout(function () {
+        that.$router.push('/index')
         that.$router.go(0)
-      }, 300);
+      }, 500);
 
 
     }
@@ -82,20 +83,23 @@ export default {
   margin-right: 20px;
   text-align: right;
 }
-.control-layout{
+
+.control-layout {
   height: auto;
   height: auto;
   max-width: 100%;
   max-height: 100%;
 }
 
-a{
+a {
   color: black;
 }
-a:link{
+
+a:link {
   color: #2d8cf0;
 }
-a:hover{
+
+a:hover {
   color: #5cadff;
 }
 </style>
