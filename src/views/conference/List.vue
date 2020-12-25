@@ -114,27 +114,9 @@ export default {
           }
         }
       ],
-      createdConference: [{
-        id: 1000,
-        name: 'one',
-        address: 'xxx',
-        date: '2020/12/12-2020/12/13',
-        state: 'finish',
-      }],
-      participatedConference: [{
-        id: 1000,
-        name: 'one',
-        address: 'xxx',
-        date: '2020/12/12-2020/12/13',
-        state: 'finish',
-      }],
-      endedConference: [{
-        id: 1000,
-        name: 'one',
-        address: 'xxx',
-        date: '2020/12/12-2020/12/13',
-        state: 'finish',
-      }],
+      createdConference: [],
+      participatedConference: [],
+      endedConference: [],
       showingPanel: ['ended', 'processing'],
       showingCreated: "created",
       showingParticipated: "participated",
