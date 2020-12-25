@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header style="position: fixed; top: 0; width: 100%; z-index: 1000">
     <Menu mode="horizontal" active-name="1">
       <img src="http://tvax4.sinaimg.cn/large/007YSV3xgy1gl45wx0lx7j30a00a0mxd.jpg"
            style="pointer-events: none;float: left;" class="control-layout">
