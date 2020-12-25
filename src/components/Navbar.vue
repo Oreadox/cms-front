@@ -67,6 +67,7 @@ export default {
       that.$Message.success('退出成功')
       setTimeout(function(){
         that.$router.push('/index')
+        that.$router.go(0)
       }, 500);
 
 
