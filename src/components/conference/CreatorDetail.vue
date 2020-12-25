@@ -45,7 +45,7 @@
         <Button style="margin-left: 1vw" type="primary" @click="participantModal=true">详情</Button>
       </FormItem>
 
-      <div v-if="formItem.progress==='ENROLLMENT'">
+      <div v-if="formItem.progress==='ENROLLMENT'||formItem.progress==='OWNER_CONFIRM'">
         <FormItem label="酒店管理">
           <Select class="input_size" v-model="formItem.hotelId" :value="formItem.hotelId" filterable>
             <Option v-for="(value, key) in hotelList" :value="key" :key="key">{{ value.name }}</Option>
@@ -74,7 +74,7 @@
           <Button style="margin-left: 1vw" type="primary" @click="checkFleet">详情</Button>
         </FormItem>
       </div>
-      
+
     </Form>
     <Modal style="padding: 20px" width="30"
            footer-hide
