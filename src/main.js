@@ -25,6 +25,7 @@ router.beforeEach((to, from, next) => {
         ViewUI.LoadingBar.start();
         next('/index')
         ViewUI.LoadingBar.finish();
+        ViewUI.Message.error("页面不存在")
         return
     }
     ViewUI.LoadingBar.finish();
