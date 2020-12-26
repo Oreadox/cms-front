@@ -2,7 +2,7 @@
   <div>
     <Navbar></Navbar>
     <Sidebar style="position: absolute"></Sidebar>
-    <Content style="margin-top: 60px; width: 100%; overflow-x: hidden">
+    <Content style="margin-top: 60px; width: 100%;">
       <RouterView :style="{padding: '24px', margin: 'auto auto auto 15vw'}"></RouterView>
     </Content>
   </div>

@@ -20,7 +20,7 @@
             <Input type="text" v-model="conferenceInfo.name" :readonly="true" style="width: 150px"></Input>
           </FormItem>
           <FormItem label="会议号">
-            <Input type="text" v-model="conferenceId" :readonly="true" style="width: 150px"></Input>
+            <Input type="text" v-model="conferenceInfo.conferenceIdOfNumber" :readonly="true" style="width: 150px"></Input>
           </FormItem>
         </Form>
         <FormItem label="创建人">
@@ -77,11 +77,9 @@
           <div v-if="driverInfo.status>=1">
             <FormItem label="接车司机" :label-width="120">
               <Input type="text" v-model="driverInfo.driverName" :readonly="true" style="width: 120px"></Input>
-              <Poptip trigger="hover">
+              <Poptip trigger="hover"  placement="right">
                 <Tag size="large" style="margin-left: 1vw" color="primary">详情</Tag>
                 <div slot="content" style="overflow: hidden">
-                  账号: {{ driverInfo.driverAccount }}
-                  <Divider style="margin: 10px"/>
                   手机号: {{ driverInfo.driverPhone }}
                 </div>
               </Poptip>
@@ -154,6 +152,7 @@ export default {
         creatorName: '',
         creatorPhone: '',
         creatorEmail: '',
+        conferenceIdOfNumber:'',
         detail: '',
         address: '',
         startTime: '',
@@ -215,6 +214,7 @@ export default {
         that.conferenceInfo.detail = resData['detail']
         that.conferenceInfo.address = resData['address']
         that.conferenceInfo.enrollTime = new Date(resData['enrollTime'])
+        that.conferenceInfo.conferenceIdOfNumber = resData['number']
         switch (resData['progress']) {
           case "ENROLLMENT":
             that.currentProgress = 0;
