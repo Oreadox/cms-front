@@ -19,10 +19,10 @@
         >
       <Form :model="formItem" label-colon :label-width="120" style="margin-top: 5%; ">
         <FormItem show-message label="收件人账号">
-          <Input  type="text" v-model="formItem.senderAccount"></Input>
+          <Input readonly type="text" v-model="formItem.senderAccount"></Input>
         </FormItem>
         <FormItem show-message >
-          <Button type="primary" @click="sendMessage">确认</Button>
+          <Button :loading="submitLoading" type="primary" @click="sendMessage">确认</Button>
           <Button  style="margin-left: 15%" @click="openModal=false">取消</Button>
         </FormItem>
       </Form>
@@ -42,11 +42,13 @@ export default {
         content: ''
       },
       openModal:false,
+      submitLoading : false,
     }
   },
   methods:{
     autoFillAccount(){
       {
+
         let that = this
         var data = {
           accountId:that.sendId.account,
@@ -68,6 +70,7 @@ export default {
     sendMessage(){
       {
         let that = this
+        that.submitLoading = true
         var data = {
           username:that.formItem.senderAccount,
           content:that.formItem.content,
@@ -79,6 +82,7 @@ export default {
               data: data
             }
         ).then(function (response) {
+          that.submitLoading = false
           if (response['data']['success'] === true) {
             that.$Message.success("发送成功");
             that.openModal = false

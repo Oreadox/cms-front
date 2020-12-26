@@ -85,7 +85,13 @@ export default {
     return {
       loginModal: false,
       registerModal: false,
+      userRole: this.$store.state.role
       // img/background仅供参考，图片采用图床引用
+    }
+  },
+  created() {
+    if (this.userid!==''){
+      this.$router.push(`/${this.userRole}`)
     }
   },
   methods: {

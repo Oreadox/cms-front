@@ -36,7 +36,7 @@
             <Input v-model="formItem.carNumber" style="width: 120px"></Input>
           </FormItem>
           <FormItem>
-            <Button type="primary" style="margin-right: 10%" @click="checkOrder('formItem')">确认订单</Button>
+            <Button :loading="submitLoading" type="primary" style="margin-right: 10%" @click="checkOrder('formItem')">确认订单</Button>
           </FormItem>
         </Form>
       </div>
@@ -93,6 +93,7 @@ export default {
         carNumber: '',
         userCheck: '',
       },
+      submitLoading : false,
       checked: false,
       pickerControl: {
         disabledDate(time) {
@@ -136,7 +137,7 @@ export default {
       var that = this
       this.$refs[name].validate((valid) => {
         if (valid) {
-          console.log(that.formItem)
+          that.submitLoading = true
           var data = {
             conferenceId: that.formItem.conferenceId,
             userId: that.formItem.userId,
@@ -150,6 +151,7 @@ export default {
             url: `${that.$baseURI}/api/driver/reservation/check`,
             data: data
           }).then(function (response) {
+            that.submitLoading = false
             if (response['data']['success'] === true) {
               that.$Message.success("确认成功");
               // that.$emit('gotoReservation', false);
