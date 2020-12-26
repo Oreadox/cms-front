@@ -30,7 +30,7 @@
       </div>
       <FormItem>
         <Button style=" margin-left:15% " to="/conference/list">取消</Button>
-        <Button style=" margin-left:15% " type="primary"  @click="submitForm">创建</Button>
+        <Button :loading="submitLoading" style=" margin-left:15% " type="primary"  @click="submitForm">创建</Button>
       </FormItem>
     </Form>
   </div>
@@ -42,6 +42,7 @@ export default {
   data() {
     return {
       useInviteCode: false,
+      submitLoading : false,
       formItem: {
         name: '',
         introduction: '',
@@ -82,13 +83,13 @@ export default {
       let that = this
       let canSubmit = 0
       let arrayObject = Object.values(that.formItem)
-      console.log(arrayObject)
       arrayObject.pop()
       for (var itemKey in arrayObject)
         if (arrayObject[itemKey]===""){
           canSubmit++
         }
       if (canSubmit===0) {
+        that.submitLoading = true
         var data = {
           name: that.formItem.name,
           detail: that.formItem.introduction,
@@ -105,6 +106,7 @@ export default {
               data: data
             }
         ).then(function (response) {
+          that.submitLoading = false
           if (response['data']['success'] === true) {
             that.$Message.success("创建成功");
             setTimeout(function () {

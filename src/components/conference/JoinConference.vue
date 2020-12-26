@@ -5,7 +5,7 @@
         <Input type="text" v-model="conferenceId"></Input>
       </FormItem>
       <FormItem>
-        <Button long type="primary" @click="gotoParticipate">确定</Button>
+        <Button :loading="submitLoading" long type="primary" @click="gotoParticipate">确定</Button>
       </FormItem>
     </Form>
     <Modal
@@ -31,7 +31,8 @@ export default {
       conferenceId: "",
       // VerifyCode:"123456",
       checkConferenceDetail: false,
-      checkConference: 0
+      checkConference: 0,
+      submitLoading : false,
     }
   },
   methods: {
@@ -41,6 +42,7 @@ export default {
         var dataOfCheck = {
           number: that.conferenceId
         }
+        that.submitLoading = true
         that.$axios(
             {
               method: "post",
@@ -82,7 +84,9 @@ export default {
             that.$Message.error("会议号不存在，请重新输入")
           }
         })
-
+      setTimeout(()=>{
+        that.submitLoading = false
+      },500)
       }
     }
   }

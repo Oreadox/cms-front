@@ -15,9 +15,9 @@
         </Input>
       </FormItem>
       <FormItem>
-        <Button type="primary" class="button" long @click="submitForm()">登录</Button>
+        <Button type="primary" :loading="submitLoading" class="button" long @click="submitForm()">登录</Button>
         <div v-if="selected==='user'">
-          <Button class="button" long @click="function(){ resetForm('formItem');gotoRegister()}">注册</Button>
+          <Button class="button"  long @click="function(){ resetForm('formItem');gotoRegister()}">注册</Button>
         </div>
         <div v-else>
           <Button class="button" long block @click="gotoIndex">返回</Button>
@@ -38,6 +38,7 @@ export default {
         username: '',
         password: '',
       },
+      submitLoading : false,
       ruleInline: {
         username: [
           {required: true, message: '用户名不能为空', trigger: 'blur'}
@@ -73,11 +74,13 @@ export default {
             username: this.formItem.username,
             password: this.formItem.password
           }
+          that.submitLoading = true
           this.$axios({
             method: 'post',
             url: `${this.$baseURI}/api/login/submit`,
             data: data
           }).then(function (response) {
+             that.submitLoading = false
             var respData = response['data']
             if (Boolean(respData['success']) === true) {
               that.$Message.success("登录成功");

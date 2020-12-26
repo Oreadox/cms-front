@@ -37,7 +37,7 @@
       </FormItem>
       <FormItem>
         <Button style="float: right; margin-left: 8px " @click="resetForm('formItem')">重置</Button>
-        <Button style="float: right" type="primary" @click="submitForm('formItem')">提交</Button>
+        <Button :loading="submitLoading" style="float: right" type="primary" @click="submitForm('formItem')">提交</Button>
         <Button style="float: left" type="text" @click="function(){resetForm('formItem'); gotoLogin()}">登录现有账号</Button>
       </FormItem>
     </Form>
@@ -75,6 +75,7 @@ export default {
       })
     }
     return {
+      submitLoading:false,
       formItem: {
         username: '',
         password: '',
@@ -140,6 +141,7 @@ export default {
       var that = this
       this.$refs[name].validate((valid) => {
         if (valid) {
+          that.submitLoading = true
           var data = {
             username: this.formItem.username,
             password: this.formItem.password,
@@ -158,12 +160,13 @@ export default {
                 data: data
               }
           ).then(function (response) {
+            that.submitLoading = false
             if(response['data']['success']===true){
               that.$Message.success("注册成功，即将跳转到登录界面");
               setTimeout(function(){
                 that.$emit('setRegisterModal', false);
                 that.$emit('setLoginModal', true);
-              }, 1500);
+              }, 500);
             } else {
               that.$Message.error(response['data']['message'])
             }

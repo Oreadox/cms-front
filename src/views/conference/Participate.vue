@@ -34,7 +34,7 @@
         </FormItem>
       </div>
       <FormItem>
-        <Button type="primary" style="margin-right: 10%" @click="submitForm('formItem')">参加</Button>
+        <Button type="primary" :loading="submitLoading" style="margin-right: 10%" @click="submitForm('formItem')">参加</Button>
         <Button style="margin-right: 10%" @click="gotoList">取消</Button>
       </FormItem>
     </Form>
@@ -109,7 +109,8 @@ export default {
           {validator: validateInviteCode, trigger: 'blur'}
         ]
       },
-      useInviteCode: false
+      useInviteCode: false,
+      submitLoading : false,
     }
   },
   created() {
@@ -131,6 +132,7 @@ export default {
       let that = this
       this.$refs[name].validate((valid) => {
         if (valid) {
+          that.submitLoading = true
           let data = {
             number: that.formItem.conferenceId,
             tripNumber: that.formItem.tripNumber,
@@ -150,11 +152,14 @@ export default {
             if (response['data']['success'] === true) {
               that.$Message.success("加入成功");
               setTimeout(function () {
+                that.submitLoading = false
                 that.$router.push('/conference/list')
-              }, 1500);
+              }, 1000);
             } else if (response['data']['inviteCodeCorrect'] === false) {
+              that.submitLoading = false
               that.$Message.error('邀请码错误')
             } else {
+              that.submitLoading = false
               that.$Message.error(response['data']['message'])
             }
           })

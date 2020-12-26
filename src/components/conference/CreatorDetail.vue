@@ -12,7 +12,7 @@
       <Step content="会议进行"></Step>
       <Step content="会议结束"></Step>
     </Steps>
-    <Button type="primary" style="margin: 2vw 1vw 1vw 0" v-if="currentProgress===1" @click="confirmConference">
+    <Button type="primary" style="margin: 2vw 1vw 1vw 0" v-if="currentProgress===1" :loading="submitLoading" @click="confirmConference">
       确认信息
     </Button>
     <Button style="margin: 2vw 1vw 1vw 0" v-if="currentProgress===0" @click="quickStartNextStep">
@@ -86,7 +86,7 @@
         <p style="text-indent: 2em; margin-bottom: 5px">
           确认后将进入会议下一阶段，未参会者将<b>无法</b>参加该会议
         </p>
-        <Button long class="button"  @click="quickConfirmConference">
+        <Button :loading="submitLoading" long class="button"  @click="quickConfirmConference">
           确认提前结束报名
         </Button>
       </div>
@@ -127,6 +127,7 @@ export default {
     return {
       currentProgress: 0,
       quickStart:false,
+      submitLoading : false,
       formItem: {},
       hotelList: {
         0: {
@@ -164,6 +165,7 @@ export default {
   methods: {
     loadConferenceInfo() {
       let that = this
+      that.submitLoading = true
       this.$axios({
         method: 'post',
         url: `${this.$baseURI}/api/conference/getById`,
@@ -175,6 +177,7 @@ export default {
           url: `${that.$baseURI}/api/conference/participant/count`,
           data: {id: that.conferenceId}
         }).then(function (response) {
+          that.submitLoading = false
           that.formItem = {
             number:resData['number'],
             name: resData['name'],
@@ -290,11 +293,13 @@ export default {
     },
     confirmConference() {
       let that = this
+      that.submitLoading = true
       this.$axios({
         method: 'post',
         url: `${that.$baseURI}/api/conference/confirm`,
         data: {id: that.conferenceId}
       }).then(function (response) {
+        that.submitLoading = false
         if (response['data']['success'] === true) {
           that.$Message.success("确认成功")
           setTimeout(()=>{
@@ -310,11 +315,13 @@ export default {
     },
     quickConfirmConference(){
       let that = this
+      that.submitLoading = true
       this.$axios({
         method: 'post',
         url: `${that.$baseURI}/api/conference/terminateEnrollment`,
         data: {id: that.conferenceId}
       }).then(function (response) {
+        that.submitLoading = false
         if(response['data']['success']===true){
           that.$Message.success("确认成功")
           that.$router.go(0)

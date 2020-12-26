@@ -2,7 +2,7 @@
   <div>
     <Card dis-hover :bordered=false >
       <div style="margin-bottom: 2vw">
-        <Button size="large" type="primary" to="/conference/create">创建会议</Button>
+        <Button size="large" type="primary" @click="$router.push('/conference/create')">创建会议</Button>
         <Button size="large" style="margin-left: 5vw " @click="enterJoinNumber=true">加入会议</Button>
       </div>
       <div>
